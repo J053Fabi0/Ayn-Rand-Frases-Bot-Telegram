@@ -1,3 +1,8 @@
+# Requisitos
+
+- `node`
+- `nodemon` - `npm i -g nodemon`
+
 # `.env`
 
 `BOT_TOKEN` El token del bot.
