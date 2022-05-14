@@ -10,5 +10,5 @@ const mensajeAyuda =
   "\nCualquier mensaje enviado será tratado como una frase y será añadido a la colección.";
 
 export default function help(bot: Bot) {
-  bot.command(["ayuda", "help"], (ctx) => void ctx.replyWithHTML(mensajeAyuda));
+  bot.command(["ayuda", "help", "start"], (ctx) => void ctx.replyWithHTML(mensajeAyuda));
 }
