@@ -20,7 +20,10 @@ if (!process.env.GROUP_ID) console.log("GROUP_ID no está configurado en .env"),
 const bot = new Telegraf(process.env.BOT_TOKEN ?? "");
 
 // Solo me hará caso a mí.
-bot.on("message", ({ message: { chat: c } }, n) => void (c.id + "" === process.env.ADMIN_ID ? n() : null));
+bot.on("message", (ctx, n) => {
+  if (ctx.message.chat.id + "" === process.env.ADMIN_ID) n();
+  else ctx.reply("Crea tu propia instancia: https://github.com/J053Fabi0/Ayn-Rand-Frases-Bot-Telegram");
+});
 
 comandos(bot);
 
