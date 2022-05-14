@@ -8,4 +8,4 @@
 
 # Correr el bot
 
-Una vez que tienes el `.env` configurado debes correr `npm run start`.
+Una vez que tienes el `.env` configurado y has corrido una vez `npm i` debes correr `npm run start`.
