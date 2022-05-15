@@ -32,7 +32,7 @@ bot.on("message", (ctx, n) => {
       .data()
       .sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
     if (!frase) return ctx.reply("No hay frases.");
-    ctx.reply(frase.frase + FIRMA, getBotonesFrases(frase.$loki));
+    ctx.reply(frase.frase + FIRMA, getBotonesFrases(frase.$loki, ctx));
   }
 });
 
@@ -87,6 +87,7 @@ import customDeath from "./utils/customDeath";
 customDeath(() =>
   db.saveDatabase((err: any) => {
     if (err) console.error(err);
+    else console.log("DB saved.");
     process.exit(0);
   })
 );
