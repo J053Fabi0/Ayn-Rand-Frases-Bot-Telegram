@@ -14,15 +14,17 @@ const sleep = promisify(setTimeout);
 
 dotenv.config({ path: join(__dirname, "..", ".env") });
 if (!process.env.ADMIN_ID) console.log("ADMIN_ID no está configurado en .env"), process.exit();
-if (!process.env.BOT_TOKEN) console.log("BOT_TOKEN no está configurado en .env"), process.exit();
 if (!process.env.GROUP_ID) console.log("GROUP_ID no está configurado en .env"), process.exit();
+if (!process.env.BOT_TOKEN) console.log("BOT_TOKEN no está configurado en .env"), process.exit();
 
 const bot = new Telegraf(process.env.BOT_TOKEN ?? "");
 
 // Solo me hará caso a mí.
 bot.on("message", (ctx, n) => {
-  if (ctx.message.chat.id + "" === process.env.ADMIN_ID) n();
-  else ctx.reply("Crea tu propia instancia: https://github.com/J053Fabi0/Ayn-Rand-Frases-Bot-Telegram");
+  if (ctx.message.chat.id + "" === process.env.ADMIN_ID) return n();
+
+  if (ctx.message.chat.type === "private")
+    ctx.reply("Crea tu propia instancia: https://github.com/J053Fabi0/Ayn-Rand-Frases-Bot-Telegram");
 });
 
 comandos(bot);
