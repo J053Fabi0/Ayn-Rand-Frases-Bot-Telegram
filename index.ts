@@ -3,12 +3,14 @@ import * as dotenv from "dotenv";
 import { promisify } from "util";
 import { Telegraf } from "telegraf";
 import comandos from "./comandos/comandos";
+import acciones from "./acciones/acciones";
 import publicarFrase from "./publicarFrase";
 import trueLength from "./utils/trueLength";
 import FrasesDB from "./types/frasesDB.type";
 import timeUntilHour from "./utils/timeUntilHour";
 import { frasesDB } from "./db/collections/collections";
-import { HORA_DE_PUBLICACIÓN, LÍMITE_TAMAÑO_MENSAJE } from "./constants";
+import getBotonesFrases from "./acciones/getBotonesFrases";
+import { FIRMA, HORA_DE_PUBLICACIÓN, LÍMITE_TAMAÑO_MENSAJE } from "./constants";
 
 const sleep = promisify(setTimeout);
 
@@ -23,11 +25,19 @@ const bot = new Telegraf(process.env.BOT_TOKEN ?? "");
 bot.on("message", (ctx, n) => {
   if (ctx.message.chat.id + "" === process.env.ADMIN_ID) return n();
 
-  if (ctx.message.chat.type === "private")
-    ctx.reply("Crea tu propia instancia: https://github.com/J053Fabi0/Ayn-Rand-Frases-Bot-Telegram");
+  if (ctx.message.chat.type === "private") {
+    const [frase] = frasesDB
+      .chain()
+      .find()
+      .data()
+      .sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
+    if (!frase) return ctx.reply("No hay frases.");
+    ctx.reply(frase.frase + FIRMA, getBotonesFrases(frase.$loki));
+  }
 });
 
 comandos(bot);
+acciones(bot);
 
 // Cuando reciba un mensaje mío, será tratado como una frase.
 bot.on("message", (ctx) => {
