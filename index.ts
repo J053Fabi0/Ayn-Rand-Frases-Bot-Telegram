@@ -14,6 +14,7 @@ import { FIRMA, HORA_DE_PUBLICACIÓN, LÍMITE_TAMAÑO_MENSAJE } from "./constant
 
 const sleep = promisify(setTimeout);
 
+dotenv.config();
 dotenv.config({ path: join(__dirname, "..", ".env") });
 if (!process.env.ADMIN_ID) console.log("ADMIN_ID no está configurado en .env"), process.exit();
 if (!process.env.GROUP_ID) console.log("GROUP_ID no está configurado en .env"), process.exit();

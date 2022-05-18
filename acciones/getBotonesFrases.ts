@@ -1,4 +1,4 @@
-import { Context, Markup } from "telegraf";
+import { Markup } from "telegraf";
 import { frasesDB } from "../db/collections/collections";
 
 export default function getBotonesFrases(idActual: number, ctx: any, anterior?: number, siguiente?: number) {
