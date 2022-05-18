@@ -11,7 +11,7 @@ export default function borrar(bot: Bot) {
 
     frasesDB.remove(id);
     ctx
-      .editMessageText("Listo, la he borrado.", getBotonesFrases(id, ctx, anterior, siguiente))
+      .reply("Listo, la he borrado.", getBotonesFrases(id, ctx, anterior, siguiente))
       .catch((e) => console.error(e));
   });
 }
