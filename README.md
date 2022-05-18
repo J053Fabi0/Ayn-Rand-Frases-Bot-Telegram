@@ -5,12 +5,12 @@
 
 # `.env`
 
-`BOT_TOKEN` El token del bot.
-
-`ADMIN_ID` El id del administrador que podrá usarlo privadamente.
-
-`GROUP_ID` El id del grupo.
+- `BOT_TOKEN` El token del bot.
+- `ADMIN_ID` El id del administrador que podrá usarlo privadamente.
+- `GROUP_ID` El id del grupo.
 
 # Correr el bot
 
-Una vez que tienes el `.env` configurado y has corrido una vez `npm i` debes correr `npm run start`.
+Copia el archivo `constants.example.ts` a `constants.ts` y modifica, si quieres, la hora de envío.
+
+Una vez que tienes el `.env` configurado y has corrido `npm i` debes correr `npm run start`.
