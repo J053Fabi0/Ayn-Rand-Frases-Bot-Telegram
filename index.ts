@@ -48,7 +48,7 @@ bot.on("message", (ctx) => {
   if (messageLength > LÍMITE_TAMAÑO_MENSAJE)
     return ctx.reply(`Es muy largo. Mide ${messageLength} y el límite son ${LÍMITE_TAMAÑO_MENSAJE}.`);
 
-  const a = frasesDB.insertOne({ frase, últimaVezEnviada: 0 } as FrasesDB);
+  const a = frasesDB.insertOne({ frase, últimaVezEnviada: 0, vecesEnviada: 0 } as FrasesDB);
   ctx.replyWithHTML(`Esta frase tiene el ID: ${a!.$loki}. Usa <code>/borrar ${a!.$loki}</code> para borrarla.`);
 });
 
