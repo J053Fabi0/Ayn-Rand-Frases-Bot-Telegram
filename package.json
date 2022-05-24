@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "npx tsc-watch --onSuccess \"nodemon dist/index.j \""
+    "start": "npx tsc-watch --onSuccess \"nodemon dist/index.js\""
   },
   "keywords": [],
   "author": "",
