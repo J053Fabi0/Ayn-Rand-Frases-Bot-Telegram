@@ -19,7 +19,6 @@
   "dependencies": {
     "death": "^1.1.0",
     "dotenv": "^16.0.1",
-    "lodash.maxby": "^4.6.0",
     "lokijs": "^1.5.12",
     "telegraf": "^4.8.2"
   }
