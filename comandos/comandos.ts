@@ -4,6 +4,7 @@ import frase from "./frase";
 import borrar from "./borrar";
 import frases from "./frases";
 import editar from "./editar";
+import saltar from "./saltar";
 import mezclar from "./mezclar";
 import restante from "./restante";
 import publicar from "./publicar";
@@ -15,6 +16,7 @@ export default function comandos(bot: Bot) {
   decir(bot);
   borrar(bot);
   frases(bot);
+  saltar(bot);
   editar(bot);
   mezclar(bot);
   restante(bot);
