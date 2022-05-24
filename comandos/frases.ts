@@ -6,7 +6,7 @@ export default function frases(bot: Bot) {
     ctx.replyWithHTML(
       "<code>" +
         (() => {
-          const frases = frasesDB.find({});
+          const frases = frasesDB.find().sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
           if (frases.length === 0) return [{ $loki: "No hay" }];
           return frases;
         })()
