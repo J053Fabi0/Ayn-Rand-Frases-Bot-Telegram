@@ -92,3 +92,6 @@ customDeath(() =>
     process.exit(0);
   })
 );
+
+const frases = frasesDB.find();
+for (const frase of frases) if (typeof frase.vecesEnviada !== "number") frase.vecesEnviada = 0;

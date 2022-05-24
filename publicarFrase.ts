@@ -5,7 +5,7 @@ import { frasesDB } from "./db/collections/collections";
 export default async function publicarFrase(id?: number) {
   const frases = frasesDB
     .chain()
-    .find(id ? { $loki: id } : {})
+    .find(id ? { $loki: id } : undefined)
     .data()
     .sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
 
@@ -16,6 +16,8 @@ export default async function publicarFrase(id?: number) {
     } catch (e) {
       console.error(e);
     }
-    frasesDB.findOne({ $loki })!.últimaVezEnviada = Date.now();
+    const fraseDB = frasesDB.findOne({ $loki });
+    fraseDB!.últimaVezEnviada = Date.now();
+    fraseDB!.vecesEnviada = fraseDB!.vecesEnviada === undefined ? 1 : fraseDB!.vecesEnviada + 1;
   }
 }
