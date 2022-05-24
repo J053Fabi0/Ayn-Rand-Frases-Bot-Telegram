@@ -1,4 +1,3 @@
-import maxBy from "lodash.maxby";
 import Bot from "../types/bot.type";
 import { frasesDB } from "../db/collections/collections";
 
