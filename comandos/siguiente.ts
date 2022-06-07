@@ -2,7 +2,7 @@ import Bot from "../types/bot.type";
 import { frasesDB } from "../db/collections/collections";
 
 export default function siguiente(bot: Bot) {
-  bot.command("siguiente", (ctx) => {
+  bot.command(["siguiente", "next"], (ctx) => {
     const id = parseInt(ctx.message.text.split(" ")[1]);
     if (isNaN(id)) return ctx.reply(id + " no es un número.");
 
