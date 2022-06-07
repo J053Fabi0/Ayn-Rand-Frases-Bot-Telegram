@@ -21,7 +21,7 @@ export default function frases(bot: Bot) {
       .map(
         (key) =>
           `<b>Veces enviadas: ${key}</b>\n` +
-          `<code>${frasesPorVecesEnviadas[key].map((a) => (a as FrasesDB).$loki).join("</code>, <code>")}</code>`
+          `<code>${frasesPorVecesEnviadas[key].map((a) => (a as FrasesDB).$loki).join(", ")}</code>`
       )
       .join("\n\n");
 
