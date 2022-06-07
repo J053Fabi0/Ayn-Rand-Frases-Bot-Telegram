@@ -1,18 +1,30 @@
 import Bot from "../types/bot.type";
+import groupBy from "lodash.groupby";
 import { frasesDB } from "../db/collections/collections";
+import FrasesDB from "../types/frasesDB.type";
 
 export default function frases(bot: Bot) {
-  bot.command(["frases", "ids"], (ctx) =>
-    ctx.replyWithHTML(
-      "<code>" +
-        (() => {
-          const frases = frasesDB.find().sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
-          if (frases.length === 0) return [{ $loki: "No hay" }];
-          return frases;
-        })()
-          .map(({ $loki }) => $loki)
-          .join(", ") +
-        "</code>"
-    )
-  );
+  bot.command(["frases", "ids"], (ctx) => {
+    const a = groupBy(
+      (() => {
+        const frases = frasesDB.find().sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
+        if (frases.length === 0) return [{ $loki: "No hay", vecesEnviada: 0 }];
+        return frases;
+      })(),
+      "vecesEnviada"
+    );
+    const keys = Object.keys(a)
+      .map((a) => parseInt(a))
+      .sort();
+
+    const b = keys
+      .map(
+        (key) =>
+          `<b>Veces enviadas: ${key}</b>\n` +
+          `<code>${a[key].map((a) => (a as FrasesDB).$loki).join("</code>, <code>")}</code>`
+      )
+      .join("\n\n");
+
+    ctx.replyWithHTML(b);
+  });
 }
