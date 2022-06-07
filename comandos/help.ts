@@ -5,6 +5,7 @@ const mensajeAyuda =
   "· <code>/decir &#60;mensaje</code> - Publica el mensaje en el grupo.\n" +
   "· <code>/editar &#60;ID> &#60;nueva frase></code> - Cambia la frase.\n" +
   "· <code>/mezclar</code> - Mezcla las frases que faltan de enviar.\n" +
+  "· <code>/saltar &#60;ID></code> - Salta la frase correspondiente al ID.\n" +
   "· <code>/frase &#60;ID></code> - Muestra la frase correspondiente al ID.\n" +
   "· <code>/borrar &#60;ID></code> - Elimina la frase correspondiente al ID.\n" +
   "· <code>/publicar &#60;ID></code> - Publica la frase correspondiente al ID.\n" +
