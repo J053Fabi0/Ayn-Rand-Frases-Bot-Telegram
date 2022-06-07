@@ -3,9 +3,7 @@ import Bot from "../types/bot.type";
 
 export default function saltar(bot: Bot) {
   bot.command(["saltar", "skip"], (ctx) => {
-    const [, idString] = ctx.message.text.split(" ");
-
-    const id = parseInt(idString);
+    const id = parseInt(ctx.message.text.split(" ")[1]);
     if (isNaN(id)) return ctx.reply(id + " no es un número.");
 
     const frase = frasesDB.findOne({ $loki: id });
