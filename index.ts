@@ -22,10 +22,11 @@ if (!process.env.BOT_TOKEN) console.log("BOT_TOKEN no está configurado en .env"
 
 const bot = new Telegraf(process.env.BOT_TOKEN ?? "");
 
-// Solo me hará caso a mí.
-bot.on("message", (ctx, n) => {
-  if (ctx.message.chat.id + "" === process.env.ADMIN_ID) return n();
+bot.on("message", (ctx, next) => {
+  // Acceso de administrador
+  if (ctx.message.chat.id + "" === process.env.ADMIN_ID) return next();
 
+  // Acceso de usuario
   if (ctx.message.chat.type === "private") {
     const [frase] = frasesDB
       .chain()
@@ -40,7 +41,7 @@ bot.on("message", (ctx, n) => {
 comandos(bot);
 acciones(bot);
 
-// Cuando reciba un mensaje mío, será tratado como una frase.
+// Cuando reciba un mensaje mío, será tratado como una nueva frase para añadir.
 bot.on("message", (ctx) => {
   const frase = (ctx.message as any).text as string;
 
