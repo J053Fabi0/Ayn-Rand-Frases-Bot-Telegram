@@ -3,19 +3,19 @@ import { frasesDB } from "../db/collections/collections";
 
 export default function mezclar(bot: Bot) {
   bot.command("mezclar", async (ctx) => {
-    let frases = frasesDB.find().sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
+    let frases = frasesDB.find();
 
     const minVecesEnviada = Math.min(...frases.map(({ vecesEnviada }) => vecesEnviada));
-    const frasesAMezclar = frases.filter(({ vecesEnviada }) => vecesEnviada === minVecesEnviada);
+    frases = frases.filter(({ vecesEnviada }) => vecesEnviada === minVecesEnviada);
 
-    const ordenActual = frasesAMezclar.map(({ $loki }) => $loki).join(", ");
+    const ordenActual = frases.map(({ $loki }) => $loki).join(", ");
 
-    for (const frase of frasesAMezclar) frase.últimaVezEnviada = Math.floor(Math.random() * -99999);
+    for (const frase of frases) frase.últimaVezEnviada = Math.floor(Math.random() * -99999);
 
     await ctx.replyWithHTML(
       `Las frases que han sido enviadas ${minVecesEnviada} ve${minVecesEnviada === 1 ? "z" : "ces"}.\n\n` +
-        `Orden actual: <code>${ordenActual}</code>\n\n` +
-        `Nuevo orden: <code>${frasesAMezclar
+        `Orden anterior: <code>${ordenActual}</code>\n\n` +
+        `Orden actual: <code>${frases
           .sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b)
           .map(({ $loki }) => $loki)
           .join(", ")}</code>`

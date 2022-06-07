@@ -5,7 +5,7 @@ import FrasesDB from "../types/frasesDB.type";
 
 export default function frases(bot: Bot) {
   bot.command(["frases", "ids"], (ctx) => {
-    const a = groupBy(
+    const frasesPorVecesEnviadas = groupBy(
       (() => {
         const frases = frasesDB.find().sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
         if (frases.length === 0) return [{ $loki: "No hay", vecesEnviada: 0 }];
@@ -13,18 +13,18 @@ export default function frases(bot: Bot) {
       })(),
       "vecesEnviada"
     );
-    const keys = Object.keys(a)
+    const keys = Object.keys(frasesPorVecesEnviadas)
       .map((a) => parseInt(a))
       .sort();
 
-    const b = keys
+    const texto = keys
       .map(
         (key) =>
           `<b>Veces enviadas: ${key}</b>\n` +
-          `<code>${a[key].map((a) => (a as FrasesDB).$loki).join("</code>, <code>")}</code>`
+          `<code>${frasesPorVecesEnviadas[key].map((a) => (a as FrasesDB).$loki).join("</code>, <code>")}</code>`
       )
       .join("\n\n");
 
-    ctx.replyWithHTML(b);
+    ctx.replyWithHTML(texto);
   });
 }
