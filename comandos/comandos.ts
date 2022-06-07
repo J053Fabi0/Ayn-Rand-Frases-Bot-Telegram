@@ -8,6 +8,7 @@ import saltar from "./saltar";
 import mezclar from "./mezclar";
 import restante from "./restante";
 import publicar from "./publicar";
+import siguiente from "./siguiente";
 import Bot from "../types/bot.type";
 
 export default function comandos(bot: Bot) {
@@ -21,4 +22,5 @@ export default function comandos(bot: Bot) {
   mezclar(bot);
   restante(bot);
   publicar(bot);
+  siguiente(bot);
 }
