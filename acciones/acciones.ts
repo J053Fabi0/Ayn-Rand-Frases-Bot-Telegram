@@ -1,6 +1,6 @@
 import frase from "./frase";
-import Bot from "../types/bot.type";
 import borrar from "./borrar";
+import Bot from "../types/bot.type";
 
 export default function acciones(bot: Bot) {
   frase(bot);

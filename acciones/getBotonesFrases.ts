@@ -1,7 +1,20 @@
 import { Markup } from "telegraf";
 import { frasesDB } from "../db/collections/collections";
 
-export default function getBotonesFrases(idActual: number, ctx: any, anterior?: number, siguiente?: number) {
+/**
+ *
+ * @param idActual El id de la frase actual
+ * @param userID El userID, para saber si el usuario es admin o no y ponerle así el bote de basura
+ * @param anterior El id de la frase anterior
+ * @param siguiente El id de la frase siguiente
+ * @returns
+ */
+export default function getBotonesFrases(
+  idActual: number,
+  userID: number | string,
+  anterior?: number,
+  siguiente?: number
+) {
   const frases = frasesDB
     .chain()
     .find()
@@ -14,7 +27,7 @@ export default function getBotonesFrases(idActual: number, ctx: any, anterior?: 
   if (!siguiente) siguiente = frases[indexActual < frases.length - 1 ? indexActual + 1 : 0].$loki;
 
   const adminButtons = [];
-  if (ctx.chat.id + "" === process.env.ADMIN_ID && indexActual !== -1)
+  if (userID + "" === process.env.ADMIN_ID && indexActual !== -1)
     adminButtons.push(
       { text: "🗑", callback_data: `borrar_${idActual}_${anterior}_${siguiente}` },
       { text: idActual + "", callback_data: "void" }

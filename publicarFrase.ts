@@ -1,24 +1,46 @@
 import bot from ".";
+import { promisify } from "util";
+import { Context } from "telegraf";
 import { FIRMA } from "./constants";
 import FrasesDB from "./types/frasesDB.type";
-import { frasesDB } from "./db/collections/collections";
+import getBotonesFrases from "./acciones/getBotonesFrases";
+import { frasesDB, personasDB } from "./db/collections/collections";
+import iteratePromisesInChunks from "./utils/promisesYieldedInChunks";
 
-export default async function publicarFrase(id?: number) {
+const sleep = promisify(setTimeout);
+
+export default async function publicarFrase(id?: number, userID?: number | string) {
   const frases = frasesDB
-    .chain()
-    .find(id ? { $loki: id, vecesEnviada: Math.min(...frasesDB.find().map((a) => a.vecesEnviada)) } : undefined)
-    .data()
+    .find(id ? { $loki: id } : { vecesEnviada: Math.min(...frasesDB.find().map((a) => a.vecesEnviada)) })
     .sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b); // Se envía siguiente la que tenga menos tiempo de haber sido enviada y que tenga el número menor de vecesEnviada.
 
-  if (frases.length >= 1) {
-    const { frase, $loki } = frases[0];
-    try {
-      await bot.telegram.sendMessage(process.env.GROUP_ID ?? "", frase + FIRMA);
-    } catch (e) {
-      console.error(e);
+  const { frase = "No hay frases.", $loki } = frases[0] ?? {};
+
+  try {
+    if (userID) {
+      bot.telegram.sendMessage(
+        userID,
+        frase + ($loki ? FIRMA : ""),
+        $loki ? getBotonesFrases($loki, userID) : undefined
+      );
+      return;
     }
-    const fraseDB = frasesDB.findOne({ $loki }) as FrasesDB;
-    fraseDB.últimaVezEnviada = Date.now();
-    fraseDB.vecesEnviada = fraseDB!.vecesEnviada === undefined ? 1 : fraseDB!.vecesEnviada + 1;
+
+    await iteratePromisesInChunks(
+      personasDB.find().map(
+        ({ userID }) =>
+          () =>
+            sleep(1000, bot.telegram.sendMessage(userID, frase + ($loki ? FIRMA : ""))) // Luego de 1 segundo se enviará este mensaje
+      ),
+      5 // Se enviarán 5 mensajes al mismo tiempo cada 1 segundo.
+    );
+  } catch (e) {
+    console.error(e);
   }
+
+  if (frases.length === 0) return;
+
+  const fraseDB = frasesDB.findOne({ $loki }) as FrasesDB;
+  fraseDB.últimaVezEnviada = Date.now();
+  fraseDB.vecesEnviada = fraseDB!.vecesEnviada === undefined ? 1 : fraseDB!.vecesEnviada + 1;
 }

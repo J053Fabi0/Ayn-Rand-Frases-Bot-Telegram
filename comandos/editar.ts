@@ -25,6 +25,6 @@ export default function editar(bot: Bot) {
     if (nuevaFrase === "") return ctx.reply("Tienes que decirme una nueva frase luego del ID.");
 
     frase.frase = nuevaFrase;
-    ctx.reply(frase.frase + FIRMA, getBotonesFrases(frase.$loki, ctx)).catch((e) => console.error(e));
+    ctx.reply(frase.frase + FIRMA, getBotonesFrases(frase.$loki, ctx.chat.id)).catch((e) => console.error(e));
   });
 }

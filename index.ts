@@ -22,24 +22,23 @@ if (!process.env.BOT_TOKEN) console.log("BOT_TOKEN no está configurado en .env"
 
 const bot = new Telegraf(process.env.BOT_TOKEN ?? "");
 
+acciones(bot);
+comandos(bot, "públicos");
+
 bot.on("message", (ctx, next) => {
+  const userID = ctx.chat.id + "";
+
   // Acceso de administrador
-  if (ctx.message.chat.id + "" === process.env.ADMIN_ID) return next();
+  if (userID === process.env.ADMIN_ID) {
+    if ((ctx.message as any).text === "/frase") return publicarFrase(undefined, userID);
+    return next();
+  }
 
   // Acceso de usuario
-  if (ctx.message.chat.type === "private") {
-    const [frase] = frasesDB
-      .chain()
-      .find()
-      .data()
-      .sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
-    if (!frase) return ctx.reply("No hay frases.");
-    ctx.reply(frase.frase + FIRMA, getBotonesFrases(frase.$loki, ctx));
-  }
+  if (ctx.chat.type === "private") publicarFrase(undefined, userID);
 });
 
-comandos(bot);
-acciones(bot);
+comandos(bot, "administrador");
 
 // Cuando reciba un mensaje mío, será tratado como una nueva frase para añadir.
 bot.on("message", (ctx) => {
