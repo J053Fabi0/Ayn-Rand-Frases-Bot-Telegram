@@ -19,6 +19,6 @@ export default function frase(bot: Bot) {
           "</code>"
       );
 
-    ctx.reply(frase.frase + FIRMA, getBotonesFrases(frase.$loki, ctx));
+    ctx.reply(frase.frase + FIRMA, getBotonesFrases(frase.$loki, ctx.chat.id));
   });
 }

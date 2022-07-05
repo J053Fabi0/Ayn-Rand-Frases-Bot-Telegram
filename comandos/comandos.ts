@@ -10,17 +10,24 @@ import restante from "./restante";
 import publicar from "./publicar";
 import siguiente from "./siguiente";
 import Bot from "../types/bot.type";
+import suscribirse from "./suscribirse";
+import desuscribirse from "./desuscribirse";
 
-export default function comandos(bot: Bot) {
-  help(bot);
-  frase(bot);
-  decir(bot);
-  borrar(bot);
-  frases(bot);
-  saltar(bot);
-  editar(bot);
-  mezclar(bot);
-  restante(bot);
-  publicar(bot);
-  siguiente(bot);
+export default function comandos(bot: Bot, tipo: "públicos" | "administrador") {
+  if (tipo === "públicos") {
+    help(bot);
+    restante(bot);
+    suscribirse(bot);
+    desuscribirse(bot);
+  } else {
+    frase(bot);
+    decir(bot);
+    borrar(bot);
+    frases(bot);
+    saltar(bot);
+    editar(bot);
+    mezclar(bot);
+    publicar(bot);
+    siguiente(bot);
+  }
 }

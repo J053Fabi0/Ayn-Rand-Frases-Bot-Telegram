@@ -4,8 +4,9 @@ import publicarFrase from "../publicarFrase";
 
 export default function publicar(bot: Bot) {
   bot.command("publicar", (ctx) => {
-    const id = parseInt(ctx.message.text.split(" ")[1]);
-    if (isNaN(id)) return ctx.reply(id + " no es un número.");
+    const idString = ctx.message.text.split(" ")[1];
+    const id = parseInt(idString);
+    if (isNaN(id)) return publicarFrase();
 
     if (!frasesDB.findOne({ $loki: id }))
       return ctx.replyWithHTML(
