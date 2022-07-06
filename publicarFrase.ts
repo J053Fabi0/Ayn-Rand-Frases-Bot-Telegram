@@ -1,6 +1,5 @@
 import bot from ".";
 import { promisify } from "util";
-import { Context } from "telegraf";
 import { FIRMA } from "./constants";
 import FrasesDB from "./types/frasesDB.type";
 import getBotonesFrases from "./acciones/getBotonesFrases";
@@ -9,7 +8,11 @@ import iteratePromisesInChunks from "./utils/promisesYieldedInChunks";
 
 const sleep = promisify(setTimeout);
 
-export default async function publicarFrase(id?: number, userID?: number | string) {
+export default async function publicarFrase(
+  id?: number,
+  chatID?: number | string,
+  chatType?: "group" | "supergroup" | "private"
+) {
   const frases = frasesDB
     .find(id ? { $loki: id } : { vecesEnviada: Math.min(...frasesDB.find().map((a) => a.vecesEnviada)) })
     .sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b); // Se envía siguiente la que tenga menos tiempo de haber sido enviada y que tenga el número menor de vecesEnviada.
@@ -17,11 +20,11 @@ export default async function publicarFrase(id?: number, userID?: number | strin
   const { frase = "No hay frases.", $loki } = frases[0] ?? {};
 
   try {
-    if (userID) {
+    if (chatID) {
       bot.telegram.sendMessage(
-        userID,
+        chatID,
         frase + ($loki ? FIRMA : ""),
-        $loki ? getBotonesFrases($loki, userID) : undefined
+        $loki && chatType === "private" ? getBotonesFrases($loki, chatID) : undefined
       );
       return;
     }
