@@ -18,6 +18,6 @@ export default function publicar(bot: Bot) {
           "</code>"
       );
 
-    publicarFrase(id);
+    publicarFrase({ id });
   });
 }

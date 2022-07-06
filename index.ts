@@ -31,7 +31,7 @@ bot.on("message", (ctx, next) => {
   // A los usuarios normales se les enviará la frase actual ante cualquier mensaje desconocido.
   // En cualquier otro tipo de chat que no sea privado, se enviará solo ante el comando /frase.
   if (ctx.chat.type === "private" || (ctx.message as any).text === "/frase")
-    publicarFrase(undefined, chatID, ctx.chat.type);
+    publicarFrase({ chatID, chatType: ctx.chat.type });
 });
 
 acciones(bot);
