@@ -1,12 +1,9 @@
 import bot from ".";
-import { promisify } from "util";
 import { FIRMA } from "./constants";
 import FrasesDB from "./types/frasesDB.type";
+import { frasesDB } from "./db/collections/collections";
 import getBotonesFrases from "./acciones/getBotonesFrases";
-import { frasesDB, personasDB } from "./db/collections/collections";
-import iteratePromisesInChunks from "./utils/promisesYieldedInChunks";
-
-const sleep = promisify(setTimeout);
+import enviarMensajeMasivo from "./utils/enviarMensajeMasivo";
 
 interface CommonParams {
   id?: number;
@@ -40,28 +37,18 @@ export default async function publicarFrase({ id, chatID, chatType }: Params = {
   const { frase = "No hay frases.", $loki } = frases[0] ?? {};
 
   try {
-    if (chatID) {
+    if (chatID)
       bot.telegram.sendMessage(
         chatID,
         frase + ($loki ? FIRMA : ""),
         $loki && chatType === "private" ? getBotonesFrases($loki, chatID) : undefined
       );
-      return;
-    }
-
-    await iteratePromisesInChunks(
-      personasDB.find().map(
-        ({ userID }) =>
-          () =>
-            sleep(1000, bot.telegram.sendMessage(userID, frase + ($loki ? FIRMA : ""))) // Luego de 1 segundo se enviará este mensaje
-      ),
-      5 // Se enviarán 5 mensajes al mismo tiempo cada 1 segundo.
-    );
+    else await enviarMensajeMasivo(frase + ($loki ? FIRMA : ""));
   } catch (e) {
     console.error(e);
   }
 
-  if (frases.length === 0) return;
+  if (frases.length === 0 || chatID) return;
 
   const fraseDB = frasesDB.findOne({ $loki }) as FrasesDB;
   fraseDB.últimaVezEnviada = Date.now();
