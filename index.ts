@@ -9,8 +9,7 @@ import trueLength from "./utils/trueLength";
 import FrasesDB from "./types/frasesDB.type";
 import timeUntilHour from "./utils/timeUntilHour";
 import { frasesDB } from "./db/collections/collections";
-import getBotonesFrases from "./acciones/getBotonesFrases";
-import { FIRMA, HORA_DE_PUBLICACIÓN, LÍMITE_TAMAÑO_MENSAJE } from "./constants";
+import { HORA_DE_PUBLICACIÓN, LÍMITE_TAMAÑO_MENSAJE } from "./constants";
 
 const sleep = promisify(setTimeout);
 
@@ -21,7 +20,6 @@ if (!process.env.BOT_TOKEN) console.log("BOT_TOKEN no está configurado en .env"
 
 const bot = new Telegraf(process.env.BOT_TOKEN ?? "");
 
-acciones(bot);
 comandos(bot, "públicos");
 
 bot.on("message", (ctx, next) => {
@@ -32,9 +30,11 @@ bot.on("message", (ctx, next) => {
 
   // A los usuarios normales se les enviará la frase actual ante cualquier mensaje desconocido.
   // En cualquier otro tipo de chat que no sea privado, se enviará solo ante el comando /frase.
-  if (ctx.chat.type === "private" || (ctx.message as any).text === "/frase") publicarFrase(undefined, chatID);
+  if (ctx.chat.type === "private" || (ctx.message as any).text === "/frase")
+    publicarFrase(undefined, chatID, ctx.chat.type);
 });
 
+acciones(bot);
 comandos(bot, "administrador");
 
 // Cuando reciba un mensaje mío, será tratado como una nueva frase para añadir.
