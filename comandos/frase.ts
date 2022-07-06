@@ -2,9 +2,13 @@ import Bot from "../types/bot.type";
 import { FIRMA } from "../constants";
 import { frasesDB } from "../db/collections/collections";
 import getBotonesFrases from "../acciones/getBotonesFrases";
+import publicarFrase from "../publicarFrase";
 
 export default function frase(bot: Bot) {
   bot.command(["frase", "ver"], (ctx) => {
+    const chatID = ctx.chat.id + "";
+    if (ctx.message.text === "/frase" || chatID !== process.env.ADMIN_ID) return publicarFrase(undefined, chatID);
+
     const id = parseInt(ctx.message.text.split(" ")[1]);
     if (isNaN(id)) return ctx.reply(id + " no es un número.");
 

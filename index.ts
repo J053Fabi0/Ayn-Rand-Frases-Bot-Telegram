@@ -17,7 +17,6 @@ const sleep = promisify(setTimeout);
 dotenv.config();
 dotenv.config({ path: join(__dirname, "..", ".env") });
 if (!process.env.ADMIN_ID) console.log("ADMIN_ID no está configurado en .env"), process.exit();
-if (!process.env.GROUP_ID) console.log("GROUP_ID no está configurado en .env"), process.exit();
 if (!process.env.BOT_TOKEN) console.log("BOT_TOKEN no está configurado en .env"), process.exit();
 
 const bot = new Telegraf(process.env.BOT_TOKEN ?? "");
@@ -26,16 +25,14 @@ acciones(bot);
 comandos(bot, "públicos");
 
 bot.on("message", (ctx, next) => {
-  const userID = ctx.chat.id + "";
+  const chatID = ctx.chat.id + "";
 
-  // Acceso de administrador
-  if (userID === process.env.ADMIN_ID) {
-    if ((ctx.message as any).text === "/frase") return publicarFrase(undefined, userID);
-    return next();
-  }
+  // Al administrador se le dejará tener acceso a los demás comandos
+  if (chatID === process.env.ADMIN_ID) return next();
 
-  // Acceso de usuario
-  if (ctx.chat.type === "private") publicarFrase(undefined, userID);
+  // A los usuarios normales se les enviará la frase actual ante cualquier mensaje desconocido.
+  // En cualquier otro tipo de chat que no sea privado, se enviará solo ante el comando /frase.
+  if (ctx.chat.type === "private" || (ctx.message as any).text === "/frase") publicarFrase(undefined, chatID);
 });
 
 comandos(bot, "administrador");
