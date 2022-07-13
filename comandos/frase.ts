@@ -5,7 +5,9 @@ import { frasesDB } from "../db/collections/collections";
 import getBotonesFrases from "../acciones/getBotonesFrases";
 
 export default function frase(bot: Bot) {
-  bot.hears([/^\/frase/, /^\/ver/], (ctx) => {
+  bot.hears([/^\/frase/, /^\/ver/], (ctx, next) => {
+    if (/^\/frases/.test(ctx.message.text)) return next();
+
     const chatID = ctx.chat.id + "";
     if (ctx.message.text === "/frase" || chatID !== process.env.ADMIN_ID)
       return publicarFrase({ chatID, chatType: ctx.chat.type });
