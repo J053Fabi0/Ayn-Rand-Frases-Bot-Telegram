@@ -5,10 +5,10 @@ import { frasesDB } from "../db/collections/collections";
 import getBotonesFrases from "../acciones/getBotonesFrases";
 
 export default function frase(bot: Bot) {
-  bot.command(["frase", "ver"], (ctx) => {
+  bot.hears([/^\/frase/, /^\/ver/], (ctx) => {
     const chatID = ctx.chat.id + "";
     if (ctx.message.text === "/frase" || chatID !== process.env.ADMIN_ID)
-      return publicarFrase({ id: undefined, chatID, chatType: ctx.chat.type });
+      return publicarFrase({ chatID, chatType: ctx.chat.type });
 
     const id = parseInt(ctx.message.text.split(" ")[1]);
     if (isNaN(id)) return ctx.reply(id + " no es un número.");
