@@ -1,5 +1,4 @@
 import bot from ".";
-import { FIRMA } from "./constants";
 import FrasesDB from "./types/frasesDB.type";
 import { frasesDB } from "./db/collections/collections";
 import getBotonesFrases from "./acciones/getBotonesFrases";
@@ -40,10 +39,10 @@ export default async function publicarFrase({ id, chatID, chatType }: Params = {
     if (chatID)
       bot.telegram.sendMessage(
         chatID,
-        frase + ($loki ? FIRMA : ""),
+        frase,
         $loki && chatType === "private" ? getBotonesFrases($loki, chatID) : undefined
       );
-    else await enviarMensajeMasivo(frase + ($loki ? FIRMA : ""));
+    else await enviarMensajeMasivo(frase);
   } catch (e) {
     console.error(e);
   }

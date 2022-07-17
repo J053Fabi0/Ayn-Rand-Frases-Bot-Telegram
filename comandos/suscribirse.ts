@@ -2,7 +2,7 @@ import Bot from "../types/bot.type";
 import PersonasDB from "../types/personasDB.type";
 import timeUntilHour from "../utils/timeUntilHour";
 import { personasDB } from "../db/collections/collections";
-import { HORA_DE_PUBLICACIÓN } from "../constants.example";
+import { HORA_DE_PUBLICACIÓN } from "../constants";
 
 export default function suscribirse(bot: Bot) {
   bot.command(["suscribirse", "suscribir", "suscribirme"], async (ctx) => {
