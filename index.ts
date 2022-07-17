@@ -11,6 +11,16 @@ import timeUntilHour from "./utils/timeUntilHour";
 import { frasesDB } from "./db/collections/collections";
 import { HORA_DE_PUBLICACIÓN, LÍMITE_TAMAÑO_MENSAJE } from "./constants";
 
+// Código temporal para hacer que todas las frases actuales sean de Ayn Rand.
+frasesDB.find().forEach(
+  (frase) =>
+    (frase.frase =
+      frase.frase +
+      `
+
+ - Ayn Rand.`)
+);
+
 const sleep = promisify(setTimeout);
 
 dotenv.config();

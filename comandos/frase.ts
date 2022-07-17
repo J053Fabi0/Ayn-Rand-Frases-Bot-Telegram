@@ -1,5 +1,4 @@
 import Bot from "../types/bot.type";
-import { FIRMA } from "../constants";
 import publicarFrase from "../publicarFrase";
 import { frasesDB } from "../db/collections/collections";
 import getBotonesFrases from "../acciones/getBotonesFrases";
@@ -26,6 +25,6 @@ export default function frase(bot: Bot) {
           "</code>"
       );
 
-    ctx.reply(frase.frase + FIRMA, getBotonesFrases(frase.$loki, ctx.chat.id));
+    ctx.reply(frase.frase, getBotonesFrases(frase.$loki, ctx.chat.id));
   });
 }

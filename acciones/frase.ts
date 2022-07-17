@@ -1,5 +1,4 @@
 import Bot from "../types/bot.type";
-import { FIRMA } from "../constants";
 import getBotonesFrases from "./getBotonesFrases";
 import { frasesDB } from "../db/collections/collections";
 import { Chat } from "telegraf/typings/core/types/typegram";
@@ -13,7 +12,7 @@ export default function (bot: Bot) {
     if (!frase) return ctx.editMessageText("Ésta frase ha sido eliminada.").catch((e) => console.error(e));
 
     ctx
-      .editMessageText(frase.frase + FIRMA, getBotonesFrases(frase.$loki, (ctx.chat as Chat).id))
+      .editMessageText(frase.frase, getBotonesFrases(frase.$loki, (ctx.chat as Chat).id))
       .catch((e) => console.error(e));
   });
 }
