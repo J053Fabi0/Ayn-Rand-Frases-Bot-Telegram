@@ -84,6 +84,15 @@ bot
     process.exit();
   });
 
+bot.catch((err) => {
+  console.log(err);
+  try {
+    bot.telegram.sendMessage(+(process.env.ADMIN_ID ?? 0), "Error.");
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 export default bot;
 
 //////////////////////////////////////////////////////////////
