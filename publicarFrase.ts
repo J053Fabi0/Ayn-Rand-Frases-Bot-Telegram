@@ -35,17 +35,13 @@ export default async function publicarFrase({ id, chatID, chatType }: Params = {
 
   const { frase = "No hay frases.", $loki } = frases[0] ?? {};
 
-  try {
-    if (chatID)
-      bot.telegram.sendMessage(
-        chatID,
-        frase,
-        $loki && chatType === "private" ? getBotonesFrases($loki, chatID) : undefined
-      );
-    else await enviarMensajeMasivo(frase);
-  } catch (e) {
-    console.error(e);
-  }
+  if (chatID)
+    bot.telegram.sendMessage(
+      chatID,
+      frase,
+      $loki && chatType === "private" ? getBotonesFrases($loki, chatID) : undefined
+    );
+  else await enviarMensajeMasivo(frase);
 
   if (frases.length === 0 || chatID) return;
 

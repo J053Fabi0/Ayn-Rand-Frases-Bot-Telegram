@@ -59,7 +59,17 @@ async function comenzarFrases() {
   );
   await sleep(time);
 
-  await publicarFrase();
+  let éxito = false;
+  while (éxito === false)
+    try {
+      await publicarFrase();
+      éxito = true;
+    } catch (e) {
+      console.log(e);
+      bot.telegram.sendMessage(+(process.env.ADMIN_ID ?? 0), "Error al enviar frase.");
+      await sleep(5_000);
+    }
+
   comenzarFrases();
 }
 
