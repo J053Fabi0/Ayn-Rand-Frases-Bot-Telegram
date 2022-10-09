@@ -1,6 +1,6 @@
 import Bot from "../types/bot.type";
-import { frasesDB } from "../db/collections/collections";
 import publicarFrase from "../publicarFrase";
+import { frasesDB } from "../db/collections/collections";
 
 export default function publicar(bot: Bot) {
   bot.command("publicar", (ctx) => {

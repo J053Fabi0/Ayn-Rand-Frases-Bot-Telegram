@@ -11,7 +11,11 @@ export default function enviarMensajeMasivo(
 ) {
   return iteratePromisesInChunks(
     personas.map(
-      (userID) => () => sleep(1000, bot.telegram.sendMessage(userID, mensaje + "")) // Luego de 1 segundo se enviará este mensaje
+      (userID) => () =>
+        sleep(
+          1000, // Luego de 1 segundo se enviará este mensaje
+          bot.telegram.sendMessage(userID, mensaje + "").catch(() => {})
+        )
     ),
     5 // Se enviarán 5 mensajes al mismo tiempo cada 1 segundo.
   );

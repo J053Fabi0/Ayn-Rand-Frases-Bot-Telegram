@@ -22,7 +22,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN ?? "");
 
 comandos(bot, "públicos");
 
-bot.on("message", (ctx, next) => {
+bot.on("message", async (ctx, next) => {
   const chatID = ctx.chat.id + "";
 
   // Al administrador se le dejará tener acceso a los demás comandos
@@ -31,7 +31,9 @@ bot.on("message", (ctx, next) => {
   // A los usuarios normales se les enviará la frase actual ante cualquier mensaje desconocido.
   // En cualquier otro tipo de chat que no sea privado, se enviará solo ante el comando /frase.
   if (ctx.chat.type === "private" || /^\/frase/.test((ctx.message as any).text))
-    publicarFrase({ chatID, chatType: ctx.chat.type });
+    try {
+      await publicarFrase({ chatID, chatType: ctx.chat.type });
+    } catch (_) {}
 });
 
 acciones(bot);
