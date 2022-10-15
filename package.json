@@ -4,7 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "npx tsc-watch --onSuccess \"nodemon dist/index.js\""
+    "stop": "pm2 stop aynrandbot",
+    "status": "pm2 status aynrandbot",
+    "start": "pm2 stop aynrandbot && npx tsc && pm2 start dist/index.js --name aynrandbot --attach",
+    "dev": "npx tsc-watch --onSuccess \"nodemon dist/index.js\""
   },
   "keywords": [],
   "author": "",
@@ -25,6 +28,7 @@
     "lodash.chunk": "^4.2.0",
     "lodash.groupby": "^4.6.0",
     "lokijs": "^1.5.12",
+    "pm2": "^5.2.2",
     "telegraf": "^4.8.2"
   }
 }
