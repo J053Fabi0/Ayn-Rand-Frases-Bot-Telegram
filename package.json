@@ -6,7 +6,7 @@
   "scripts": {
     "stop": "pm2 stop aynrandbot",
     "status": "pm2 status aynrandbot",
-    "start": "pm2 stop aynrandbot && npx tsc && pm2 start dist/index.js --name aynrandbot --attach",
+    "start": "pm2 stop aynrandbot && npx tsc && pm2 start dist/index.js --name aynrandbot && pm2 logs aynrandbot",
     "create": "npx tsc && pm2 start dist/index.js --name aynrandbot && pm2 stop aynrandbot",
     "dev": "npx tsc-watch --onSuccess \"nodemon dist/index.js\""
   },
