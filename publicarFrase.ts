@@ -1,8 +1,8 @@
-import bot from ".";
-import FrasesDB from "./types/frasesDB.type";
-import { frasesDB } from "./db/collections/collections";
-import getBotonesFrases from "./acciones/getBotonesFrases";
-import enviarMensajeMasivo from "./utils/enviarMensajeMasivo";
+import bot from "./initBot.ts";
+import FrasesDB from "./types/frasesDB.type.ts";
+import { frasesDB } from "./db/collections/collections.ts";
+import getBotonesFrases from "./acciones/getBotonesFrases.ts";
+import enviarMensajeMasivo from "./utils/enviarMensajeMasivo.ts";
 
 interface CommonParams {
   id?: number;
@@ -33,16 +33,16 @@ export default async function publicarFrase({ id, chatID, chatType }: Params = {
   // que tenga el número menor de vecesEnviada.
   // Si es usando el comando /frase, se intenciona compartir la última que se envió, así que se invierte el órden.
 
-  const { frase = "No hay frases.", $loki } = frases[0] ?? {};
+  const { frase = "No hay frases.", $loki = undefined } = frases[0] ?? {};
 
   if (chatID)
-    try {
-      bot.telegram.sendMessage(
+    bot.api
+      .sendMessage(
         chatID,
         frase,
-        $loki && chatType === "private" ? getBotonesFrases($loki, chatID) : undefined
-      );
-    } catch (_) {}
+        $loki && chatType === "private" ? { reply_markup: getBotonesFrases($loki, chatID) } : undefined
+      )
+      .catch(() => {});
   else await enviarMensajeMasivo(frase);
 
   if (frases.length === 0 || chatID) return;

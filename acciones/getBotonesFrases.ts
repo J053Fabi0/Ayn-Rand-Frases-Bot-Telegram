@@ -1,5 +1,6 @@
-import { Markup } from "telegraf";
-import { frasesDB } from "../db/collections/collections";
+import { ADMIN_ID } from "../env.ts";
+import { InlineKeyboard } from "grammy/mod.ts";
+import { frasesDB } from "../db/collections/collections.ts";
 
 /**
  *
@@ -15,11 +16,7 @@ export default function getBotonesFrases(
   anterior?: number,
   siguiente?: number
 ) {
-  const frases = frasesDB
-    .chain()
-    .find()
-    .data()
-    .sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
+  const frases = frasesDB.find().sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
   const indexActual = frases.findIndex(({ $loki }) => $loki === idActual);
 
   const customDirections = anterior || siguiente;
@@ -27,19 +24,19 @@ export default function getBotonesFrases(
   if (!siguiente) siguiente = frases[indexActual < frases.length - 1 ? indexActual + 1 : 0].$loki;
 
   const adminButtons = [];
-  if (userID + "" === process.env.ADMIN_ID && indexActual !== -1)
+  if (`${userID}` === ADMIN_ID && indexActual !== -1)
     adminButtons.push(
       { text: "🗑", callback_data: `borrar_${idActual}_${anterior}_${siguiente}` },
-      { text: idActual + "", callback_data: "void" }
+      { text: `${idActual}`, callback_data: "void" }
     );
 
-  return Markup.inlineKeyboard(
+  return new InlineKeyboard(
     (indexActual !== -1 || customDirections) && frases.length >= 2
       ? [
           [
-            { text: "◀️", callback_data: "a_frase_" + anterior },
+            { text: "◀️", callback_data: `a_frase_${anterior}` },
             ...adminButtons,
-            { text: "▶️", callback_data: "s_frase_" + siguiente },
+            { text: "▶️", callback_data: `s_frase_${siguiente}` },
           ],
         ]
       : [adminButtons]

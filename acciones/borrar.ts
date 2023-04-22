@@ -1,18 +1,18 @@
-import Bot from "../types/bot.type";
-import getBotonesFrases from "./getBotonesFrases";
-import { frasesDB } from "../db/collections/collections";
-import { Chat } from "telegraf/typings/core/types/typegram";
+import Bot from "../types/bot.type.ts";
+import getBotonesFrases from "./getBotonesFrases.ts";
+import { frasesDB } from "../db/collections/collections.ts";
 
 export default function borrar(bot: Bot) {
-  bot.action(/^borrar_/, (ctx) => {
+  bot.callbackQuery(/^borrar_/, (ctx) => {
     const [id, anterior, siguiente] = ctx.update.callback_query
       .data!.split("_")
       .slice(1)
       .map((v) => parseInt(v));
 
     frasesDB.remove(id);
-    ctx
-      .reply("Listo, la he borrado.", getBotonesFrases(id, (ctx.chat as Chat).id, anterior, siguiente))
-      .catch((e) => console.error(e));
+    if (ctx.chat)
+      ctx
+        .reply("Listo, la he borrado.", { reply_markup: getBotonesFrases(id, ctx.chat.id, anterior, siguiente) })
+        .catch((e) => console.error(e));
   });
 }

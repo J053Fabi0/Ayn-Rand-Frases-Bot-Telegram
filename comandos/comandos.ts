@@ -1,17 +1,17 @@
-import help from "./help";
-import decir from "./decir";
-import frase from "./frase";
-import borrar from "./borrar";
-import frases from "./frases";
-import editar from "./editar";
-import saltar from "./saltar";
-import mezclar from "./mezclar";
-import restante from "./restante";
-import publicar from "./publicar";
-import siguiente from "./siguiente";
-import Bot from "../types/bot.type";
-import suscribirse from "./suscribirse";
-import desuscribirse from "./desuscribirse";
+import help from "./help.ts";
+import decir from "./decir.ts";
+import frase from "./frase.ts";
+import borrar from "./borrar.ts";
+import frases from "./frases.ts";
+import editar from "./editar.ts";
+import saltar from "./saltar.ts";
+import mezclar from "./mezclar.ts";
+import restante from "./restante.ts";
+import publicar from "./publicar.ts";
+import siguiente from "./siguiente.ts";
+import Bot from "../types/bot.type.ts";
+import suscribirse from "./suscribirse.ts";
+import desuscribirse from "./desuscribirse.ts";
 
 export default function comandos(bot: Bot, tipo: "públicos" | "administrador") {
   if (tipo === "públicos") {

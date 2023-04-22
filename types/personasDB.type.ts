@@ -1,5 +1,3 @@
-export default interface PersonasDB {
-  meta: any;
-  $loki: number;
+export default interface PersonasDB extends Partial<LokiObj> {
   userID: number;
 }

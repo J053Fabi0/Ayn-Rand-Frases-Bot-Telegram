@@ -1,17 +1,19 @@
-import Bot from "../types/bot.type";
-import PersonasDB from "../types/personasDB.type";
-import timeUntilHour from "../utils/timeUntilHour";
-import { personasDB } from "../db/collections/collections";
-import { HORA_DE_PUBLICACIÓN } from "../constants";
+import Bot from "../types/bot.type.ts";
+import PersonasDB from "../types/personasDB.type.ts";
+import timeUntilHour from "../utils/timeUntilHour.ts";
+import { HORA_DE_PUBLICACIÓN } from "../constants.ts";
+import { personasDB } from "../db/collections/collections.ts";
 
 export default function suscribirse(bot: Bot) {
   bot.command(["suscribirse", "suscribir", "suscribirme"], async (ctx) => {
+    if (!ctx.message) return;
+
     const chatID = ctx.chat.id;
 
     const admins =
       ctx.chat.type === "private"
         ? undefined
-        : (await bot.telegram.getChatAdministrators(chatID)).map(({ user: { id } }) => id);
+        : (await bot.api.getChatAdministrators(chatID)).map(({ user: { id } }) => id);
 
     // Si estamos en un grupo
     if (admins) {
