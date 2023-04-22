@@ -1,4 +1,5 @@
-import Bot from "../types/bot.type";
+import { ADMIN_ID } from "../env.ts";
+import Bot from "../types/bot.type.ts";
 
 const mensajeAdminAyuda =
   "· <code>/frases</code> - Muestra los IDs de las frases existentes.\n" +
@@ -26,8 +27,11 @@ export default function help(bot: Bot) {
   bot.command(
     ["ayuda", "help", "start"],
     (ctx) =>
-      void ctx.replyWithHTML(
-        ctx.message.chat.id + "" === process.env.ADMIN_ID ? mensajeAdminAyuda : mensajePúblicoAyuda
+      void (
+        ctx.message &&
+        ctx.reply(ctx.message.chat.id + "" === ADMIN_ID ? mensajeAdminAyuda : mensajePúblicoAyuda, {
+          parse_mode: "HTML",
+        })
       )
   );
 }

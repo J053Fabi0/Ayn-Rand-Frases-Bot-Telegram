@@ -1,0 +1,12 @@
+{
+  "importMap": "./import_map.json",
+  "tasks": {
+    "stop": "pm2 stop aynrand",
+    "start": "pm2 start --interpreter='deno' --interpreter-args='run --allow-net --allow-read --allow-env --allow-run --allow-write' --name aynrand index.ts && pm2 logs aynrand",
+    "logs": "pm2 logs aynrand",
+    "reload": "pm2 reload aynrand && pm2 logs aynrand",
+
+    "run": "deno run --allow-net --allow-read --allow-env --allow-run --allow-write index.ts",
+    "watch": "deno run --watch --allow-net --allow-read --allow-env --allow-run --allow-write index.ts"
+  }
+}

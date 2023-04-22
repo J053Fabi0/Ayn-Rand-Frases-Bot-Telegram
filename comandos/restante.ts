@@ -1,6 +1,6 @@
-import Bot from "../types/bot.type";
-import timeUntilHour from "../utils/timeUntilHour";
-import { HORA_DE_PUBLICACIÓN } from "../constants";
+import Bot from "../types/bot.type.ts";
+import timeUntilHour from "../utils/timeUntilHour.ts";
+import { HORA_DE_PUBLICACIÓN } from "../constants.ts";
 
 export default function restante(bot: Bot) {
   bot.command("restante", (ctx) => {

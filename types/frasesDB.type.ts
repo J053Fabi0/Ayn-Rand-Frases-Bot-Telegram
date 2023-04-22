@@ -1,7 +1,5 @@
-export default interface FrasesDB {
-  meta: any;
+export default interface FrasesDB extends Partial<LokiObj> {
   frase: string;
-  $loki: number;
   vecesEnviada: number;
   últimaVezEnviada: number;
 }
