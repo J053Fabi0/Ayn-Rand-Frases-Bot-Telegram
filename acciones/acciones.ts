@@ -1,10 +1,14 @@
-import frase from "./frase";
-import borrar from "./borrar";
-import Bot from "../types/bot.type";
+import frase from "./frase.ts";
+import borrar from "./borrar.ts";
+import Bot from "../types/bot.type.ts";
 
 export default function acciones(bot: Bot) {
   frase(bot);
   borrar(bot);
 
-  bot.action(/.*/, (ctx) => ctx.answerCbQuery().catch((e) => console.error(e)));
+  // Answer all unknown button events
+  bot.on("callback_query:data", async (ctx) => {
+    console.log("Unknown button event with payload", ctx.callbackQuery.data);
+    await ctx.answerCallbackQuery().catch(() => {});
+  });
 }

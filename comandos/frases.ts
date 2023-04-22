@@ -1,11 +1,11 @@
-import Bot from "../types/bot.type";
-import groupBy from "lodash.groupby";
-import { frasesDB } from "../db/collections/collections";
-import FrasesDB from "../types/frasesDB.type";
+import { lodash } from "lodash";
+import Bot from "../types/bot.type.ts";
+import FrasesDB from "../types/frasesDB.type.ts";
+import { frasesDB } from "../db/collections/collections.ts";
 
 export default function frases(bot: Bot) {
   bot.command(["frases", "ids"], (ctx) => {
-    const frasesPorVecesEnviadas = groupBy(
+    const frasesPorVecesEnviadas = lodash.groupBy(
       (() => {
         const frases = frasesDB.find().sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
         if (frases.length === 0) return [{ $loki: "No hay", vecesEnviada: 0 }];
@@ -13,6 +13,7 @@ export default function frases(bot: Bot) {
       })(),
       "vecesEnviada"
     );
+
     const keys = Object.keys(frasesPorVecesEnviadas)
       .map((a) => parseInt(a))
       .sort();
@@ -25,6 +26,6 @@ export default function frases(bot: Bot) {
       )
       .join("\n\n");
 
-    ctx.replyWithHTML(texto);
+    ctx.reply(texto, { parse_mode: "HTML" });
   });
 }

@@ -1,10 +1,23 @@
 import loki from "lokijs";
-import { join } from "path";
+import { AUTOSAVE_INTERVAL } from "../constants.ts";
 
-const lfsa = require("../utils/loki-fs-sync-adapter");
+import LokiFsSyncAdapter from "../utils/loki-fs-sync-adapter.ts";
+
+// Ejemplos en https://github.com/techfort/LokiJS/wiki/Query-Examples.
+
+// Las opciones de la base de datos.
+const dbOptions: Partial<LokiConstructorOptions> &
+  Partial<LokiConfigOptions> &
+  Partial<ThrottledSaveDrainOptions> = {
+  adapter: LokiFsSyncAdapter,
+  // autosave: true,
+  // El autoupdate funciona extraño. Es mejor usar manualmente db.update();
+  // autoupdate: true, // https://github.com/techfort/LokiJS/wiki/Autoupdating-Collections
+  // autosaveInterval,
+};
 
 // Instanciarla.
-const db = new loki(join(__dirname, "database.db"), { adapter: new lfsa() });
+const db = new loki(Deno.cwd() + "/db/database.db", dbOptions);
 
 const autosave = () =>
   setTimeout(() => {
@@ -12,8 +25,7 @@ const autosave = () =>
       if (err) console.error(err);
       autosave();
     });
-  }, 4_000);
-
+  }, AUTOSAVE_INTERVAL);
 autosave();
 
 // Cargar la base de datos síncronamente desde el archivo '*.db'.

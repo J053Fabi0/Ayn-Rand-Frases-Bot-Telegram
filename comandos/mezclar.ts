@@ -1,5 +1,5 @@
-import Bot from "../types/bot.type";
-import { frasesDB } from "../db/collections/collections";
+import Bot from "../types/bot.type.ts";
+import { frasesDB } from "../db/collections/collections.ts";
 
 export default function mezclar(bot: Bot) {
   bot.command("mezclar", async (ctx) => {
@@ -12,13 +12,14 @@ export default function mezclar(bot: Bot) {
 
     for (const frase of frases) frase.últimaVezEnviada = Math.floor(Math.random() * -99999);
 
-    await ctx.replyWithHTML(
+    await ctx.reply(
       `Las frases que han sido enviadas ${minVecesEnviada} ve${minVecesEnviada === 1 ? "z" : "ces"}.\n\n` +
         `Orden anterior: <code>${ordenActual}</code>\n\n` +
         `Orden actual: <code>${frases
           .sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b)
           .map(({ $loki }) => $loki)
-          .join(", ")}</code>`
+          .join(", ")}</code>`,
+      { parse_mode: "HTML" }
     );
   });
 }
