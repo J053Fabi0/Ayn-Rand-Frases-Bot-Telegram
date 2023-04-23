@@ -6,6 +6,8 @@ import {
   InsertOptions,
   UpdateOptions,
   InsertDocument,
+  AggregateOptions,
+  AggregatePipeline,
 } from "../deps.ts";
 import InsertDoc from "../types/collections/insertDoc.type.ts";
 import { ObjectId } from "https://deno.land/x/web_bson@v0.3.0/mod.js";
@@ -107,4 +109,11 @@ export function deleteOne<T extends Collection<CommonCollection>>(collection: T)
 export function deleteMany<T extends Collection<CommonCollection>>(collection: T) {
   return (filter: Filter<DocumentOfCollection<T>>, options?: UpdateOptions) =>
     collection.deleteMany(filter, options);
+}
+
+export function aggregate<T extends Collection<CommonCollection>>(collection: T) {
+  return (
+    pipeline: AggregatePipeline<DocumentOfCollection<T>> | AggregatePipeline<DocumentOfCollection<T>>[],
+    options?: AggregateOptions
+  ) => collection.aggregate(pipeline instanceof Array ? pipeline : [pipeline], options).toArray();
 }

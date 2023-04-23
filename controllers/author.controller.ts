@@ -15,3 +15,5 @@ export const changeAuthors = a.updateMany(Model);
 
 export const deleteAuthor = a.deleteOne(Model);
 export const deleteAuthors = a.deleteMany(Model);
+
+export const aggregateAuthor = a.aggregate(Model);
