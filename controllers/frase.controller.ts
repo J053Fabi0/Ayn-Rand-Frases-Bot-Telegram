@@ -15,3 +15,5 @@ export const changeFrases = a.updateMany(Model);
 
 export const deleteFrase = a.deleteOne(Model);
 export const deleteFrases = a.deleteMany(Model);
+
+export const aggregateFrase = a.aggregate(Model);
