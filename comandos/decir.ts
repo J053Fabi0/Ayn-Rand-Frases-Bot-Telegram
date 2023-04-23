@@ -1,4 +1,4 @@
-import Bot from "../types/bot.type.ts";
+import { Bot } from "../deps.ts";
 import enviarMensajeMasivo from "../utils/enviarMensajeMasivo.ts";
 
 export default function decir(bot: Bot) {

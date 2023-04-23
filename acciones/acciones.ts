@@ -1,6 +1,6 @@
 import frase from "./frase.ts";
 import borrar from "./borrar.ts";
-import Bot from "../types/bot.type.ts";
+import { Bot } from "../deps.ts";
 
 export default function acciones(bot: Bot) {
   frase(bot);

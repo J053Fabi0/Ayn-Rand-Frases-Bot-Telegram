@@ -1,5 +1,5 @@
 import { ADMIN_ID } from "../env.ts";
-import { InlineKeyboard } from "grammy/mod.ts";
+import { InlineKeyboard } from "../deps.ts";
 import { frasesDB } from "../db/collections/collections.ts";
 
 /**

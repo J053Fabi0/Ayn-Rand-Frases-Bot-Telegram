@@ -1,4 +1,4 @@
-import Bot from "../types/bot.type.ts";
+import { Bot } from "../deps.ts";
 import { frasesDB } from "../db/collections/collections.ts";
 
 export default function mezclar(bot: Bot) {

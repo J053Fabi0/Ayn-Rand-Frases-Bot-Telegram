@@ -1,5 +1,4 @@
-import { sleep } from "sleep";
-import { Bot } from "grammy/mod.ts";
+import { sleep, Bot } from "./deps.ts";
 import acciones from "./acciones/acciones.ts";
 import comandos from "./comandos/comandos.ts";
 import publicarFrase from "./publicarFrase.ts";

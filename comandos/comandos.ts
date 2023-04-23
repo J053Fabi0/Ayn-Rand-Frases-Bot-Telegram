@@ -5,11 +5,11 @@ import borrar from "./borrar.ts";
 import frases from "./frases.ts";
 import editar from "./editar.ts";
 import saltar from "./saltar.ts";
+import { Bot } from "../deps.ts";
 import mezclar from "./mezclar.ts";
 import restante from "./restante.ts";
 import publicar from "./publicar.ts";
 import siguiente from "./siguiente.ts";
-import Bot from "../types/bot.type.ts";
 import suscribirse from "./suscribirse.ts";
 import desuscribirse from "./desuscribirse.ts";
 

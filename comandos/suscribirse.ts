@@ -1,4 +1,4 @@
-import Bot from "../types/bot.type.ts";
+import { Bot } from "../deps.ts";
 import PersonasDB from "../types/personasDB.type.ts";
 import timeUntilHour from "../utils/timeUntilHour.ts";
 import { HORA_DE_PUBLICACIÓN } from "../constants.ts";
