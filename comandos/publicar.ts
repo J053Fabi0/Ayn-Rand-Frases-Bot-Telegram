@@ -1,4 +1,4 @@
-import Bot from "../types/bot.type.ts";
+import { Bot } from "../deps.ts";
 import publicarFrase from "../publicarFrase.ts";
 import { frasesDB } from "../db/collections/collections.ts";
 

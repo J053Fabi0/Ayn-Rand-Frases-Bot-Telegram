@@ -1,11 +1,10 @@
-import { lodash } from "lodash";
-import Bot from "../types/bot.type.ts";
+import { Bot, _ } from "../deps.ts";
 import FrasesDB from "../types/frasesDB.type.ts";
 import { frasesDB } from "../db/collections/collections.ts";
 
 export default function frases(bot: Bot) {
   bot.command(["frases", "ids"], (ctx) => {
-    const frasesPorVecesEnviadas = lodash.groupBy(
+    const frasesPorVecesEnviadas = _.groupBy(
       (() => {
         const frases = frasesDB.find().sort(({ últimaVezEnviada: a }, { últimaVezEnviada: b }) => a - b);
         if (frases.length === 0) return [{ $loki: "No hay", vecesEnviada: 0 }];

@@ -1,4 +1,4 @@
-import loki from "lokijs";
+import { loki } from "../deps.ts";
 import { AUTOSAVE_INTERVAL } from "../constants.ts";
 
 import LokiFsSyncAdapter from "../utils/loki-fs-sync-adapter.ts";

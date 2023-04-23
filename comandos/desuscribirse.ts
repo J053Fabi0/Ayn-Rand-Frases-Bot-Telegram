@@ -1,4 +1,4 @@
-import Bot from "../types/bot.type.ts";
+import { Bot } from "../deps.ts";
 import { Context, Filter } from "grammy/mod.ts";
 import { personasDB } from "../db/collections/collections.ts";
 

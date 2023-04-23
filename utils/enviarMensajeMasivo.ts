@@ -1,5 +1,5 @@
-import { sleep } from "sleep";
 import bot from "../initBot.ts";
+import { sleep } from "../deps.ts";
 import { personasDB } from "../db/collections/collections.ts";
 import iteratePromisesInChunks from "./promisesYieldedInChunks.ts";
 

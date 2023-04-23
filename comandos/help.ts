@@ -1,5 +1,5 @@
+import { Bot } from "../deps.ts";
 import { ADMIN_ID } from "../env.ts";
-import Bot from "../types/bot.type.ts";
 
 const mensajeAdminAyuda =
   "· <code>/frases</code> - Muestra los IDs de las frases existentes.\n" +
