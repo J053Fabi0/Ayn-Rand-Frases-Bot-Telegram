@@ -12,31 +12,36 @@ import { ObjectId } from "https://deno.land/x/web_bson@v0.3.0/mod.js";
 import CommonCollection from "../types/collections/commonCollection.type.ts";
 
 type UnPromisify<T> = T extends Promise<infer U> ? U : T;
-
-export function findOne<T extends Collection<CommonCollection>>(collection: T) {
-  return (filter?: Filter<Exclude<UnPromisify<ReturnType<T["findOne"]>>, undefined>>, options?: FindOptions) =>
-    collection.findOne(filter, options).then((v) => v ?? null);
-}
+type DocumentOfCollection<T extends Collection<CommonCollection>> = Exclude<
+  UnPromisify<ReturnType<T["findAndModify"]>>,
+  undefined
+>;
 
 export function find<T extends Collection<CommonCollection>>(collection: T) {
-  return (filter?: Filter<Exclude<UnPromisify<ReturnType<T["find"]>>, undefined>>, options?: FindOptions) =>
-    collection.find(filter, options).toArray();
+  return (filter?: Filter<DocumentOfCollection<T>>, options?: FindOptions) =>
+    collection.find(filter, options).toArray() as Promise<DocumentOfCollection<T>[]>;
+}
+
+export function findOne<T extends Collection<CommonCollection>>(collection: T) {
+  return (filter?: Filter<DocumentOfCollection<T>>, options?: FindOptions) =>
+    collection.findOne(filter, options).then((v) => v ?? null) as Promise<DocumentOfCollection<T> | null>;
 }
 
 export function findById<T extends Collection<CommonCollection>>(collection: T) {
   return (id: string | ObjectId, options?: FindOptions) =>
-    collection.findOne({ _id: typeof id === "string" ? new ObjectId(id) : id }, options).then((v) => v ?? null);
+    collection
+      .findOne({ _id: typeof id === "string" ? new ObjectId(id) : id }, options)
+      .then((v) => v ?? null) as Promise<DocumentOfCollection<T> | null>;
 }
 
 export function insertOne<T extends Collection<CommonCollection>>(collection: T) {
-  return async (
-    doc: InsertDoc<Exclude<UnPromisify<ReturnType<T["findAndModify"]>>, undefined>>,
-    options?: InsertOptions
-  ) => {
+  return async (doc: InsertDoc<DocumentOfCollection<T>>, options?: InsertOptions) => {
     // set createdAt and modifiedAt if they are not present
     const date = new Date();
-    if (!doc.createdAt) doc.createdAt = date;
-    if (!doc.modifiedAt) doc.modifiedAt = date;
+    if (!doc.createdAt || typeof doc.createdAt !== "object" || !(doc.createdAt instanceof Date))
+      doc.createdAt = date;
+    if (!doc.modifiedAt || typeof doc.modifiedAt !== "object" || !(doc.modifiedAt instanceof Date))
+      doc.modifiedAt = date;
 
     const _id = await collection.insertOne(doc as InsertDocument<CommonCollection>, options);
 
@@ -45,15 +50,14 @@ export function insertOne<T extends Collection<CommonCollection>>(collection: T)
 }
 
 export function insertMany<T extends Collection<CommonCollection>>(collection: T) {
-  return async (
-    docs: InsertDoc<Exclude<UnPromisify<ReturnType<T["findAndModify"]>>, undefined>>[],
-    options?: InsertOptions
-  ) => {
+  return async (docs: InsertDoc<DocumentOfCollection<T>>[], options?: InsertOptions) => {
     // set createdAt and modifiedAt if they are not present
     const date = new Date();
     for (const doc of docs) {
-      if (!doc.createdAt) doc.createdAt = date;
-      if (!doc.modifiedAt) doc.modifiedAt = date;
+      if (!doc.createdAt || typeof doc.createdAt !== "object" || !(doc.createdAt instanceof Date))
+        doc.createdAt = date;
+      if (!doc.modifiedAt || typeof doc.modifiedAt !== "object" || !(doc.modifiedAt instanceof Date))
+        doc.modifiedAt = date;
     }
 
     const { insertedIds } = await collection.insertMany(docs as InsertDocument<CommonCollection>[], options);
@@ -63,7 +67,7 @@ export function insertMany<T extends Collection<CommonCollection>>(collection: T
 }
 
 export function count<T extends Collection<CommonCollection>>(collection: T) {
-  return (filter?: Filter<Exclude<UnPromisify<ReturnType<T["count"]>>, undefined>>, options?: FindOptions) =>
+  return (filter?: Filter<DocumentOfCollection<T>>, options?: FindOptions) =>
     collection.countDocuments(filter, options);
 }
 
@@ -80,19 +84,27 @@ function updateCommon(
 }
 
 export function updateOne<T extends Collection<CommonCollection>>(collection: T) {
-  return (filter: Filter<CommonCollection>, update: UpdateFilter<CommonCollection>, options?: UpdateOptions) =>
-    updateCommon("one", collection, filter, update, options);
+  return (
+    filter: Filter<DocumentOfCollection<T>>,
+    update: UpdateFilter<DocumentOfCollection<T>>,
+    options?: UpdateOptions
+  ) => updateCommon("one", collection, filter, update, options);
 }
 
 export function updateMany<T extends Collection<CommonCollection>>(collection: T) {
-  return (filter: Filter<CommonCollection>, update: UpdateFilter<CommonCollection>, options?: UpdateOptions) =>
-    updateCommon("many", collection, filter, update, options);
+  return (
+    filter: Filter<DocumentOfCollection<T>>,
+    update: UpdateFilter<DocumentOfCollection<T>>,
+    options?: UpdateOptions
+  ) => updateCommon("many", collection, filter, update, options);
 }
 
 export function deleteOne<T extends Collection<CommonCollection>>(collection: T) {
-  return (filter: Filter<CommonCollection>, options?: UpdateOptions) => collection.deleteOne(filter, options);
+  return (filter: Filter<DocumentOfCollection<T>>, options?: UpdateOptions) =>
+    collection.deleteOne(filter, options);
 }
 
 export function deleteMany<T extends Collection<CommonCollection>>(collection: T) {
-  return (filter: Filter<CommonCollection>, options?: UpdateOptions) => collection.deleteMany(filter, options);
+  return (filter: Filter<DocumentOfCollection<T>>, options?: UpdateOptions) =>
+    collection.deleteMany(filter, options);
 }
