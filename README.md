@@ -1,7 +1,6 @@
 # Requisitos
 
-- `node`
-- `nodemon` - `npm i -g nodemon`
+- `deno`
 
 # `.env`
 
@@ -12,4 +11,4 @@
 
 Copia el archivo `constants.example.ts` a `constants.ts` y modifica, si quieres, la hora de envío.
 
-Una vez que tienes el `.env` configurado y has corrido `npm i` debes correr `npm run start`.
+Una vez que tienes el `.env` configurado debes correr `deno task run`.
