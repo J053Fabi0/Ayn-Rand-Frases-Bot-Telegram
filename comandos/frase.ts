@@ -1,5 +1,5 @@
+import { Bot } from "../deps.ts";
 import { ADMIN_ID } from "../env.ts";
-import Bot from "../types/bot.type.ts";
 import publicarFrase from "../publicarFrase.ts";
 import { frasesDB } from "../db/collections/collections.ts";
 import getBotonesFrases from "../acciones/getBotonesFrases.ts";

@@ -1,3 +1,4 @@
+// load the .env file
 import "dotenv";
 
 // Check that all required .env variables are set
