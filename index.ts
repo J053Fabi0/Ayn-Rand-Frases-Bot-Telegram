@@ -12,7 +12,7 @@ for (const envVariable of envVariables)
   if (Deno.env.get(envVariable) === undefined) console.log(envVariable + " not set in .env."), Deno.exit(0);
 
 // Then start the bot
-// import("./initBot.ts");
+import("./initBot.ts");
 
 // Create the web server app
 const app = opine();

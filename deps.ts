@@ -2,7 +2,9 @@ export { sleep } from "sleep";
 export { opineCors } from "cors";
 export { default as loki } from "lokijs";
 export { lodash as _, lodash } from "lodash";
-export { Bot, InlineKeyboard } from "grammy/mod.ts";
+
+export type { Filter as FilterCtx } from "grammy/mod.ts";
+export { Bot, InlineKeyboard, Context } from "grammy/mod.ts";
 
 export { default as Joi } from "joi";
 export type { ObjectSchema } from "joi";

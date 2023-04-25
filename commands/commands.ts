@@ -13,8 +13,8 @@ import siguiente from "./siguiente.ts";
 import suscribirse from "./suscribirse.ts";
 import desuscribirse from "./desuscribirse.ts";
 
-export default function comandos(bot: Bot, tipo: "públicos" | "administrador") {
-  if (tipo === "públicos") {
+export default function commands(bot: Bot, tipo: "public" | "admin") {
+  if (tipo === "public") {
     help(bot);
     restante(bot);
     suscribirse(bot);

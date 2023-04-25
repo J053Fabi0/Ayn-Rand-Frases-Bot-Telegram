@@ -1,6 +1,5 @@
-import { Bot } from "../deps.ts";
-import { Context, Filter } from "grammy/mod.ts";
-import { personasDB } from "../db/collections/collections.ts";
+import { deleteUser, getUser } from "../controllers/user.controller.ts";
+import { Bot, FilterCtx, Context, ObjectId } from "../deps.ts";
 
 export default function desuscribirse(bot: Bot) {
   bot.command(["desuscribirse", "desuscribir", "desuscribirme"], async (ctx) => {
@@ -21,9 +20,10 @@ export default function desuscribirse(bot: Bot) {
   });
 }
 
-function desuscribir(ctx: Filter<Context, "message">, chatID: number) {
-  if (personasDB.findOne({ userID: chatID })) {
-    personasDB.findAndRemove({ userID: chatID });
+async function desuscribir(ctx: FilterCtx<Context, "message">, chatID: number) {
+  const user = (await getUser({ telegramID: chatID }, { projection: { _id: 1 } })) as { _id: ObjectId } | null;
+  if (user) {
+    await deleteUser({ _id: user._id });
     ctx.reply("Listo, no recibirás más frases.");
   } else {
     ctx.reply("No estabas suscrito.");
