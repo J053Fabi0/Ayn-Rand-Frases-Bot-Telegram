@@ -11,7 +11,7 @@ export default function frase(bot: Bot) {
 
     if (/^\/frases/.test(ctx.message.text || "")) return next();
 
-    const chatID = ctx.chat.id + "";
+    const chatID = ctx.chat.id;
     if (ctx.message.text === "/frase" || chatID !== ADMIN_ID)
       return publishQuote({ chatID, chatType: ctx.chat.type });
 

@@ -17,7 +17,7 @@ export default bot;
 commands(bot, "public");
 
 bot.on("message", async (ctx, next) => {
-  const chatID = `${ctx.chat.id}`;
+  const chatID = ctx.chat.id;
 
   // Al administrador se le dejará tener acceso a los demás comandos
   if (chatID === ADMIN_ID) return next();

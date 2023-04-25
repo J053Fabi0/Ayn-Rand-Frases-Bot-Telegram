@@ -12,7 +12,7 @@ import { getQuotes } from "../controllers/quote.controller.ts";
  */
 export default async function getQuotesButtons(
   actualNumber: number,
-  userID: number | string,
+  userID: number,
   previous?: number,
   next?: number
 ) {
@@ -24,7 +24,7 @@ export default async function getQuotesButtons(
   if (!next) next = quotes[actualIndex < quotes.length - 1 ? actualIndex + 1 : 0].number;
 
   const adminButtons = [];
-  if (`${userID}` === ADMIN_ID && actualIndex !== -1)
+  if (userID === ADMIN_ID && actualIndex !== -1)
     adminButtons.push(
       { text: "🗑", callback_data: `delete_${actualNumber}_${previous}_${next}` },
       { text: `${actualNumber}`, callback_data: "void" }
