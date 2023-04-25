@@ -1,11 +1,11 @@
-import chunk from "lodash.chunk";
+import { _ } from "../deps.ts";
 
 /**
  * Given an array of functions that resolve to a promise, return an iterable object that resolves them in chunks,
  * so that the can be iterated by chunks.
  */
 export function* yieldPromisesFunctions<returnType>(promises: (() => Promise<returnType>)[], maxSimultaneous = 2) {
-  const chunkedPr = chunk(promises, maxSimultaneous);
+  const chunkedPr = _.chunk(promises, maxSimultaneous);
   for (const promisesToResolve of chunkedPr) yield Promise.allSettled(promisesToResolve.map((x) => x()));
 }
 
