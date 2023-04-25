@@ -6,7 +6,7 @@ export default function frases(bot: Bot) {
   bot.command(["frases", "ids"], async (ctx) => {
     const quotesByTimesSent = _.groupBy(
       await (async () => {
-        const quotes = await getQuotes({}, { projection: { _id: 0, number: 1, timesSent: 1 } });
+        const quotes = await getQuotes({}, { projection: { _id: 0, number: 1, timesSent: 1, lastSentTime: 1 } });
         if (quotes.length === 0) return [{ number: "No hay", timesSent: 0 }] as unknown as Quote[];
         return quotes;
       })(),
@@ -21,7 +21,10 @@ export default function frases(bot: Bot) {
       .map(
         (key) =>
           `<b>Veces enviadas: ${key}</b>\n` +
-          `<code>${quotesByTimesSent[key].map((a) => a.number).join(", ")}</code>`
+          `<code>${quotesByTimesSent[key]
+            .sort((a, b) => +a.lastSentTime - +b.lastSentTime)
+            .map((a) => a.number)
+            .join(", ")}</code>`
       )
       .join("\n\n");
 

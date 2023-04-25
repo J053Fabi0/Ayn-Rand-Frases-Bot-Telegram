@@ -20,3 +20,12 @@ export const aggregateQuote = a.aggregate(Model);
 
 export const getAllQuotesNumbers = async () =>
   (await getQuotes({}, { projection: { number: 1 } })).map(({ number }) => number);
+
+export const getNextQuotesNumbers = async () => {
+  const maxTimeSent =
+    (await aggregateQuote([{ $group: { _id: null, timesSent: { $max: "$timesSent" } } }]))[0]?.timesSent ?? 0;
+
+  return (await getQuotes({ timesSent: maxTimeSent }, { projection: { number: 1, lastSentTime: 1 } }))
+    .sort((a, b) => +a.lastSentTime - +b.lastSentTime)
+    .map(({ number }) => number);
+};

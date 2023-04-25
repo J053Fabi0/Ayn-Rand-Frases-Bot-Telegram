@@ -16,9 +16,7 @@ export default async function getQuotesButtons(
   previous?: number,
   next?: number
 ) {
-  const quotes = (await getQuotes({}, { sort: { últimaVezEnviada: 1 }, projection: { number: 1 } })) as {
-    number: number;
-  }[];
+  const quotes = await getQuotes({}, { projection: { number: 1 }, sort: { lastSentTime: 1 } });
   const actualIndex = quotes.findIndex(({ number }) => number === actualNumber);
 
   const customDirections = Boolean(previous || next);

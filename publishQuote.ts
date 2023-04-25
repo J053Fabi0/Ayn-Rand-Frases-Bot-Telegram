@@ -27,8 +27,8 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
   }
 
   const quotes = await getQuotes(query, {
-    sort: chatID === undefined ? { últimaVezEnviada: 1 } : { últimaVezEnviada: -1 },
-    projection: { quote: 1, number: 1, _id: 1, timesSent: 1 },
+    sort: chatID === undefined ? { lastSentTime: 1 } : { lastSentTime: -1 },
+    projection: { quote: 1, number: 1, _id: 1 },
     limit: 1,
   });
   // Si se está publicando a todos se envía siguiente la que tenga menos tiempo de haber sido enviada y
@@ -49,8 +49,5 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
 
   if (quotes.length === 0 || chatID) return;
 
-  // const fraseDB = frasesDB.findOne({ $loki }) as FrasesDB;
-  // fraseDB.últimaVezEnviada = Date.now();
-  // fraseDB.vecesEnviada = fraseDB!.vecesEnviada === undefined ? 1 : fraseDB!.vecesEnviada + 1;
-  await changeQuote(quotes[0]._id, { $set: { lastSentTime: new Date(), timesSent: quotes[0].timesSent + 1 } });
+  await changeQuote({ _id: quotes[0]._id }, { $set: { lastSentTime: new Date() }, $inc: { timesSent: 1 } });
 }

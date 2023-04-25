@@ -10,13 +10,14 @@ export default function mezclar(bot: Bot) {
     const minVecesEnviada = Math.min(...quotes.map((q) => q.timesSent));
     quotes = quotes.filter((q) => q.timesSent === minVecesEnviada);
 
-    const ordenActual = quotes.map((q) => q.number).join(", ");
+    const ordenAnterior = quotes.map((q) => q.number).join(", ");
 
-    await Promise.all(quotes.map(({ _id }) => changeQuote({ _id }, { lastSentTime: randomDate() })));
+    for (const quote of quotes) quote.lastSentTime = randomDate();
+    await Promise.all(quotes.map(({ _id, lastSentTime }) => changeQuote({ _id }, { $set: { lastSentTime } })));
 
     await ctx.reply(
       `Las frases que han sido enviadas ${minVecesEnviada} ve${minVecesEnviada === 1 ? "z" : "ces"}.\n\n` +
-        `Orden anterior: <code>${ordenActual}</code>\n\n` +
+        `Orden anterior: <code>${ordenAnterior}</code>\n\n` +
         `Orden actual: <code>${quotes
           .sort(({ lastSentTime: a }, { lastSentTime: b }) => +a - +b)
           .map((q) => q.number)
