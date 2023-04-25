@@ -3,12 +3,13 @@ import { ObjectId } from "./deps.ts";
 import getQuotesButtons from "./callbacks/getQuotesButtons.ts";
 import sendMassiveMessage from "./utils/sendMassiveMessage.ts";
 import { aggregateQuote, changeQuote, getQuotes } from "./controllers/quote.controller.ts";
+import handleSendMessageError from "./utils/handleSendMessageError.ts";
 
 interface CommonParams {
   id?: string | ObjectId;
 }
 interface ParamsChat extends CommonParams {
-  chatID: number | string;
+  chatID: number;
   chatType: "group" | "supergroup" | "private";
 }
 interface ParamsNoChat extends CommonParams {
@@ -44,7 +45,7 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
         quote,
         number && chatType === "private" ? { reply_markup: await getQuotesButtons(number, chatID) } : undefined
       )
-      .catch(() => {});
+      .catch(handleSendMessageError(chatID));
   else await sendMassiveMessage(quote);
 
   if (quotes.length === 0 || chatID) return;
