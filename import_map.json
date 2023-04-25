@@ -1,10 +1,6 @@
 {
   "imports": {
-    "joi": "https://esm.sh/joi@17.9.1",
-    "lokijs": "https://esm.sh/lokijs@1.5.12",
-    "cors": "https://deno.land/x/cors@v1.2.2/mod.ts",
     "grammy/": "https://deno.land/x/grammy@v1.16.0/",
-    "opine": "https://deno.land/x/opine@2.3.4/mod.ts",
     "sleep": "https://deno.land/x/sleep@v1.2.1/mod.ts",
     "mongo": "https://deno.land/x/mongo@v0.31.2/mod.ts",
     "dotenv": "https://deno.land/x/dotenv@v3.2.2/load.ts",
