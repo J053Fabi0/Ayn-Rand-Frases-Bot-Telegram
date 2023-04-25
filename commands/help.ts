@@ -1,7 +1,7 @@
 import { Bot } from "../deps.ts";
 import { ADMIN_ID } from "../env.ts";
 
-const mensajeAdminAyuda =
+const adminHelpMessage =
   "· <code>/frases</code> - Muestra los IDs de las frases existentes.\n" +
   "· <code>/decir &#60;mensaje</code> - Publica el mensaje en el grupo.\n" +
   "· <code>/editar &#60;ID> &#60;nueva frase></code> - Cambia la frase.\n" +
@@ -16,10 +16,10 @@ const mensajeAdminAyuda =
   "· <code>/desuscribirse</code> - Desuscríbete de las frases diarias.\n" +
   "\nCualquier mensaje enviado será tratado como una frase y será añadido a la colección.";
 
-const mensajePúblicoAyuda =
-  "· <code>/suscribirse</code> - Suscríbete a las frases diarias.\n" +
-  "· <code>/desuscribirse</code> - Desuscríbete de las frases diarias.\n" +
-  "· <code>/restante</code> - Dice los minutos que faltan para recibir la siguiente frase.\n" +
+const publicHelpMessage =
+  "· /suscribirse - Suscríbete a las frases diarias.\n" +
+  "· /desuscribirse - Desuscríbete de las frases diarias.\n" +
+  "· /restante - Dice los minutos que faltan para recibir la siguiente frase.\n" +
   "\nCualquier otro mensaje hará que se te envíe la frase que será enviada a todos próximamente, junto con un botones interactivos " +
   "para explorar otras.";
 
@@ -29,7 +29,7 @@ export default function help(bot: Bot) {
     (ctx) =>
       void (
         ctx.message &&
-        ctx.reply(ctx.message.chat.id + "" === ADMIN_ID ? mensajeAdminAyuda : mensajePúblicoAyuda, {
+        ctx.reply(ctx.message.chat.id + "" === ADMIN_ID ? adminHelpMessage : publicHelpMessage, {
           parse_mode: "HTML",
         })
       )
