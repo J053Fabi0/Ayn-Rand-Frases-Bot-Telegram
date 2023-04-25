@@ -42,7 +42,7 @@ bot.on("message", async (ctx) => {
     return ctx.reply(`Es muy largo. Mide ${messageLength} y el límite son ${LÍMITE_TAMAÑO_MENSAJE}.`);
 
   const lastNumber =
-    (await aggregateQuote([{ $group: { _id: null, número: { $max: "$number" } } }]))[0]?.number ?? 0;
+    (await aggregateQuote([{ $group: { _id: null, number: { $max: "$number" } } }]))[0]?.number ?? 0;
 
   const a = await createQuote({ quote, lastSentTime: new Date(0), timesSent: 0, number: lastNumber + 1 });
   ctx.reply(`Esta frase tiene el ID: ${a.number}. Usa <code>/borrar ${a.number}</code> para borrarla.`, {
