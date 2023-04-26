@@ -7,7 +7,7 @@ import CommonResponse from "./types/commonResponse.type.ts";
 import { opine, opineCors, json, NextFunction } from "./deps.ts";
 
 // Check that all required .env variables are set
-const envVariables = ["ADMIN_ID", "BOT_TOKEN", "PORT", "MONGO_URI"];
+const envVariables = ["ADMIN_ID", "BOT_TOKEN", "PORT", "MONGO_URI", "AUTH_TOKEN"];
 for (const envVariable of envVariables)
   if (Deno.env.get(envVariable) === undefined) console.log(envVariable + " not set in .env."), Deno.exit(0);
 
