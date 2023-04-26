@@ -5,6 +5,7 @@ export default interface Quote extends CommonCollection {
   quote: string;
   number: number;
   author: ObjectId;
+  source: ObjectId;
   timesSent: number;
   lastSentTime: Date;
 }
