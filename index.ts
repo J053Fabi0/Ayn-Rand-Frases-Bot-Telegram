@@ -1,5 +1,6 @@
 // load the .env file
 import "dotenv";
+import "./utils/crons.ts";
 import router from "./routes/routes.ts";
 import handleError from "./utils/handleError.ts";
 import CommonRequest from "./types/commonRequest.type.ts";

@@ -4,8 +4,7 @@ import commands from "./commands/commands.ts";
 import { ADMIN_ID, BOT_TOKEN } from "./env.ts";
 import trueLength from "./utils/trueLength.ts";
 import callbacks from "./callbacks/callbacks.ts";
-import startQuotes from "./utils/startQuotes.ts";
-import { LÍMITE_TAMAÑO_MENSAJE } from "./constants.ts";
+import { MESSAGE_LENGTH_LIMIT } from "./constants.ts";
 import { aggregateQuote, createQuote } from "./controllers/mongo/quote.controller.ts";
 
 const bot = new Bot(BOT_TOKEN);
@@ -38,8 +37,8 @@ bot.on("message", async (ctx) => {
   const quote = ctx.message.text;
 
   const messageLength = trueLength(quote);
-  if (messageLength > LÍMITE_TAMAÑO_MENSAJE)
-    return ctx.reply(`Es muy largo. Mide ${messageLength} y el límite son ${LÍMITE_TAMAÑO_MENSAJE}.`);
+  if (messageLength > MESSAGE_LENGTH_LIMIT)
+    return ctx.reply(`Es muy largo. Mide ${messageLength} y el límite son ${MESSAGE_LENGTH_LIMIT}.`);
 
   const lastNumber =
     (await aggregateQuote([{ $group: { _id: null, number: { $max: "$number" } } }]))[0]?.number ?? 0;
@@ -49,7 +48,5 @@ bot.on("message", async (ctx) => {
     parse_mode: "HTML",
   });
 });
-
-startQuotes();
 
 bot.start();
