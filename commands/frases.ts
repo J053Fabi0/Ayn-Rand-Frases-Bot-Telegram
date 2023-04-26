@@ -1,6 +1,6 @@
 import { Bot, _ } from "../deps.ts";
 import Quote from "../types/collections/quote.type.ts";
-import { getQuotes } from "../controllers/quote.controller.ts";
+import { getQuotes } from "../controllers/mongo/quote.controller.ts";
 
 export default function frases(bot: Bot) {
   bot.command(["frases", "ids"], async (ctx) => {

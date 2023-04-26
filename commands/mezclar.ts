@@ -1,5 +1,5 @@
 import { Bot } from "../deps.ts";
-import { changeQuote, getQuotes } from "../controllers/quote.controller.ts";
+import { changeQuote, getQuotes } from "../controllers/mongo/quote.controller.ts";
 
 const randomDate = () => new Date(Date.now() * Math.random());
 

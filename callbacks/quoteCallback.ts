@@ -1,6 +1,6 @@
 import { Bot } from "../deps.ts";
 import getQuotesButtons from "./getQuotesButtons.ts";
-import { getQuote } from "../controllers/quote.controller.ts";
+import { getQuote } from "../controllers/mongo/quote.controller.ts";
 
 export default function quoteCallback(bot: Bot) {
   // n = next, p = previous
