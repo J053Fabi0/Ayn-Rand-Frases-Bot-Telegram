@@ -1,11 +1,11 @@
-import { sleep, Bot } from "./deps.ts";
+import { Bot } from "./deps.ts";
 import publishQuote from "./publishQuote.ts";
 import commands from "./commands/commands.ts";
 import { ADMIN_ID, BOT_TOKEN } from "./env.ts";
 import trueLength from "./utils/trueLength.ts";
 import callbacks from "./callbacks/callbacks.ts";
-import timeUntilHour from "./utils/timeUntilHour.ts";
-import { LÍMITE_TAMAÑO_MENSAJE, HORA_DE_PUBLICACIÓN } from "./constants.ts";
+import startQuotes from "./utils/startQuotes.ts";
+import { LÍMITE_TAMAÑO_MENSAJE } from "./constants.ts";
 import { aggregateQuote, createQuote } from "./controllers/mongo/quote.controller.ts";
 
 const bot = new Bot(BOT_TOKEN);
@@ -50,29 +50,6 @@ bot.on("message", async (ctx) => {
   });
 });
 
-async function startQuotes() {
-  const time = timeUntilHour(HORA_DE_PUBLICACIÓN);
-
-  console.log(
-    `${BigInt(time) / 1_000n / 60n} minutos para publicar ` +
-      `a las ${HORA_DE_PUBLICACIÓN} horas. - ` +
-      new Date().toLocaleString()
-  );
-  await sleep(time / 1_000);
-
-  let éxito = false;
-  while (éxito === false)
-    try {
-      await publishQuote();
-      éxito = true;
-    } catch (e) {
-      console.log(e);
-      bot.api.sendMessage(ADMIN_ID, "Error al enviar frase.");
-      await sleep(5);
-    }
-
-  startQuotes();
-}
 startQuotes();
 
 bot.start();
