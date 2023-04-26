@@ -5,6 +5,7 @@ import { ADMIN_ID, BOT_TOKEN } from "./env.ts";
 import trueLength from "./utils/trueLength.ts";
 import callbacks from "./callbacks/callbacks.ts";
 import { MESSAGE_LENGTH_LIMIT } from "./constants.ts";
+import { getAuthor } from "./controllers/mongo/author.controller.ts";
 import { aggregateQuote, createQuote } from "./controllers/mongo/quote.controller.ts";
 
 const bot = new Bot(BOT_TOKEN);
@@ -16,7 +17,7 @@ export default bot;
 commands(bot, "public");
 
 bot.on("message", async (ctx, next) => {
-  const chatID = `${ctx.chat.id}`;
+  const chatID = ctx.chat.id;
 
   // Al administrador se le dejará tener acceso a los demás comandos
   if (chatID === ADMIN_ID) return next();
@@ -43,7 +44,14 @@ bot.on("message", async (ctx) => {
   const lastNumber =
     (await aggregateQuote([{ $group: { _id: null, number: { $max: "$number" } } }]))[0]?.number ?? 0;
 
-  const a = await createQuote({ quote, lastSentTime: new Date(0), timesSent: 0, number: lastNumber + 1 });
+  const aynRand = (await getAuthor({ name: "Ayn Rand" }))!;
+  const a = await createQuote({
+    quote,
+    timesSent: 0,
+    author: aynRand._id,
+    number: lastNumber + 1,
+    lastSentTime: new Date(0),
+  });
   ctx.reply(`Esta frase tiene el ID: ${a.number}. Usa <code>/borrar ${a.number}</code> para borrarla.`, {
     parse_mode: "HTML",
   });

@@ -1,6 +1,7 @@
 import { Bot } from "../deps.ts";
 import tellIDIsNotValid from "../utils/tellIDIsNotValid.ts";
 import getQuotesButtons from "../callbacks/getQuotesButtons.ts";
+import { getAuthor } from "../controllers/mongo/author.controller.ts";
 import { changeQuote, getQuote } from "../controllers/mongo/quote.controller.ts";
 
 export default function editar(bot: Bot) {
@@ -12,14 +13,17 @@ export default function editar(bot: Bot) {
     const number = parseInt(idString);
     if (isNaN(number)) return ctx.reply(`${number} no es un número.`);
 
-    const quote = await getQuote({ number });
+    const quote = await getQuote({ number }, { projection: { author: 1 } });
     if (!quote) return tellIDIsNotValid(ctx);
 
     const newQuote = words.join(" ");
     if (newQuote === "") return ctx.reply("Tienes que decirme una nueva frase luego del ID.");
 
-    await changeQuote({ number }, { $set: { quote: newQuote } });
+    await changeQuote({ _id: quote._id }, { $set: { quote: newQuote } });
 
-    ctx.reply(newQuote, { reply_markup: await getQuotesButtons(quote.number, ctx.chat.id) });
+    const author = await getAuthor({ _id: quote.author }, { projection: { name: 1, _id: 0 } });
+    const fullNewQuote = author ? `${newQuote}\n\n - ${author.name}.` : newQuote;
+
+    ctx.reply(fullNewQuote, { reply_markup: await getQuotesButtons(number, ctx.chat.id) });
   });
 }

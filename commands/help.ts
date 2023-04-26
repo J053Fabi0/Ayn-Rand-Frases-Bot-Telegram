@@ -29,7 +29,7 @@ export default function help(bot: Bot) {
     (ctx) =>
       void (
         ctx.message &&
-        ctx.reply(ctx.message.chat.id + "" === ADMIN_ID ? adminHelpMessage : publicHelpMessage, {
+        ctx.reply(ctx.message.chat.id === ADMIN_ID ? adminHelpMessage : publicHelpMessage, {
           parse_mode: "HTML",
         })
       )
