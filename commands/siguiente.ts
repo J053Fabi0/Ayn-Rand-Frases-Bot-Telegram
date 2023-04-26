@@ -1,6 +1,6 @@
 import { Bot } from "../deps.ts";
 import tellIDIsNotValid from "../utils/tellIDIsNotValid.ts";
-import { aggregateQuote, changeQuote, getQuote } from "../controllers/quote.controller.ts";
+import { aggregateQuote, changeQuote, getQuote } from "../controllers/mongo/quote.controller.ts";
 
 export default function siguiente(bot: Bot) {
   bot.command(["siguiente", "next"], async (ctx) => {

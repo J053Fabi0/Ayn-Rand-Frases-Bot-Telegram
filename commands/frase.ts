@@ -2,8 +2,8 @@ import { Bot } from "../deps.ts";
 import { ADMIN_ID } from "../env.ts";
 import publishQuote from "../publishQuote.ts";
 import tellIDIsNotValid from "../utils/tellIDIsNotValid.ts";
-import { getQuote } from "../controllers/quote.controller.ts";
 import getQuotesButtons from "../callbacks/getQuotesButtons.ts";
+import { getQuote } from "../controllers/mongo/quote.controller.ts";
 
 export default function frase(bot: Bot) {
   bot.hears([/^\/frase/, /^\/ver/], async (ctx, next) => {

@@ -1,5 +1,5 @@
 import * as a from "./dbUtils.ts";
-import Model from "../models/author.model.ts";
+import Model from "../../models/author.model.ts";
 
 export const getAuthors = a.find(Model);
 export const getAuthor = a.findOne(Model);

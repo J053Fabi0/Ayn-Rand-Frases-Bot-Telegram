@@ -1,6 +1,11 @@
 import { Bot } from "../deps.ts";
+import {
+  getQuote,
+  changeQuote,
+  aggregateQuote,
+  getNextQuotesNumbers,
+} from "../controllers/mongo/quote.controller.ts";
 import tellIDIsNotValid from "../utils/tellIDIsNotValid.ts";
-import { aggregateQuote, changeQuote, getNextQuotesNumbers, getQuote } from "../controllers/quote.controller.ts";
 
 export default function saltar(bot: Bot) {
   bot.command(["saltar", "skip"], async (ctx) => {

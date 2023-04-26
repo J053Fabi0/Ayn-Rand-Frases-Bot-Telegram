@@ -1,6 +1,6 @@
 import { Bot } from "../deps.ts";
 import getQuotesButton from "./getQuotesButtons.ts";
-import { deleteQuote } from "../controllers/quote.controller.ts";
+import { deleteQuote } from "../controllers/mongo/quote.controller.ts";
 
 export default function deleteCallback(bot: Bot) {
   bot.callbackQuery(/^delete_/, async (ctx) => {

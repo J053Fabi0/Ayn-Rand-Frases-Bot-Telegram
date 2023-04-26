@@ -1,7 +1,7 @@
 import { Bot } from "../deps.ts";
 import tellIDIsNotValid from "../utils/tellIDIsNotValid.ts";
 import getQuotesButtons from "../callbacks/getQuotesButtons.ts";
-import { changeQuote, getQuote } from "../controllers/quote.controller.ts";
+import { changeQuote, getQuote } from "../controllers/mongo/quote.controller.ts";
 
 export default function editar(bot: Bot) {
   bot.command(["edit", "editar"], async (ctx) => {

@@ -1,5 +1,5 @@
 import * as a from "./dbUtils.ts";
-import Model from "../models/quote.model.ts";
+import Model from "../../models/quote.model.ts";
 
 export const getQuotes = a.find(Model);
 export const getQuote = a.findOne(Model);

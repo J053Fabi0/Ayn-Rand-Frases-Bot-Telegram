@@ -2,7 +2,7 @@ import bot from "./initBot.ts";
 import { ObjectId } from "./deps.ts";
 import getQuotesButtons from "./callbacks/getQuotesButtons.ts";
 import sendMassiveMessage from "./utils/sendMassiveMessage.ts";
-import { aggregateQuote, changeQuote, getQuotes } from "./controllers/quote.controller.ts";
+import { aggregateQuote, changeQuote, getQuotes } from "./controllers/mongo/quote.controller.ts";
 
 interface CommonParams {
   id?: string | ObjectId;
