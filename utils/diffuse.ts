@@ -61,5 +61,6 @@ async function updateQuotesWithoutAuthor() {
     await changeQuote({ _id: id }, { $set: { quote: finalQuote, author: authorId } });
   }
 
-  if (orphanQuotes.length > 0) console.log(`Updated ${orphanQuotes.length} quotes without author!`);
+  if (orphanQuotesWithAuthor.length > 0)
+    console.log(`Updated ${orphanQuotesWithAuthor.length} quotes without author!`);
 }
