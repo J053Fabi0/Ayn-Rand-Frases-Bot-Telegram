@@ -1,5 +1,6 @@
 export { sleep } from "sleep";
 export { opineCors } from "cors";
+export { default as Cron } from "croner";
 export { default as loki } from "lokijs";
 export { lodash as _, lodash } from "lodash";
 
