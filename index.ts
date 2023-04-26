@@ -2,6 +2,7 @@
 import "dotenv";
 import "./utils/crons.ts";
 import router from "./routes/routes.ts";
+import diffuse from "./utils/diffuse.ts";
 import handleError from "./utils/handleError.ts";
 import CommonRequest from "./types/commonRequest.type.ts";
 import CommonResponse from "./types/commonResponse.type.ts";
@@ -28,3 +29,5 @@ app.use((err: Error, _: CommonRequest, res: CommonResponse, __: NextFunction) =>
 
 const port = +Deno.env.get("PORT")!;
 app.listen(port, () => console.log(`Listening on: http://localhost:${port}`));
+
+await diffuse();
