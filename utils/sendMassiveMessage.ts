@@ -1,7 +1,7 @@
 import bot from "../initBot.ts";
 import { sleep } from "../deps.ts";
 import iteratePromisesInChunks from "./promisesYieldedInChunks.ts";
-import { getUsers } from "../controllers/user.controller.ts";
+import { getUsers } from "../controllers/mongo/user.controller.ts";
 
 export default async function sendMassiveMessage(mensaje: string | number, receivers: number[] = []) {
   if (receivers.length === 0) {

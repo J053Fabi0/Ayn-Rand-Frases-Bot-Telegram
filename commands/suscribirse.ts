@@ -1,7 +1,7 @@
 import { Bot, FilterCtx, Context } from "../deps.ts";
 import timeUntilHour from "../utils/timeUntilHour.ts";
 import { HORA_DE_PUBLICACIÓN } from "../constants.ts";
-import { createUser, getUser } from "../controllers/user.controller.ts";
+import { createUser, getUser } from "../controllers/mongo/user.controller.ts";
 
 export default function suscribirse(bot: Bot) {
   bot.command(["suscribirse", "suscribir", "suscribirme"], async (ctx) => {

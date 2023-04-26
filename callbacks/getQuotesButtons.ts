@@ -1,6 +1,6 @@
 import { ADMIN_ID } from "../env.ts";
 import { InlineKeyboard } from "../deps.ts";
-import { getQuotes } from "../controllers/quote.controller.ts";
+import { getQuotes } from "../controllers/mongo/quote.controller.ts";
 
 /**
  *

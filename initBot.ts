@@ -6,7 +6,7 @@ import trueLength from "./utils/trueLength.ts";
 import callbacks from "./callbacks/callbacks.ts";
 import timeUntilHour from "./utils/timeUntilHour.ts";
 import { LÍMITE_TAMAÑO_MENSAJE, HORA_DE_PUBLICACIÓN } from "./constants.ts";
-import { aggregateQuote, createQuote } from "./controllers/quote.controller.ts";
+import { aggregateQuote, createQuote } from "./controllers/mongo/quote.controller.ts";
 
 const bot = new Bot(BOT_TOKEN);
 
