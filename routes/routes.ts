@@ -5,8 +5,11 @@ import { auth as authSchema } from "../schemas/auth.schema.ts";
 
 const router = Router();
 
+// Auth for every route.
+router.use(authSchema, authController);
+
 // Default response.
-router.get("/", authSchema, authController, (_, res) => res.sendStatus(200));
+router.get("/", (_, res) => res.sendStatus(200));
 
 router.use(authorRoutes);
 
