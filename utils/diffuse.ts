@@ -1,8 +1,8 @@
 import { sleep, _, ObjectId } from "../deps.ts";
 import Author from "../types/collections/author.type.ts";
 import { changeQuote, getQuotes } from "../controllers/mongo/quote.controller.ts";
-import { createAuthor, getAuthor, getAuthors } from "../controllers/mongo/author.controller.ts";
 import { createSource, getSource } from "../controllers/mongo/source.controller.ts";
+import { createAuthor, getAuthor, getAuthors } from "../controllers/mongo/author.controller.ts";
 
 export default async function diffuse() {
   // This is used to supress the error when ther's no code in this function.
@@ -32,6 +32,7 @@ async function updateQuotesWithoutSource() {
   for (const quote of quotes) {
     const [firstLine, ...rest] = quote.quote.split("\n");
 
+    // This is the only source that is not from Ayn Rand
     const author =
       firstLine === 'In his talk "Judging Viewpoints by Their Fundamentals", minute 1:19:07.' ? peter : aynRand;
 
@@ -54,7 +55,10 @@ async function updateQuotesWithoutSource() {
 
 async function updateQuotesWithoutAuthor() {
   const maxAuthorLength = 30;
-  const quotes = await getQuotes({}, { projection: { quote: 1, author: 1 } });
+  const quotes = await getQuotes({ author: { $exists: false } }, { projection: { quote: 1, author: 1 } });
+
+  if (quotes.length === 0) return;
+
   const authors = await getAuthors({}, { projection: { name: 1 } });
   const aynRand =
     authors.find((author) => author.name === "Ayn Rand") ?? (await createAuthor({ name: "Ayn Rand" }));
