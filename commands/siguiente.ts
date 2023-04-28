@@ -12,19 +12,13 @@ export default function siguiente(bot: Bot) {
     const quote = await getQuote({ number });
     if (!quote) return tellIDIsNotValid(ctx);
 
-    // Hacer que tenga la menor cantidad de veces enviada como los demás.
-    const lowerTimesSent =
-      (await aggregateQuote([{ $group: { _id: null, timesSent: { $min: "$timesSent" } } }]))[0]?.timesSent ?? 0;
     // Hacer que tenga 1 menos que el valor más bajo de últimaVezEnviada
     const lowerLastSentTime =
       (await aggregateQuote([{ $group: { _id: null, lastSentTime: { $min: "$lastSentTime" } } }]))[0]
         ?.lastSentTime ?? new Date(1);
 
-    await changeQuote(
-      { number },
-      { $set: { timesSent: lowerTimesSent, lastSentTime: new Date(+lowerLastSentTime - 1) } }
-    );
+    await changeQuote({ number }, { $set: { lastSentTime: new Date(+lowerLastSentTime - 1) } });
 
-    ctx.reply(`Listo. Corre /frases para verla.`);
+    ctx.reply(`Listo. /frases.`);
   });
 }
