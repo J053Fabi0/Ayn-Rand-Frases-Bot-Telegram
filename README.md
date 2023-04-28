@@ -6,8 +6,8 @@
 
 - `PORT` El puerto en el que correrá el servidor.
 - `AUTH_TOKEN` El token secreto que se usará para autenticar las peticiones.
-- `ADMIN_ID` El id del administrador que podrá usarlo privadamente. Puedes obtenerlo con
-  [@userinfobot](https://t.me/userinfobot).
+- `ADMINS_IDS` Los ids de los administradores que podrán usarlo privadamente. Puedes obtenerlo con
+  [@userinfobot](https://t.me/userinfobot). Separa los ids con comas, sin espacios.
 - `BOT_TOKEN` El token del bot. Puedes crear un bot con [@BotFather](https://t.me/BotFather).
 
 # Correr el bot

@@ -1,7 +1,7 @@
 import { Bot } from "./deps.ts";
 import publishQuote from "./publishQuote.ts";
 import commands from "./commands/commands.ts";
-import { ADMIN_ID, BOT_TOKEN } from "./env.ts";
+import { ADMINS_IDS, BOT_TOKEN } from "./env.ts";
 import trueLength from "./utils/trueLength.ts";
 import callbacks from "./callbacks/callbacks.ts";
 import { MESSAGE_LENGTH_LIMIT } from "./constants.ts";
@@ -20,7 +20,7 @@ bot.on("message", async (ctx, next) => {
   const chatID = ctx.chat.id;
 
   // Al administrador se le dejará tener acceso a los demás comandos
-  if (chatID === ADMIN_ID) return next();
+  if (ADMINS_IDS.includes(chatID)) return next();
 
   // A los usuarios normales se les enviará la frase actual ante cualquier mensaje desconocido.
   // En cualquier otro tipo de chat que no sea privado, se enviará solo ante el comando /frase.
