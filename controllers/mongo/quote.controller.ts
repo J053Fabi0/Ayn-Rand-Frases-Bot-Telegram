@@ -1,5 +1,9 @@
 import * as a from "./dbUtils.ts";
 import Model from "../../models/quote.model.ts";
+import Quote from "../../types/collections/quote.type.ts";
+import Author from "../../types/collections/author.type.ts";
+import Source from "../../types/collections/source.type.ts";
+import { AggregateOptions, Filter } from "../../deps.ts";
 
 export const getQuotes = a.find(Model);
 export const getQuote = a.findOne(Model);
@@ -21,11 +25,31 @@ export const aggregateQuote = a.aggregate(Model);
 export const getAllQuotesNumbers = async () =>
   (await getQuotes({}, { projection: { number: 1 } })).map(({ number }) => number);
 
-export const getNextQuotesNumbers = async () => {
-  const maxTimeSent =
-    (await aggregateQuote([{ $group: { _id: null, timesSent: { $max: "$timesSent" } } }]))[0]?.timesSent ?? 0;
+export async function getFullQuote(filter: Filter<Collection<Quote>>, options?: AggregateOptions) {
+  const possibleQuote = (await aggregateQuote(
+    [
+      { $match: filter },
+      { $lookup: { from: "authors", localField: "author", foreignField: "_id", as: "author" } },
+      { $lookup: { from: "sources", localField: "source", foreignField: "_id", as: "source" } },
+    ],
+    options
+  )) as [Omit<Quote, "author" | "source"> & { author: [Author] | []; source: [Source] | [] }] | [] | null;
 
-  return (await getQuotes({ timesSent: maxTimeSent }, { projection: { number: 1, lastSentTime: 1 } }))
-    .sort((a, b) => +a.lastSentTime - +b.lastSentTime)
-    .map(({ number }) => number);
-};
+  if (!possibleQuote || possibleQuote.length === 0)
+    return {
+      possibleQuote: null,
+      fullQuote: null,
+    } as {
+      possibleQuote: null;
+      fullQuote: null;
+    };
+
+  const { quote } = possibleQuote[0];
+  const author = possibleQuote[0].author[0]?.name;
+  const quoteWithAutor = author ? `${quote}\n\n - ${author}.` : quote;
+
+  const source = possibleQuote[0].source[0]?.name;
+  const fullQuote = source ? `${quoteWithAutor}\n\n${source}` : quoteWithAutor;
+
+  return { possibleQuote: possibleQuote[0], fullQuote };
+}

@@ -4,12 +4,18 @@ import { getQuotes } from "../controllers/mongo/quote.controller.ts";
 
 export default function frases(bot: Bot) {
   bot.command(["frases", "ids"], async (ctx) => {
+    const quotes = await getQuotes(
+      {},
+      {
+        projection: { _id: 0, number: 1, timesSent: 1, lastSentTime: 1 },
+        sort: { lastSentTime: 1 },
+      }
+    );
+
     const quotesByTimesSent = _.groupBy(
-      await (async () => {
-        const quotes = await getQuotes({}, { projection: { _id: 0, number: 1, timesSent: 1, lastSentTime: 1 } });
-        if (quotes.length === 0) return [{ number: "No hay", timesSent: 0 }] as unknown as Quote[];
-        return quotes;
-      })(),
+      quotes.length === 0
+        ? [{ number: "No hay", timesSent: 0, lastSentTime: new Date() } as unknown as Quote]
+        : quotes,
       "timesSent"
     );
 
@@ -17,16 +23,26 @@ export default function frases(bot: Bot) {
       .map((a) => parseInt(a))
       .sort();
 
-    const message = keys
-      .map(
-        (key) =>
-          `<b>Veces enviadas: ${key}</b>\n` +
-          `<code>${quotesByTimesSent[key]
-            .sort((a, b) => +a.lastSentTime - +b.lastSentTime)
-            .map((a) => a.number)
-            .join(", ")}</code>`
-      )
-      .join("\n\n");
+    const message =
+      `<b>Siguientes frases</b>\n<code>` +
+      `${quotes
+        .slice(0, 5)
+        .map((q) => q.number)
+        .join(", ")} ... ` +
+      `${quotes
+        .slice(-5)
+        .map((q) => q.number)
+        .join(", ")}</code>\n\n` +
+      keys
+        .map(
+          (key) =>
+            `<b>Veces enviadas: ${key}</b>\n` +
+            `<code>${quotesByTimesSent[key]
+              .sort((a, b) => +a.lastSentTime - +b.lastSentTime)
+              .map((q) => q.number)
+              .join(", ")}</code>`
+        )
+        .join("\n\n");
 
     ctx.reply(message, { parse_mode: "HTML" });
   });

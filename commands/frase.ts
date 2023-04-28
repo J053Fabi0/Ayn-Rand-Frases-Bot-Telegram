@@ -5,7 +5,7 @@ import Quote from "../types/collections/quote.type.ts";
 import Author from "../types/collections/author.type.ts";
 import tellIDIsNotValid from "../utils/tellIDIsNotValid.ts";
 import getQuotesButtons from "../callbacks/getQuotesButtons.ts";
-import { aggregateQuote } from "../controllers/mongo/quote.controller.ts";
+import { aggregateQuote, getFullQuote } from "../controllers/mongo/quote.controller.ts";
 
 export default function frase(bot: Bot) {
   bot.hears([/^\/frase/, /^\/ver/], async (ctx, next) => {
@@ -21,17 +21,9 @@ export default function frase(bot: Bot) {
     const number = parseInt(ctx.message.text!.split(" ")[1]);
     if (isNaN(number)) return ctx.reply(number + " no es un número.");
 
-    const possibleQuote = (await aggregateQuote([
-      { $match: { number } },
-      { $lookup: { from: "authors", localField: "author", foreignField: "_id", as: "author" } },
-      { $project: { "_id": 0, "quote": 1, "author.name": 1 } },
-    ])) as [Quote & { author: [Author] | [] }] | [] | null;
+    const { fullQuote } = await getFullQuote({ number });
 
-    if (!possibleQuote || possibleQuote.length === 0) return tellIDIsNotValid(ctx);
-
-    const { quote } = possibleQuote[0];
-    const author = possibleQuote[0].author[0]?.name;
-    const fullQuote = author ? `${quote}\n\n - ${author}.` : quote;
+    if (fullQuote === null) return tellIDIsNotValid(ctx);
 
     ctx.reply(fullQuote, { reply_markup: await getQuotesButtons(number, chatID) });
   });

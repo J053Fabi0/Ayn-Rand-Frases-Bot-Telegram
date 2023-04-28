@@ -1,4 +1,4 @@
-import { Bot, ObjectId } from "./deps.ts";
+import { Bot } from "./deps.ts";
 import publishQuote from "./publishQuote.ts";
 import commands from "./commands/commands.ts";
 import { ADMIN_ID, BOT_TOKEN } from "./env.ts";
@@ -48,10 +48,10 @@ bot.on("message", async (ctx) => {
   const a = await createQuote({
     quote,
     timesSent: 0,
+    source: null,
     author: aynRand._id,
     number: lastNumber + 1,
     lastSentTime: new Date(0),
-    source: null as unknown as ObjectId,
   });
   ctx.reply(`Esta frase tiene el ID: ${a.number}. Usa <code>/borrar ${a.number}</code> para borrarla.`, {
     parse_mode: "HTML",
