@@ -1,10 +1,15 @@
+import {
+  createQuote,
+  changeQuote,
+  aggregateQuote,
+  getQuotes as getQuotesCtrl,
+} from "../mongo/quote.controller.ts";
 import { ObjectId } from "../../deps.ts";
 import { pretifyIds } from "../../utils/pretifyId.ts";
 import { getSourceById } from "../mongo/source.controller.ts";
 import { getAuthorById } from "../mongo/author.controller.ts";
 import CommonResponse from "../../types/commonResponse.type.ts";
-import { GetQuotes, PostQuote } from "../../types/api/quote.type.ts";
-import { getQuotes as getQuotesCtrl, createQuote, aggregateQuote } from "../mongo/quote.controller.ts";
+import { GetQuotes, PostQuote, PatchQuote } from "../../types/api/quote.type.ts";
 
 export const getQuotes = async ({ params }: GetQuotes, res: CommonResponse) => {
   const author = await getAuthorById(params.authorId, { projection: { _id: 1 } });
@@ -39,4 +44,24 @@ export const postQuote = async ({ body }: PostQuote, res: CommonResponse) => {
   });
 
   res.send({ message: quote._id });
+};
+
+export const patchQuote = async ({ body }: PatchQuote, res: CommonResponse) => {
+  const { quoteId, ...patchData } = body;
+
+  if (patchData.sourceId) {
+    const source = await getSourceById(patchData.sourceId, { projection: { _id: 1 } });
+    if (!source) res.setStatus(404).send({ message: null, error: "Source not found" });
+  }
+
+  if (patchData.authorId) {
+    const author = await getAuthorById(patchData.authorId, { projection: { _id: 1 } });
+    if (!author) res.setStatus(404).send({ message: null, error: "Author not found" });
+  }
+
+  const { modifiedCount } = await changeQuote({ _id: new ObjectId(quoteId) }, { $set: patchData });
+
+  if (modifiedCount === 0) res.setStatus(404).send({ message: null, error: "Quote not found" });
+
+  res.sendStatus(200);
 };

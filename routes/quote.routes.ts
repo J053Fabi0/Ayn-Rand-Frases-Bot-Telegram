@@ -8,4 +8,6 @@ quoteRoutes.get("/quotes/:authorId", s.getQuotes, c.getQuotes);
 
 quoteRoutes.post("/quote", s.postQuote, c.postQuote);
 
+quoteRoutes.patch("/quote", s.patchQuote, c.patchQuote);
+
 export default quoteRoutes;
