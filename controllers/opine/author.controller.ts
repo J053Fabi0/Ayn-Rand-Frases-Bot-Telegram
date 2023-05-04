@@ -1,8 +1,13 @@
+import {
+  createAuthor,
+  changeAuthor,
+  getAuthors as getAuthorsCtrl,
+  deleteAuthor as deleteAuthorCtrl,
+} from "../mongo/author.controller.ts";
 import { ObjectId } from "../../deps.ts";
 import { countQuotes } from "../mongo/quote.controller.ts";
 import CommonResponse from "../../types/commonResponse.type.ts";
-import { GetAuthors, PostAuthor, PatchAuthor } from "../../types/api/author.type.ts";
-import { getAuthors as getAuthorsCtrl, createAuthor, changeAuthor } from "../mongo/author.controller.ts";
+import { GetAuthors, PostAuthor, PatchAuthor, DeleteAuthor } from "../../types/api/author.type.ts";
 
 export const getAuthors = async (_: GetAuthors, res: CommonResponse) => {
   const authors = (await getAuthorsCtrl({})).map((a) => ({ id: a._id, name: a.name, numberOfQuotes: 0 }));
@@ -22,6 +27,13 @@ export const patchAuthor = async ({ body }: PatchAuthor, res: CommonResponse) =>
 
   const { modifiedCount } = await changeAuthor({ _id: new ObjectId(_id) }, { $set: other });
   if (modifiedCount === 0) throw new Error("No author found with that id.");
+
+  res.sendStatus(200);
+};
+
+export const deleteAuthor = async ({ params }: DeleteAuthor, res: CommonResponse) => {
+  const deletedCount = await deleteAuthorCtrl({ _id: new ObjectId(params._id) });
+  if (deletedCount === 0) throw new Error("No author found with that id.");
 
   res.sendStatus(200);
 };
