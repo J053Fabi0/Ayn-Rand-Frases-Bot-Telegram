@@ -8,4 +8,6 @@ sourceRoutes.get("/sources/:authorId", s.getSource, c.getSources);
 
 sourceRoutes.post("/source", s.postSource, c.postSource);
 
+sourceRoutes.patch("/source", s.patchSource, c.patchSource);
+
 export default sourceRoutes;
