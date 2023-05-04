@@ -4,6 +4,8 @@ import * as c from "../controllers/opine/quote.controller.ts";
 
 const quoteRoutes = new Router();
 
-quoteRoutes.use("/quotes/:authorId", s.getQuotes, c.getQuotes);
+quoteRoutes.get("/quotes/:authorId", s.getQuotes, c.getQuotes);
+
+quoteRoutes.post("/quote", s.postQuote, c.postQuote);
 
 export default quoteRoutes;
