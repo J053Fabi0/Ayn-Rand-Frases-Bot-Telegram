@@ -6,4 +6,6 @@ const sourceRoutes = new Router();
 
 sourceRoutes.get("/sources/:authorId", s.getSource, c.getSources);
 
+sourceRoutes.post("/source", s.postSource, c.postSource);
+
 export default sourceRoutes;
