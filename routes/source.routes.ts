@@ -10,4 +10,6 @@ sourceRoutes.post("/source", s.postSource, c.postSource);
 
 sourceRoutes.patch("/source", s.patchSource, c.patchSource);
 
+sourceRoutes.delete("/source/:id", s.deleteSource, c.deleteSource);
+
 export default sourceRoutes;

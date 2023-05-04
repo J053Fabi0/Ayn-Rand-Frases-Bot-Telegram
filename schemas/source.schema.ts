@@ -21,3 +21,5 @@ export const patchSource = a(
     })
     .or("name", "authors")
 );
+
+export const deleteSource = a(joi.object({ id: id.required() }), "params");
