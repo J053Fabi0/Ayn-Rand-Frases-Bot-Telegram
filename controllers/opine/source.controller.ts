@@ -2,8 +2,8 @@ import { ObjectId } from "../../deps.ts";
 import { pretifyIds } from "../../utils/pretifyId.ts";
 import { getAuthorById } from "../mongo/author.controller.ts";
 import CommonResponse from "../../types/commonResponse.type.ts";
-import { GetSources, PostSource } from "../../types/api/source.type.ts";
-import { getSources as getSourcesCtrl, createSource } from "../mongo/source.controller.ts";
+import { GetSources, PostSource, PatchSource } from "../../types/api/source.type.ts";
+import { getSources as getSourcesCtrl, createSource, changeSource } from "../mongo/source.controller.ts";
 
 export const getSources = async ({ params }: GetSources, res: CommonResponse) => {
   const author = await getAuthorById(params.authorId, { projection: { _id: 1 } });
@@ -28,4 +28,24 @@ export const postSource = async ({ body }: PostSource, res: CommonResponse) => {
   });
 
   res.send({ message: source._id });
+};
+
+export const patchSource = async ({ body }: PatchSource, res: CommonResponse) => {
+  const { sourceId, authors, ...patchData } = body;
+
+  if (authors) {
+    for (const authorId of authors) {
+      const author = await getAuthorById(authorId, { projection: { _id: 1 } });
+      if (!author) res.setStatus(404).send({ message: null, error: `Author not found (${authorId})` });
+    }
+  }
+
+  const { matchedCount } = await changeSource(
+    { _id: new ObjectId(sourceId) },
+    { $set: { ...patchData, ...(authors ? { authors: authors.map((id) => new ObjectId(id)) } : {}) } }
+  );
+
+  if (!matchedCount) res.setStatus(404).send({ message: null, error: "Source not found" });
+
+  res.sendStatus(200);
 };
