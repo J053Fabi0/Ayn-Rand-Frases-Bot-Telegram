@@ -1,9 +1,14 @@
+import {
+  createSource,
+  changeSource,
+  getSources as getSourcesCtrl,
+  deleteSource as deleteSourceCtrl,
+} from "../mongo/source.controller.ts";
 import { ObjectId } from "../../deps.ts";
 import { pretifyIds } from "../../utils/pretifyId.ts";
 import { getAuthorById } from "../mongo/author.controller.ts";
 import CommonResponse from "../../types/commonResponse.type.ts";
-import { GetSources, PostSource, PatchSource } from "../../types/api/source.type.ts";
-import { getSources as getSourcesCtrl, createSource, changeSource } from "../mongo/source.controller.ts";
+import { GetSources, PostSource, PatchSource, DeleteSource } from "../../types/api/source.type.ts";
 
 export const getSources = async ({ params }: GetSources, res: CommonResponse) => {
   const author = await getAuthorById(params.authorId, { projection: { _id: 1 } });
@@ -46,6 +51,13 @@ export const patchSource = async ({ body }: PatchSource, res: CommonResponse) =>
   );
 
   if (!matchedCount) res.setStatus(404).send({ message: null, error: "Source not found" });
+
+  res.sendStatus(200);
+};
+
+export const deleteSource = async ({ params }: DeleteSource, res: CommonResponse) => {
+  const deletedCount = await deleteSourceCtrl({ _id: new ObjectId(params._id) });
+  if (deletedCount === 0) res.setStatus(404).send({ message: null, error: "Source not found" });
 
   res.sendStatus(200);
 };
