@@ -18,9 +18,9 @@ export const postAuthor = async ({ body }: PostAuthor, res: CommonResponse) => {
 };
 
 export const patchAuthor = async ({ body }: PatchAuthor, res: CommonResponse) => {
-  const { id, ...other } = body;
+  const { _id, ...other } = body;
 
-  const { modifiedCount } = await changeAuthor({ _id: new ObjectId(id) }, { $set: other });
+  const { modifiedCount } = await changeAuthor({ _id: new ObjectId(_id) }, { $set: other });
   if (modifiedCount === 0) throw new Error("No author found with that id.");
 
   res.sendStatus(200);
