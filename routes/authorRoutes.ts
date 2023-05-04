@@ -4,6 +4,7 @@ import * as c from "../controllers/opine/author.controller.ts";
 
 const authorRoutes = new Router();
 
-authorRoutes.use("/authors", s.getAuthors, c.getAuthors);
+authorRoutes.get("/authors", s.getAuthors, c.getAuthors);
+authorRoutes.post("/author", s.postAuthor, c.postAuthor);
 
 export default authorRoutes;
