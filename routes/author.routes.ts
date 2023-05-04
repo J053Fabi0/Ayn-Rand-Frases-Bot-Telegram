@@ -10,4 +10,6 @@ authorRoutes.post("/author", s.postAuthor, c.postAuthor);
 
 authorRoutes.patch("/author", s.patchAuthor, c.patchAuthor);
 
+authorRoutes.delete("/author/:id", s.deleteAuthor, c.deleteAuthor);
+
 export default authorRoutes;
