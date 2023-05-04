@@ -23,3 +23,5 @@ export const patchQuote = a(
     })
     .or("quote", "sourceId", "authorId")
 );
+
+export const deleteQuote = a(joi.object({ id: id.required() }), "params");

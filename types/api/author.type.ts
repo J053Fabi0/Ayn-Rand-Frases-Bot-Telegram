@@ -4,4 +4,4 @@ export type GetAuthors = CommonRequest;
 
 export type PostAuthor = CommonRequest<{ name: string }>;
 
-export type PatchAuthor = CommonRequest<{ name: string; id: string }>;
+export type PatchAuthor = CommonRequest<{ name: string; _id: string }>;

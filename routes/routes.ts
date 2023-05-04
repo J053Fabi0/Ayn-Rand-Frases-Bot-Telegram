@@ -13,8 +13,8 @@ router.use(authSchema, authController);
 // Default response.
 router.get("/", (_, res) => res.sendStatus(200));
 
-router.use(authorRoutes);
 router.use(quoteRoutes);
+router.use(authorRoutes);
 router.use(sourceRoutes);
 
 export default router;

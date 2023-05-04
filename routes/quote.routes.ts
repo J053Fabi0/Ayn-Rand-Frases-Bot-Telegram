@@ -10,4 +10,6 @@ quoteRoutes.post("/quote", s.postQuote, c.postQuote);
 
 quoteRoutes.patch("/quote", s.patchQuote, c.patchQuote);
 
+quoteRoutes.delete("/quote/:id", s.deleteQuote, c.deleteQuote);
+
 export default quoteRoutes;
