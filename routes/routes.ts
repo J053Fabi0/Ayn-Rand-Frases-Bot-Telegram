@@ -1,6 +1,6 @@
 import { Router } from "../deps.ts";
-import quoteRoutes from "./quoteRoutes.ts";
-import authorRoutes from "./authorRoutes.ts";
+import quoteRoutes from "./quote.routes.ts";
+import authorRoutes from "./author.routes.ts";
 import authController from "../middlewares/auth.ts";
 import { auth as authSchema } from "../schemas/auth.schema.ts";
 
