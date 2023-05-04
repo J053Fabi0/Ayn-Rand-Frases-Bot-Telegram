@@ -9,6 +9,17 @@ export const postQuote = a(
   joi.object({
     authorId: id.required(),
     quote: quote.required(),
-    sourceId: id.allow("").default(null),
+    sourceId: id.allow(null).default(null),
   })
+);
+
+export const patchQuote = a(
+  joi
+    .object({
+      quote: quote,
+      authorId: id,
+      quoteId: id.required(),
+      sourceId: id.allow(null),
+    })
+    .or("quote", "sourceId", "authorId")
 );
