@@ -3,13 +3,14 @@ import {
   changeQuote,
   aggregateQuote,
   getQuotes as getQuotesCtrl,
+  deleteQuote as deleteQuoteCtrl,
 } from "../mongo/quote.controller.ts";
 import { ObjectId } from "../../deps.ts";
 import { pretifyIds } from "../../utils/pretifyId.ts";
 import { getSourceById } from "../mongo/source.controller.ts";
 import { getAuthorById } from "../mongo/author.controller.ts";
 import CommonResponse from "../../types/commonResponse.type.ts";
-import { GetQuotes, PostQuote, PatchQuote } from "../../types/api/quote.type.ts";
+import { GetQuotes, PostQuote, PatchQuote, DeleteQuote } from "../../types/api/quote.type.ts";
 
 export const getQuotes = async ({ params }: GetQuotes, res: CommonResponse) => {
   const author = await getAuthorById(params.authorId, { projection: { _id: 1 } });
@@ -62,6 +63,14 @@ export const patchQuote = async ({ body }: PatchQuote, res: CommonResponse) => {
   const { modifiedCount } = await changeQuote({ _id: new ObjectId(quoteId) }, { $set: patchData });
 
   if (modifiedCount === 0) res.setStatus(404).send({ message: null, error: "Quote not found" });
+
+  res.sendStatus(200);
+};
+
+export const deleteQuote = async ({ params }: DeleteQuote, res: CommonResponse) => {
+  const deletedCount = await deleteQuoteCtrl({ _id: new ObjectId(params._id) });
+
+  if (deletedCount === 0) res.setStatus(404).send({ message: null, error: "Quote not found" });
 
   res.sendStatus(200);
 };

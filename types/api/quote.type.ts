@@ -10,3 +10,5 @@ export type PatchQuote = CommonRequest<{
   authorId?: string;
   sourceId?: string | null;
 }>;
+
+export type DeleteQuote = CommonRequest<undefined, undefined, { _id: string }>;
