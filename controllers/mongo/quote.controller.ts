@@ -49,7 +49,7 @@ export async function getFullQuote(filter: Filter<Collection<Quote>>, options?: 
   const quoteWithAutor = author ? `${quote}\n\n - ${author}.` : quote;
 
   const source = possibleQuote[0].source[0]?.name;
-  const fullQuote = source ? `${quoteWithAutor}\n\n${source}` : quoteWithAutor;
+  const fullQuote = source ? `${source}\n\n${quoteWithAutor}` : quoteWithAutor;
 
   return { possibleQuote: possibleQuote[0], fullQuote };
 }
