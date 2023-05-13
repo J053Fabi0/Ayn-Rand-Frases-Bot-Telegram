@@ -16,11 +16,11 @@ import desuscribirse from "./desuscribirse.ts";
 export default function commands(bot: Bot, tipo: "public" | "admin") {
   if (tipo === "public") {
     help(bot);
+    frase(bot);
     restante(bot);
     suscribirse(bot);
     desuscribirse(bot);
   } else {
-    frase(bot);
     decir(bot);
     borrar(bot);
     frases(bot);
