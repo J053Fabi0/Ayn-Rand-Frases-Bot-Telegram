@@ -35,15 +35,16 @@ export const postQuote = async ({ body }: PostQuote, res: CommonResponse) => {
   const lastNumber =
     (await aggregateQuote([{ $group: { _id: null, number: { $max: "$number" } } }]))[0]?.number ?? 0;
 
-  const lastDate =
-    (await aggregateQuote([{ $group: { _id: null, lastSentTime: { $max: "$lastSentTime" } } }]))[0]
+  const lowestSentTime =
+    (await aggregateQuote([{ $group: { _id: null, lastSentTime: { $min: "$lastSentTime" } } }]))[0]
       ?.lastSentTime ?? 0;
 
   const quote = await createQuote({
     timesSent: 0,
     quote: body.quote,
     number: lastNumber + 1,
-    lastSentTime: new Date(+lastDate - 1),
+    // lower than the lowest, to be the next one to be sent
+    lastSentTime: new Date(+lowestSentTime - 1),
     author: new ObjectId(body.authorId),
     source: body.sourceId ? new ObjectId(body.sourceId) : null,
   });
