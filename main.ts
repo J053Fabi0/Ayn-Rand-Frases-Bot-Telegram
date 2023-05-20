@@ -36,7 +36,7 @@ app.use("/", router);
 // Error handling
 app.use((err: Error, _: CommonRequest, res: CommonResponse, __: NextFunction) => handleError(res, err));
 
-app.listen(API_PORT, () => console.log(`Listening on: http://localhost:${API_PORT}`));
+app.listen(API_PORT, () => console.log(`Listening on http://localhost:${API_PORT}/`));
 
 diffuse();
 
