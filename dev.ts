@@ -2,4 +2,4 @@
 
 import { dev } from "./deps.ts";
 
-await dev(import.meta.url, "./index.ts");
+await dev(import.meta.url, "./main.ts");
