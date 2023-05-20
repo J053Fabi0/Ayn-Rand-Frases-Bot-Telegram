@@ -48,7 +48,7 @@ export default function NewQuote({ data }: PageProps<IndexProps>) {
         <title>Publish quote</title>
       </Head>
 
-      <div class="py-5 mx-auto max-w-screen-md">
+      <div class="p-5 mx-auto max-w-screen-md">
         <div class="min-h-screen">
           <h1 class="text-2xl">Publish a new quote</h1>
 
