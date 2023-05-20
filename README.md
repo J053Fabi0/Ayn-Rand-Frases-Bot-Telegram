@@ -4,7 +4,8 @@
 
 # `.env`
 
-- `PORT` El puerto en el que correrá el servidor.
+- `WEB_PORT` El puerto en el que correrá el front-end.
+- `API_PORT` El puerto en el que correrá el API.
 - `AUTH_TOKEN` El token secreto que se usará para autenticar las peticiones. Usa cualquier contraseña segura.
 - `ADMINS_IDS` Los ids de los administradores que podrán usarlo privadamente. Puedes obtenerlo con
   [@userinfobot](https://t.me/userinfobot). Separa los ids con comas, sin espacios.
