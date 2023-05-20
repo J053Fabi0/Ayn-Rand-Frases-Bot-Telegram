@@ -38,7 +38,7 @@ app.use((err: Error, _: CommonRequest, res: CommonResponse, __: NextFunction) =>
 
 app.listen(API_PORT, () => console.log(`Listening on: http://localhost:${API_PORT}`));
 
-await diffuse();
+diffuse();
 
 // Start the web server
 await start(manifest, { plugins: [twindPlugin(twindConfig)], port: WEB_PORT });
