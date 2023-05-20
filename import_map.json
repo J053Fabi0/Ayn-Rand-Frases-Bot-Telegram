@@ -1,6 +1,6 @@
 {
   "imports": {
-    "joi": "https://esm.sh/joi@17.9.1",
+    "joi": "https://esm.sh/joi@17.9.2/",
     "lokijs": "https://esm.sh/lokijs@1.5.12",
     "cors": "https://deno.land/x/cors@v1.2.2/mod.ts",
     "grammy/": "https://deno.land/x/grammy@v1.16.0/",
@@ -13,8 +13,8 @@
 
     "twind": "https://esm.sh/twind@0.16.19",
     "twind/": "https://esm.sh/twind@0.16.19/",
-    "preact": "https://esm.sh/preact@10.13.2",
-    "preact/": "https://esm.sh/preact@10.13.2/",
+    "preact": "https://esm.sh/preact@10.14.1",
+    "preact/": "https://esm.sh/preact@10.14.1/",
     "$fresh/": "https://deno.land/x/fresh@1.1.5/",
     "@preact/signals": "https://esm.sh/*@preact/signals@1.1.3",
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.2.3",

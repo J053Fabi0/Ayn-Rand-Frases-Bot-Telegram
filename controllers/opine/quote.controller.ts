@@ -23,13 +23,13 @@ export const getQuotes = async ({ params }: GetQuotes, res: CommonResponse) => {
   res.send({ message: quotes });
 };
 
-export const postQuote = async ({ body }: PostQuote, res: CommonResponse) => {
+export const postQuote = async ({ body }: PostQuote, res?: CommonResponse) => {
   const author = await getAuthorById(body.authorId, { projection: { _id: 1 } });
-  if (!author) res.setStatus(404).send({ message: null, error: "Author not found" });
+  if (!author) res?.setStatus(404).send({ message: null, error: "Author not found" });
 
   if (body.sourceId) {
     const source = await getSourceById(body.sourceId, { projection: { _id: 1 } });
-    if (!source) res.setStatus(404).send({ message: null, error: "Source not found" });
+    if (!source) res?.setStatus(404).send({ message: null, error: "Source not found" });
   }
 
   const lastNumber =
@@ -49,7 +49,9 @@ export const postQuote = async ({ body }: PostQuote, res: CommonResponse) => {
     source: body.sourceId ? new ObjectId(body.sourceId) : null,
   });
 
-  res.send({ message: quote._id });
+  res?.send({ message: quote._id });
+
+  return quote;
 };
 
 export const patchQuote = async ({ body }: PatchQuote, res: CommonResponse) => {
