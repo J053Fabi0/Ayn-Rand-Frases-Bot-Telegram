@@ -1,5 +1,6 @@
 import {
   Filter,
+  ObjectId,
   Collection,
   FindOptions,
   UpdateFilter,
@@ -8,10 +9,9 @@ import {
   InsertDocument,
   AggregateOptions,
   AggregatePipeline,
-} from "../deps.ts";
-import InsertDoc from "../types/collections/insertDoc.type.ts";
-import { ObjectId } from "https://deno.land/x/web_bson@v0.3.0/mod.js";
-import CommonCollection from "../types/collections/commonCollection.type.ts";
+} from "../../deps.ts";
+import InsertDoc from "../../types/collections/insertDoc.type.ts";
+import CommonCollection from "../../types/collections/commonCollection.type.ts";
 
 type UnPromisify<T> = T extends Promise<infer U> ? U : T;
 type DocumentOfCollection<T extends Collection<CommonCollection>> = Exclude<

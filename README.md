@@ -5,8 +5,9 @@
 # `.env`
 
 - `PORT` El puerto en el que correrá el servidor.
-- `ADMIN_ID` El id del administrador que podrá usarlo privadamente. Puedes obtenerlo con
-  [@userinfobot](https://t.me/userinfobot).
+- `AUTH_TOKEN` El token secreto que se usará para autenticar las peticiones.
+- `ADMINS_IDS` Los ids de los administradores que podrán usarlo privadamente. Puedes obtenerlo con
+  [@userinfobot](https://t.me/userinfobot). Separa los ids con comas, sin espacios.
 - `BOT_TOKEN` El token del bot. Puedes crear un bot con [@BotFather](https://t.me/BotFather).
 
 # Correr el bot
