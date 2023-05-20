@@ -105,5 +105,4 @@ dist
 
 constants.ts
 .vscode/settings.json
-db/database.db
 deno.lock
