@@ -1,5 +1,5 @@
 import { Bot } from "../deps.ts";
-import { ADMIN_ID } from "../env.ts";
+import { ADMINS_IDS } from "../env.ts";
 
 const adminHelpMessage =
   "· <code>/frases</code> - Muestra los IDs de las frases existentes.\n" +
@@ -29,7 +29,7 @@ export default function help(bot: Bot) {
     (ctx) =>
       void (
         ctx.message &&
-        ctx.reply(ctx.message.chat.id === ADMIN_ID ? adminHelpMessage : publicHelpMessage, {
+        ctx.reply(ADMINS_IDS.includes(ctx.message.chat.id) ? adminHelpMessage : publicHelpMessage, {
           parse_mode: "HTML",
         })
       )

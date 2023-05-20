@@ -1,4 +1,4 @@
-import { deleteUser, getUser } from "../controllers/user.controller.ts";
+import { deleteUser, getUser } from "../controllers/mongo/user.controller.ts";
 import { Bot, FilterCtx, Context, ObjectId } from "../deps.ts";
 
 export default function desuscribirse(bot: Bot) {

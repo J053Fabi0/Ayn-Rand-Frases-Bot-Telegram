@@ -1,10 +1,14 @@
+import { PUBLICATION_HOUR, TIMEZONE } from "../constants.ts";
 import { Bot } from "../deps.ts";
-import timeUntilHour from "../utils/timeUntilHour.ts";
-import { HORA_DE_PUBLICACIÓN } from "../constants.ts";
+import { publishQuoteCron } from "../utils/crons.ts";
+import msToTimeDescription from "../utils/msToTimeDescription.ts";
 
 export default function restante(bot: Bot) {
   bot.command("restante", (ctx) => {
     if (ctx.chat.type === "private")
-      ctx.reply(`${BigInt(timeUntilHour(HORA_DE_PUBLICACIÓN)) / 1000n / 60n} minutos.`);
+      ctx.reply(
+        `${msToTimeDescription(publishQuoteCron.msToNext() || 0)}\n\n` +
+          `A las ${PUBLICATION_HOUR} horas, tiempo de ${TIMEZONE}.`
+      );
   });
 }

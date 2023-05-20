@@ -1,8 +1,7 @@
 import bot from "../initBot.ts";
 import { sleep } from "../deps.ts";
-import { getUsers } from "../controllers/user.controller.ts";
-import handleSendMessageError from "./handleSendMessageError.ts";
 import iteratePromisesInChunks from "./promisesYieldedInChunks.ts";
+import { getUsers } from "../controllers/mongo/user.controller.ts";
 
 export default async function sendMassiveMessage(mensaje: string | number, receivers: number[] = []) {
   if (receivers.length === 0) {
@@ -13,7 +12,7 @@ export default async function sendMassiveMessage(mensaje: string | number, recei
   return iteratePromisesInChunks(
     receivers.map((userID) => async () => {
       await sleep(1);
-      bot.api.sendMessage(userID, `${mensaje}`).catch(handleSendMessageError(userID));
+      bot.api.sendMessage(userID, `${mensaje}`).catch(() => {});
     }),
     5 // Se enviarán 5 mensajes al mismo tiempo cada 1 segundo.
   );

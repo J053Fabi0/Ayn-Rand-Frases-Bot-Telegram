@@ -1,6 +1,6 @@
 import { Bot, ObjectId } from "../deps.ts";
 import tellIDIsNotValid from "../utils/tellIDIsNotValid.ts";
-import { deleteQuote, getQuote } from "../controllers/quote.controller.ts";
+import { deleteQuote, getQuote } from "../controllers/mongo/quote.controller.ts";
 
 export default function (bot: Bot) {
   bot.command(["borrar", "eliminar", "quitar"], async (ctx) => {
