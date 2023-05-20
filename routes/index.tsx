@@ -7,7 +7,7 @@ export default function Home() {
         <title>Ayn Rand</title>
       </Head>
 
-      <div class="py-5 mx-auto max-w-screen-md">
+      <div class="p-5 mx-auto max-w-screen-md">
         <div class="min-h-screen">
           <h1 class="text-2xl">Objectivism quotes</h1>
 
