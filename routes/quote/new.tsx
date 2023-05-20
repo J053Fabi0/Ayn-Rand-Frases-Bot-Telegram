@@ -26,9 +26,11 @@ export const handler: Handlers<IndexProps> = {
     const authToken = form.get("authToken")?.toString();
     if (authToken !== AUTH_TOKEN) return new Response("Unauthorized", { status: 401 });
 
-    const quote = form.get("quote")?.toString()!;
-    const authorId = form.get("author")?.toString()!;
-    const sourceId = form.get("source")?.toString()!;
+    const quote = form.get("quote")?.toString();
+    const authorId = form.get("author")?.toString();
+    const sourceId = form.get("source")?.toString();
+
+    if (!quote || !authorId || !sourceId) return new Response("Missing quote, author, or source", { status: 400 });
 
     const newQuote = await postQuote({ body: { quote, authorId, sourceId } } as PostQuote);
 
