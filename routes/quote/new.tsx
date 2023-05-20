@@ -1,6 +1,7 @@
 import { AUTH_TOKEN } from "../../env.ts";
 import { Head, Handlers, PageProps } from "../../deps.ts";
 import { PostQuote } from "../../types/api/quote.type.ts";
+import { Container } from "../../components/Container.tsx";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
 import { postQuote } from "../../controllers/opine/quote.controller.ts";
@@ -48,7 +49,7 @@ export default function NewQuote({ data }: PageProps<IndexProps>) {
         <title>Publish quote</title>
       </Head>
 
-      <div class="p-5 mx-auto max-w-screen-md">
+      <Container>
         <div class="min-h-screen">
           <h1 class="text-2xl">Publish a new quote</h1>
 
@@ -84,7 +85,7 @@ export default function NewQuote({ data }: PageProps<IndexProps>) {
         <a href="https://fresh.deno.dev">
           <img width="197" height="37" src="https://fresh.deno.dev/fresh-badge-dark.svg" alt="Made with Fresh" />
         </a>
-      </div>
+      </Container>
     </>
   );
 }
