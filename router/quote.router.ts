@@ -2,14 +2,14 @@ import { Router } from "../deps.ts";
 import * as s from "../schemas/quote.schema.ts";
 import * as c from "../controllers/opine/quote.controller.ts";
 
-const quoteRoutes = new Router();
+const quoteRouter = new Router();
 
-quoteRoutes.get("/quotes/:authorId", s.getQuotes, c.getQuotes);
+quoteRouter.get("/quotes/:authorId", s.getQuotes, c.getQuotes);
 
-quoteRoutes.post("/quote", s.postQuote, c.postQuote);
+quoteRouter.post("/quote", s.postQuote, c.postQuote);
 
-quoteRoutes.patch("/quote", s.patchQuote, c.patchQuote);
+quoteRouter.patch("/quote", s.patchQuote, c.patchQuote);
 
-quoteRoutes.delete("/quote/:id", s.deleteQuote, c.deleteQuote);
+quoteRouter.delete("/quote/:id", s.deleteQuote, c.deleteQuote);
 
-export default quoteRoutes;
+export default quoteRouter;
