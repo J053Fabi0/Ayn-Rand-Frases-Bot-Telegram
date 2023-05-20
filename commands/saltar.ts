@@ -1,6 +1,6 @@
 import { Bot } from "../deps.ts";
 import tellIDIsNotValid from "../utils/tellIDIsNotValid.ts";
-import { aggregateQuote, changeQuote, getNextQuotesNumbers, getQuote } from "../controllers/quote.controller.ts";
+import { getQuote, changeQuote } from "../controllers/mongo/quote.controller.ts";
 
 export default function saltar(bot: Bot) {
   bot.command(["saltar", "skip"], async (ctx) => {
@@ -12,13 +12,8 @@ export default function saltar(bot: Bot) {
     const quote = await getQuote({ number }, { projection: { timesSent: 1 } });
     if (!quote) return tellIDIsNotValid(ctx);
 
-    const maxTimeSent =
-      (await aggregateQuote([{ $group: { _id: null, timesSent: { $max: "$timesSent" } } }]))[0]?.timesSent ?? 0;
-    await changeQuote(
-      { number },
-      { $inc: { timesSent: quote.timesSent === maxTimeSent ? 0 : 1 }, $set: { lastSentTime: new Date() } }
-    );
+    await changeQuote({ number }, { $set: { lastSentTime: new Date() } });
 
-    ctx.reply(`Listo.\n\n<code>${(await getNextQuotesNumbers()).join(", ")}</code>`, { parse_mode: "HTML" });
+    ctx.reply("Listo. /frases.");
   });
 }

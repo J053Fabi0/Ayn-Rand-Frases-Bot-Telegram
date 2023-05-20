@@ -2,14 +2,13 @@ import bot from "./initBot.ts";
 import { ObjectId } from "./deps.ts";
 import getQuotesButtons from "./callbacks/getQuotesButtons.ts";
 import sendMassiveMessage from "./utils/sendMassiveMessage.ts";
-import { aggregateQuote, changeQuote, getQuotes } from "./controllers/quote.controller.ts";
-import handleSendMessageError from "./utils/handleSendMessageError.ts";
+import { changeQuote, getFullQuote, getQuote } from "./controllers/mongo/quote.controller.ts";
 
 interface CommonParams {
   id?: string | ObjectId;
 }
 interface ParamsChat extends CommonParams {
-  chatID: number;
+  chatID: number | string;
   chatType: "group" | "supergroup" | "private";
 }
 interface ParamsNoChat extends CommonParams {
@@ -19,36 +18,34 @@ interface ParamsNoChat extends CommonParams {
 type Params = ParamsChat | ParamsNoChat;
 
 export default async function publishQuote({ id, chatID, chatType }: Params = {}) {
-  const query: { _id?: ObjectId; timesSent?: number } = {};
+  const query: { _id?: ObjectId } = {};
   if (id) {
     query._id = new ObjectId(id);
   } else if (chatID === undefined) {
-    query.timesSent =
-      (await aggregateQuote([{ $group: { _id: null, timesSent: { $min: "$timesSent" } } }]))[0]?.timesSent ?? 0;
+    // Si se está publicando a todos se envía siguiente la que tenga menos tiempo de haber sido enviada
+    query._id = (await getQuote({}, { sort: { lastSentTime: 1 }, projection: { _id: 1 } }))!._id;
+  }
+  // Si es usando el comando /frase, se intenciona compartir la última que se envió
+  else query._id = (await getQuote({}, { sort: { lastSentTime: -1 }, projection: { _id: -1 } }))!._id;
+
+  const { fullQuote, possibleQuote } = await getFullQuote(query);
+
+  if (fullQuote === null) {
+    if (chatID === undefined) return;
+    return bot.api.sendMessage(chatID, "No hay frases para compartir.").catch(() => {});
   }
 
-  const quotes = await getQuotes(query, {
-    sort: chatID === undefined ? { lastSentTime: 1 } : { lastSentTime: -1 },
-    projection: { quote: 1, number: 1, _id: 1 },
-    limit: 1,
-  });
-  // Si se está publicando a todos se envía siguiente la que tenga menos tiempo de haber sido enviada y
-  // que tenga el número menor de vecesEnviada.
-  // Si es usando el comando /frase, se intenciona compartir la última que se envió, así que se invierte el órden.
-
-  const { quote = "No hay frases.", number = undefined } = quotes[0] ?? {};
-
   if (chatID)
-    bot.api
+    return bot.api
       .sendMessage(
         chatID,
-        quote,
-        number && chatType === "private" ? { reply_markup: await getQuotesButtons(number, chatID) } : undefined
+        fullQuote,
+        possibleQuote.number && chatType === "private"
+          ? { reply_markup: await getQuotesButtons(possibleQuote.number, chatID) }
+          : undefined
       )
-      .catch(handleSendMessageError(chatID));
-  else await sendMassiveMessage(quote);
+      .catch(() => {});
+  else await sendMassiveMessage(fullQuote);
 
-  if (quotes.length === 0 || chatID) return;
-
-  await changeQuote({ _id: quotes[0]._id }, { $set: { lastSentTime: new Date() }, $inc: { timesSent: 1 } });
+  await changeQuote({ _id: possibleQuote._id }, { $set: { lastSentTime: new Date() }, $inc: { timesSent: 1 } });
 }

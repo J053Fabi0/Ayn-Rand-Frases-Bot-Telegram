@@ -1,4 +1,4 @@
-import { getAllQuotesNumbers } from "../controllers/quote.controller.ts";
+import { getAllQuotesNumbers } from "../controllers/mongo/quote.controller.ts";
 import { Context, FilterCtx } from "../deps.ts";
 
 export default async function tellIDIsNotValid(ctx: FilterCtx<Context, "message">) {
