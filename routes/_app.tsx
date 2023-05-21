@@ -1,6 +1,5 @@
-import { H3 } from "../components/Headers.tsx";
-import Navbar from "../components/Navbar.tsx";
 import { AppProps } from "../deps.ts";
+import Navbar from "../components/Navbar.tsx";
 
 export default function App({ Component }: AppProps) {
   return (

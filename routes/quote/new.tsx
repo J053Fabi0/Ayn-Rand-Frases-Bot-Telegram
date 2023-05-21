@@ -1,10 +1,10 @@
-import { AUTH_TOKEN } from "../../env.ts";
 import Button from "../../components/Button.tsx";
-import { H4 } from "../../components/Headers.tsx";
+import { State } from "../../types/state.type.ts";
+import { Header } from "../../components/Headers.tsx";
 import { PostQuote } from "../../types/api/quote.type.ts";
+import { Head, Handlers, PageProps } from "../../deps.ts";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
-import { Head, Handlers, PageProps, compare } from "../../deps.ts";
 import { postQuote } from "../../controllers/opine/quote.controller.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { getSources } from "../../controllers/mongo/source.controller.ts";
@@ -15,7 +15,7 @@ export interface NewQuoteProps {
   sources: Source[];
 }
 
-export const handler: Handlers<NewQuoteProps> = {
+export const handler: Handlers<NewQuoteProps, State> = {
   async GET(_, ctx) {
     const authors = await getAuthors();
     const sources = await getSources();
@@ -25,9 +25,6 @@ export const handler: Handlers<NewQuoteProps> = {
 
   async POST(req) {
     const form = await req.formData();
-    const authToken = form.get("authToken")?.toString();
-    if (!authToken) return new Response("Missing auth token", { status: 401 });
-    if (!(await compare(authToken, AUTH_TOKEN))) return new Response("Unauthorized", { status: 401 });
 
     const quote = form.get("quote")?.toString();
     const authorId = form.get("author")?.toString();
@@ -51,18 +48,10 @@ export default function NewQuote({ data }: PageProps<NewQuoteProps>) {
         <title>Publish quote</title>
       </Head>
 
-      <H4>Publish a new quote</H4>
+      <Header size={4}>Publish a new quote</Header>
 
       <form method="post">
         <div class="flex flex-col">
-          <input
-            required
-            type="password"
-            name="authToken"
-            placeholder="Auth token"
-            class="mt-2 p-2 border border-gray-300 rounded w-full"
-          />
-
           <textarea
             required
             rows={6}
