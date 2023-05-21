@@ -1,6 +1,7 @@
 import { AUTH_TOKEN } from "../../env.ts";
 import isMongoId from "../../utils/isMongoId.ts";
 import Button from "../../components/Button.tsx";
+import { H4 } from "../../components/Headers.tsx";
 import { Checkbox } from "../../components/Checkbox.tsx";
 import Author from "../../types/collections/author.type.ts";
 import { PostSource } from "../../types/api/source.type.ts";
@@ -47,7 +48,7 @@ export default function NewSource({ data }: PageProps<NewSourceProps>) {
         <title>Publish quote</title>
       </Head>
 
-      <h1 class="text-2xl">Publish a new quote</h1>
+      <H4 class="text-2xl">Publish a new source</H4>
 
       <form method="post">
         <div class="flex flex-col">
