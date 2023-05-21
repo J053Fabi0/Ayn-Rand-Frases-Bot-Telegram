@@ -7,15 +7,13 @@ export default function Home() {
         <title>Ayn Rand</title>
       </Head>
 
-      <h1 class="text-2xl">Objectivism quotes</h1>
+      <a href="/quote/new">
+        <p class="mt-3 underline">Publish a quote</p>
+      </a>
 
-      <p class="mt-3 underline">
-        <a href="/quote/new">Publish a quote</a>
-      </p>
-
-      <p class="mt-3 underline">
-        <a href="/source/new">Publish a source</a>
-      </p>
+      <a href="/source/new">
+        <p class="mt-3 underline">Publish a source</p>
+      </a>
     </>
   );
 }
