@@ -1,6 +1,7 @@
 {
   "imports": {
     "joi": "https://esm.sh/joi@17.9.2/",
+    "std/": "https://deno.land/std@0.188.0/",
     "lokijs": "https://esm.sh/lokijs@1.5.12",
     "cors": "https://deno.land/x/cors@v1.2.2/mod.ts",
     "grammy/": "https://deno.land/x/grammy@v1.16.0/",
@@ -11,6 +12,7 @@
     "dotenv": "https://deno.land/x/dotenv@v3.2.2/load.ts",
     "croner": "https://deno.land/x/croner@6.0.3/dist/croner.js",
     "lodash": "https://deno.land/x/deno_ts_lodash@0.0.1/mod.ts",
+    "squishy_cookies": "https://deno.land/x/squishy_cookies@1.2.0/mod.ts",
 
     "twind": "https://esm.sh/twind@0.16.19",
     "twind/": "https://esm.sh/twind@0.16.19/",
