@@ -7,6 +7,7 @@
     "opine": "https://deno.land/x/opine@2.3.4/mod.ts",
     "sleep": "https://deno.land/x/sleep@v1.2.1/mod.ts",
     "mongo": "https://deno.land/x/mongo@v0.31.2/mod.ts",
+    "bcrypt": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
     "dotenv": "https://deno.land/x/dotenv@v3.2.2/load.ts",
     "croner": "https://deno.land/x/croner@6.0.3/dist/croner.js",
     "lodash": "https://deno.land/x/deno_ts_lodash@0.0.1/mod.ts",

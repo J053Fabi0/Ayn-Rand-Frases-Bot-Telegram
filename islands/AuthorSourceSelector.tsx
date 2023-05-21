@@ -1,10 +1,10 @@
 import { useState } from "preact/hooks";
-import { IndexProps } from "../routes/index.tsx";
+import { NewQuoteProps } from "../routes/quote/new.tsx";
 import Author from "../types/collections/author.type.ts";
 
 const findAuthor = (authors: Author[], id: string) => authors.find((a) => a._id.toString() === id)!;
 
-export default function AuthorSourceSelector({ authors, sources }: IndexProps) {
+export default function AuthorSourceSelector({ authors, sources }: NewQuoteProps) {
   const [author, setAuthor] = useState(authors[0]);
 
   return (
