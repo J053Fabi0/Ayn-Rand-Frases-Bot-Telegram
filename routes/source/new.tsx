@@ -1,14 +1,12 @@
 import { AUTH_TOKEN } from "../../env.ts";
-import { PostQuote } from "../../types/api/quote.type.ts";
-import { Container } from "../../components/Container.tsx";
-import Author from "../../types/collections/author.type.ts";
-import { Head, Handlers, PageProps, compare } from "../../deps.ts";
-import { postQuote } from "../../controllers/opine/quote.controller.ts";
-import { getAuthors } from "../../controllers/mongo/author.controller.ts";
-import { Checkbox } from "../../components/Checkbox.tsx";
 import isMongoId from "../../utils/isMongoId.ts";
-import { postSource } from "../../controllers/opine/source.controller.ts";
+import Button from "../../components/Button.tsx";
+import { Checkbox } from "../../components/Checkbox.tsx";
+import Author from "../../types/collections/author.type.ts";
 import { PostSource } from "../../types/api/source.type.ts";
+import { Head, Handlers, PageProps, compare } from "../../deps.ts";
+import { getAuthors } from "../../controllers/mongo/author.controller.ts";
+import { postSource } from "../../controllers/opine/source.controller.ts";
 
 export interface NewSourceProps {
   authors: Author[];
@@ -49,45 +47,39 @@ export default function NewSource({ data }: PageProps<NewSourceProps>) {
         <title>Publish quote</title>
       </Head>
 
-      <Container>
-        <div class="min-h-screen">
-          <h1 class="text-2xl">Publish a new quote</h1>
+      <h1 class="text-2xl">Publish a new quote</h1>
 
-          <form method="post">
-            <div class="flex flex-col">
-              <input
-                required
-                type="password"
-                name="authToken"
-                placeholder="Auth token"
-                class="mt-2 p-2 border border-gray-300 rounded w-full"
-              />
+      <form method="post">
+        <div class="flex flex-col">
+          <input
+            required
+            type="password"
+            name="authToken"
+            placeholder="Auth token"
+            class="mt-2 p-2 border border-gray-300 rounded w-full"
+          />
 
-              <input
-                required
-                type="text"
-                name="source"
-                placeholder="Source"
-                class="my-2 p-2 border border-gray-300 rounded w-full"
-              />
+          <input
+            required
+            type="text"
+            name="source"
+            placeholder="Source"
+            class="my-2 p-2 border border-gray-300 rounded w-full"
+          />
 
-              {data.authors.map((author, i) => (
-                <Checkbox inputId={`author-${i}`} name={author._id.toString()} text={author.name} />
-              ))}
-            </div>
-
-            <button class="mt-2 p-2 border border-gray-300 rounded" type="submit">
-              Publish
-            </button>
-          </form>
+          {data.authors.map((author, i) => (
+            <Checkbox inputId={`author-${i}`} name={author._id.toString()}>
+              {author.name}
+            </Checkbox>
+          ))}
         </div>
 
-        {/* "Made with Fresh" logo */}
-        <hr class="mb-4" />
-        <a href="https://fresh.deno.dev">
-          <img width="197" height="37" src="https://fresh.deno.dev/fresh-badge-dark.svg" alt="Made with Fresh" />
-        </a>
-      </Container>
+        <div class="mt-3 flex justify-center items-center">
+          <Button class="mt-2 p-2" type="submit" color="blue">
+            Publish
+          </Button>
+        </div>
+      </form>
     </>
   );
 }

@@ -1,8 +1,9 @@
-/// <reference no-default-lib="true" />
 /// <reference lib="dom" />
-/// <reference lib="dom.iterable" />
-/// <reference lib="dom.asynciterable" />
 /// <reference lib="deno.ns" />
+/// <reference lib="dom.iterable" />
+/// <reference lib="deno.unstable" />
+/// <reference no-default-lib="true" />
+/// <reference lib="dom.asynciterable" />
 
 // load the .env file
 import "dotenv";
@@ -38,6 +39,7 @@ app.use((err: Error, _: CommonRequest, res: CommonResponse, __: NextFunction) =>
 
 app.listen(API_PORT, () => console.log(`Listening on http://localhost:${API_PORT}/`));
 
+// Run the diffuser
 diffuse();
 
 // Start the web server
