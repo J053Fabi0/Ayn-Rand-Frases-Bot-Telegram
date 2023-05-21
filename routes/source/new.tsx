@@ -3,9 +3,9 @@ import isMongoId from "../../utils/isMongoId.ts";
 import Button from "../../components/Button.tsx";
 import { H4 } from "../../components/Headers.tsx";
 import { Checkbox } from "../../components/Checkbox.tsx";
+import { Head, Handlers, PageProps } from "../../deps.ts";
 import Author from "../../types/collections/author.type.ts";
 import { PostSource } from "../../types/api/source.type.ts";
-import { Head, Handlers, PageProps, compare } from "../../deps.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { postSource } from "../../controllers/opine/source.controller.ts";
 
@@ -22,17 +22,13 @@ export const handler: Handlers<NewSourceProps> = {
   async POST(req) {
     const form = await req.formData();
 
-    const authToken = form.get("authToken")?.toString();
-    if (!authToken) return new Response("Missing auth token", { status: 401 });
-    if (!(await compare(authToken, AUTH_TOKEN))) return new Response("Unauthorized", { status: 401 });
-
     const source = form.get("source")?.toString();
     const authors = [...form.keys()].filter((key) => isMongoId(key));
 
     if (!source) return new Response("Missing source", { status: 400 });
     if (authors.length === 0) return new Response("Missing authors", { status: 400 });
 
-    const newSource = await postSource({ body: { authors, name: source } } as PostSource);
+    await postSource({ body: { authors, name: source } } as PostSource);
 
     // Redirect user to the quote page.
     const headers = new Headers();
@@ -52,14 +48,6 @@ export default function NewSource({ data }: PageProps<NewSourceProps>) {
 
       <form method="post">
         <div class="flex flex-col">
-          <input
-            required
-            type="password"
-            name="authToken"
-            placeholder="Auth token"
-            class="mt-2 p-2 border border-gray-300 rounded w-full"
-          />
-
           <input
             required
             type="text"
