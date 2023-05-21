@@ -1,5 +1,6 @@
 export { sleep } from "sleep";
 export { opineCors } from "cors";
+export type { JSX } from "preact";
 export { compare, hash } from "bcrypt";
 export { default as Cron } from "croner";
 export { default as loki } from "lokijs";
