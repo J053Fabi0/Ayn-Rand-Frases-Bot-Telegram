@@ -45,7 +45,7 @@ export default function NewSource({ data }: PageProps<NewSourceProps>) {
   return (
     <>
       <Head>
-        <title>Publish quote</title>
+        <title>New source</title>
       </Head>
 
       <H4 class="text-2xl">Publish a new source</H4>
