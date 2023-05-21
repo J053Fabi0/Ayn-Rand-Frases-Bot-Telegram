@@ -15,6 +15,10 @@ export default function Home() {
           <p class="mt-3 underline">
             <a href="/quote/new">Publish a quote</a>
           </p>
+
+          <p class="mt-3 underline">
+            <a href="/source/new">Publish a source</a>
+          </p>
         </div>
 
         {/* "Made with Fresh" logo */}
