@@ -34,3 +34,26 @@ export const H5 = (props: JSX.HTMLAttributes<HTMLHeadingElement>) => (
 export const H6 = (props: JSX.HTMLAttributes<HTMLHeadingElement>) => (
   <h6 {...props} class={`block ${commonStyles} ${textStyles.h6} ${props.class ?? ""}`} />
 );
+
+export const Header = ({
+  size,
+  ...props
+}: JSX.HTMLAttributes<HTMLHeadingElement> & { size: 1 | 2 | 3 | 4 | 5 | 6 }) => {
+  props.class = `block ${commonStyles} ${textStyles[`h${size}`]} ${props.class ?? ""}`;
+  switch (size) {
+    case 1:
+      return <h1 {...props} />;
+    case 2:
+      return <h2 {...props} />;
+    case 3:
+      return <h3 {...props} />;
+    case 4:
+      return <h4 {...props} />;
+    case 5:
+      return <h5 {...props} />;
+    case 6:
+      return <h6 {...props} />;
+    default:
+      return <h1 {...props} />;
+  }
+};
