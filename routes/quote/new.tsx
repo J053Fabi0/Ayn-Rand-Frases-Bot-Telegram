@@ -1,5 +1,5 @@
 import { AUTH_TOKEN } from "../../env.ts";
-import { Head, Handlers, PageProps } from "../../deps.ts";
+import { Head, Handlers, PageProps, compare } from "../../deps.ts";
 import { PostQuote } from "../../types/api/quote.type.ts";
 import { Container } from "../../components/Container.tsx";
 import Author from "../../types/collections/author.type.ts";
@@ -9,12 +9,12 @@ import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { getSources } from "../../controllers/mongo/source.controller.ts";
 import AuthorSourceSelector from "../../islands/AuthorSourceSelector.tsx";
 
-export interface IndexProps {
+export interface NewQuoteProps {
   authors: Author[];
   sources: Source[];
 }
 
-export const handler: Handlers<IndexProps> = {
+export const handler: Handlers<NewQuoteProps> = {
   async GET(_, ctx) {
     const authors = await getAuthors();
     const sources = await getSources();
@@ -25,7 +25,8 @@ export const handler: Handlers<IndexProps> = {
   async POST(req) {
     const form = await req.formData();
     const authToken = form.get("authToken")?.toString();
-    if (authToken !== AUTH_TOKEN) return new Response("Unauthorized", { status: 401 });
+    if (!authToken) return new Response("Missing auth token", { status: 401 });
+    if (!(await compare(authToken, AUTH_TOKEN))) return new Response("Unauthorized", { status: 401 });
 
     const quote = form.get("quote")?.toString();
     const authorId = form.get("author")?.toString();
@@ -42,7 +43,7 @@ export const handler: Handlers<IndexProps> = {
   },
 };
 
-export default function NewQuote({ data }: PageProps<IndexProps>) {
+export default function NewQuote({ data }: PageProps<NewQuoteProps>) {
   return (
     <>
       <Head>
