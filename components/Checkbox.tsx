@@ -2,11 +2,10 @@ import { JSX } from "../deps.ts";
 
 interface CheckboxProps {
   name: string;
-  text: string;
   inputId: string;
 }
 
-export function Checkbox({ inputId, name, text }: JSX.HTMLAttributes<HTMLButtonElement> & CheckboxProps) {
+export function Checkbox({ inputId, name, children }: JSX.HTMLAttributes<HTMLButtonElement> & CheckboxProps) {
   return (
     <div class="inline-flex items-center">
       <label for={inputId} class="relative flex cursor-pointer items-center rounded-full p-2">
@@ -18,7 +17,7 @@ export function Checkbox({ inputId, name, text }: JSX.HTMLAttributes<HTMLButtonE
         />
       </label>
       <label class="mt-px cursor-pointer select-none" for={inputId}>
-        {text}
+        {children}
       </label>
     </div>
   );

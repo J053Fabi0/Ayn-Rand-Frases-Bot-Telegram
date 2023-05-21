@@ -22,6 +22,6 @@ export type { NextFunction, OpineResponse, OpineRequest, Params, ParamsDictionar
 export { Head } from "$fresh/runtime.ts";
 export { start } from "$fresh/server.ts";
 export { default as dev } from "$fresh/dev.ts";
-export type { Handlers, PageProps } from "$fresh/server.ts";
 export { default as twindPlugin } from "$fresh/plugins/twind.ts";
+export type { Handlers, PageProps, AppProps } from "$fresh/server.ts";
 export type { Options as TwindOptions } from "$fresh/plugins/twind.ts";
