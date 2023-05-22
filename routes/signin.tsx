@@ -1,6 +1,6 @@
-import { AUTH_TOKEN, BOT_TOKEN } from "../env.ts";
 import Button from "../components/Button.tsx";
-import { Header } from "../components/Headers.tsx";
+import Header from "../components/Headers.tsx";
+import { AUTH_TOKEN, BOT_TOKEN } from "../env.ts";
 import { Head, Handlers, compare, createSignedCookie } from "../deps.ts";
 
 export const handler: Handlers = {
@@ -14,8 +14,7 @@ export const handler: Handlers = {
     const { headers } = await createSignedCookie("authToken", authToken, BOT_TOKEN, { httpOnly: true, path: "/" });
     headers.set("location", "/");
 
-    const resp = new Response(null, { status: 303, headers });
-    return resp;
+    return new Response(null, { status: 303, headers });
   },
 };
 

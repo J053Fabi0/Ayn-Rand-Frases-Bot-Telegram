@@ -11,34 +11,7 @@ const textStyles = {
   h6: "text-base leading-relaxed capitalize",
 };
 
-export const H1 = (props: JSX.HTMLAttributes<HTMLHeadingElement>) => (
-  <h1 {...props} class={`block ${commonStyles} ${textStyles.h1} ${props.class ?? ""}`} />
-);
-
-export const H2 = (props: JSX.HTMLAttributes<HTMLHeadingElement>) => (
-  <h2 {...props} class={`block ${commonStyles} ${textStyles.h2} ${props.class ?? ""}`} />
-);
-
-export const H3 = (props: JSX.HTMLAttributes<HTMLHeadingElement>) => (
-  <h3 {...props} class={`block ${commonStyles} ${textStyles.h3} ${props.class ?? ""}`} />
-);
-
-export const H4 = (props: JSX.HTMLAttributes<HTMLHeadingElement>) => (
-  <h4 {...props} class={`block ${commonStyles} ${textStyles.h4} ${props.class ?? ""}`} />
-);
-
-export const H5 = (props: JSX.HTMLAttributes<HTMLHeadingElement>) => (
-  <h5 {...props} class={`block ${commonStyles} ${textStyles.h5} ${props.class ?? ""}`} />
-);
-
-export const H6 = (props: JSX.HTMLAttributes<HTMLHeadingElement>) => (
-  <h6 {...props} class={`block ${commonStyles} ${textStyles.h6} ${props.class ?? ""}`} />
-);
-
-export const Header = ({
-  size,
-  ...props
-}: JSX.HTMLAttributes<HTMLHeadingElement> & { size: 1 | 2 | 3 | 4 | 5 | 6 }) => {
+const Header = ({ size, ...props }: JSX.HTMLAttributes<HTMLHeadingElement> & { size: 1 | 2 | 3 | 4 | 5 | 6 }) => {
   props.class = `block ${commonStyles} ${textStyles[`h${size}`]} ${props.class ?? ""}`;
   switch (size) {
     case 1:
@@ -57,3 +30,5 @@ export const Header = ({
       return <h1 {...props} />;
   }
 };
+
+export default Header;

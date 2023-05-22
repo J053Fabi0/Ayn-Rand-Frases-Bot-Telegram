@@ -1,6 +1,6 @@
 import Button from "../../components/Button.tsx";
 import { State } from "../../types/state.type.ts";
-import { Header } from "../../components/Headers.tsx";
+import Header from "../../components/Headers.tsx";
 import { PostQuote } from "../../types/api/quote.type.ts";
 import { Head, Handlers, PageProps } from "../../deps.ts";
 import Author from "../../types/collections/author.type.ts";

@@ -1,7 +1,5 @@
-import { HandlerContext } from "../deps.ts";
-import { State } from "../types/state.type.ts";
 import Button from "./Button.tsx";
-import { Header } from "./Headers.tsx";
+import Header from "./Headers.tsx";
 
 interface Page {
   href: string;
