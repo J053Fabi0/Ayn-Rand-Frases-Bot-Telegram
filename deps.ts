@@ -5,6 +5,8 @@ export { compare, hash } from "bcrypt";
 export { default as Cron } from "croner";
 export { default as loki } from "lokijs";
 export { lodash as _, lodash } from "lodash";
+export { signal, computed } from "@preact/signals";
+export { repeatUntilNoError } from "duplicatedFilesCleaner";
 export { getCookies, setCookie, deleteCookie } from "std/http/cookie.ts";
 export { createSignedCookie, verifySignedCookie, cookieSign, cookieVerify } from "squishy_cookies";
 
