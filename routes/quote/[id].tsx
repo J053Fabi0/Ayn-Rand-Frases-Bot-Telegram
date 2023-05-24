@@ -24,7 +24,15 @@ export const handler: Handlers<QuoteProps, State> = {
 export default function Quote(props: PageProps<QuoteProps>) {
   const { fullQuote, quote } = props.data;
 
-  if (!fullQuote || !quote) return <Typography variant="h4">Quote not found</Typography>;
+  if (!fullQuote || !quote)
+    return (
+      <>
+        <Head>
+          <Metas description="" title="Quote not found" />
+        </Head>
+        <Typography variant="h4">Quote not found</Typography>{" "}
+      </>
+    );
 
   const splitQuote = fullQuote.split("\n");
   const description =
