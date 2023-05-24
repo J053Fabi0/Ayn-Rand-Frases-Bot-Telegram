@@ -1,11 +1,13 @@
 import { State } from "../../types/state.type.ts";
-import { Handlers, PageProps, ObjectId } from "../../deps.ts";
-import Quote from "../../types/collections/quote.type.ts";
-import { getFullQuote } from "../../controllers/mongo/quote.controller.ts";
+import { Metas } from "../../components/Metas.tsx";
 import Typography from "../../components/Typography.tsx";
+import Quote from "../../types/collections/quote.type.ts";
+import { Handlers, Head, PageProps, ObjectId } from "../../deps.ts";
+import { PossibleQuote, getFullQuote } from "../../controllers/mongo/quote.controller.ts";
 
 interface QuoteProps {
-  quote: string | null;
+  fullQuote: string | null;
+  quote: PossibleQuote | null;
 }
 
 export const handler: Handlers<QuoteProps, State> = {
@@ -15,22 +17,32 @@ export const handler: Handlers<QuoteProps, State> = {
     // The id can be either the quote number or the quote id
     const quote = await getFullQuote(!isNaN(parseInt(id)) ? { number: parseInt(id) } : { _id: new ObjectId(id) });
 
-    return await ctx.render({ quote: quote.fullQuote });
+    return await ctx.render({ fullQuote: quote.fullQuote, quote: quote.possibleQuote });
   },
 };
 
 export default function Quote(props: PageProps<QuoteProps>) {
-  const { quote } = props.data;
+  const { fullQuote, quote } = props.data;
 
-  if (!quote) return <Typography variant="h4">Quote not found</Typography>;
+  if (!fullQuote || !quote) return <Typography variant="h4">Quote not found</Typography>;
 
-  const splitQuote = quote.split("\n");
+  const splitQuote = fullQuote.split("\n");
 
   return (
-    <p>
-      {splitQuote.map((t, i) => (
-        <p class={`mt-2${i === splitQuote.length - 1 && /^ - /.test(t) ? " ml-2" : ""}`}>{t}</p>
-      ))}
-    </p>
+    <>
+      <Head>
+        <Metas
+          image=""
+          image_alt=""
+          name={`Quote from ${quote.author[0]?.name}`}
+          description={fullQuote.slice(0, 50) + (fullQuote.length > 50 ? "..." : "")}
+        />
+      </Head>
+      <p>
+        {splitQuote.map((t, i) => (
+          <p class={`mt-2${i === splitQuote.length - 1 && /^ - /.test(t) ? " ml-2" : ""}`}>{t}</p>
+        ))}
+      </p>
+    </>
   );
 }

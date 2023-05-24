@@ -25,6 +25,8 @@ export const aggregateQuote = a.aggregate(Model);
 export const getAllQuotesNumbers = async () =>
   (await getQuotes({}, { projection: { number: 1 } })).map(({ number }) => number);
 
+export type PossibleQuote = Omit<Quote, "author" | "source"> & { author: [Author] | []; source: [Source] | [] };
+
 export async function getFullQuote(filter: Filter<Collection<Quote>>, options?: AggregateOptions) {
   const possibleQuote = (await aggregateQuote(
     [
@@ -33,7 +35,7 @@ export async function getFullQuote(filter: Filter<Collection<Quote>>, options?: 
       { $lookup: { from: "sources", localField: "source", foreignField: "_id", as: "source" } },
     ],
     options
-  )) as [Omit<Quote, "author" | "source"> & { author: [Author] | []; source: [Source] | [] }] | [] | null;
+  )) as [PossibleQuote] | [] | null;
 
   if (!possibleQuote || possibleQuote.length === 0)
     return { possibleQuote: null, fullQuote: null } as { possibleQuote: null; fullQuote: null };
