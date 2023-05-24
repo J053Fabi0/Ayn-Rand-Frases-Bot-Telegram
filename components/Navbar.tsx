@@ -1,5 +1,5 @@
 import Button from "./Button.tsx";
-import Header from "./Headers.tsx";
+import Typography from "./Typography.tsx";
 
 interface Page {
   href: string;
@@ -26,9 +26,9 @@ export default function Navbar() {
             href="/"
             class="mr-4 block cursor-pointer py-1.5 font-sans text-sm font-normal leading-normal text-inherit antialiased"
           >
-            <Header size={5}>
+            <Typography variant="h5">
               <span>Objectivism quotes</span>
-            </Header>
+            </Typography>
           </a>
           <ul class="hidden items-center gap-6 lg:flex">
             {pages.map((page) => (
