@@ -27,16 +27,13 @@ export default function Quote(props: PageProps<QuoteProps>) {
   if (!fullQuote || !quote) return <Typography variant="h4">Quote not found</Typography>;
 
   const splitQuote = fullQuote.split("\n");
+  const description =
+    quote.quote.replace(/\n/g, "").slice(0, 50) + (quote.quote.replace(/\n/g, "").length > 50 ? "..." : "");
 
   return (
     <>
       <Head>
-        <Metas
-          image=""
-          image_alt=""
-          name={`Quote from ${quote.author[0]?.name}`}
-          description={fullQuote.slice(0, 50) + (fullQuote.length > 50 ? "..." : "")}
-        />
+        <Metas description={description} title={`Quote from ${quote.author[0]?.name}`} />
       </Head>
       <p>
         {splitQuote.map((t, i) => (
