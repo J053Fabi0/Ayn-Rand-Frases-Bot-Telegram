@@ -35,8 +35,7 @@ export default function Quote(props: PageProps<QuoteProps>) {
     );
 
   const splitQuote = fullQuote.split("\n");
-  const description =
-    quote.quote.replace(/\n/g, "").slice(0, 50) + (quote.quote.replace(/\n/g, "").length > 50 ? "..." : "");
+  const description = quote.quote.replace(/\n/g, " ").slice(0, 50) + (quote.quote.length > 50 ? "…" : "");
 
   return (
     <>
