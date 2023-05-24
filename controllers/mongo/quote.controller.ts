@@ -36,13 +36,7 @@ export async function getFullQuote(filter: Filter<Collection<Quote>>, options?: 
   )) as [Omit<Quote, "author" | "source"> & { author: [Author] | []; source: [Source] | [] }] | [] | null;
 
   if (!possibleQuote || possibleQuote.length === 0)
-    return {
-      possibleQuote: null,
-      fullQuote: null,
-    } as {
-      possibleQuote: null;
-      fullQuote: null;
-    };
+    return { possibleQuote: null, fullQuote: null } as { possibleQuote: null; fullQuote: null };
 
   const { quote } = possibleQuote[0];
   const author = possibleQuote[0].author[0]?.name;
