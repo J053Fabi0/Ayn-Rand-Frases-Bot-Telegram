@@ -1,5 +1,5 @@
 import Button from "../components/Button.tsx";
-import Header from "../components/Headers.tsx";
+import Typography from "../components/Typography.tsx";
 import { AUTH_TOKEN, BOT_TOKEN } from "../env.ts";
 import { Head, Handlers, compare, createSignedCookie } from "../deps.ts";
 
@@ -25,9 +25,9 @@ export default function SignIn() {
         <title>Sign in</title>
       </Head>
 
-      <Header size={4} class="text-2xl">
+      <Typography variant="h4" class="text-2xl">
         Sign in as an admin
-      </Header>
+      </Typography>
 
       <form method="post">
         <div class="flex flex-col">

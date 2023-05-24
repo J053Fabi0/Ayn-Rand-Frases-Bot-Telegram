@@ -1,6 +1,6 @@
 import isMongoId from "../../utils/isMongoId.ts";
 import Button from "../../components/Button.tsx";
-import Header from "../../components/Headers.tsx";
+import Typography from "../../components/Typography.tsx";
 import { Checkbox } from "../../components/Checkbox.tsx";
 import { Head, Handlers, PageProps } from "../../deps.ts";
 import Author from "../../types/collections/author.type.ts";
@@ -43,9 +43,9 @@ export default function NewSource({ data }: PageProps<NewSourceProps>) {
         <title>New source</title>
       </Head>
 
-      <Header size={4} class="text-2xl">
+      <Typography variant="h4" class="text-2xl">
         Publish a new source
-      </Header>
+      </Typography>
 
       <form method="post">
         <div class="flex flex-col">

@@ -1,6 +1,6 @@
 import Button from "../../components/Button.tsx";
 import { State } from "../../types/state.type.ts";
-import Header from "../../components/Headers.tsx";
+import Typography from "../../components/Typography.tsx";
 import { PostQuote } from "../../types/api/quote.type.ts";
 import { Head, Handlers, PageProps } from "../../deps.ts";
 import Author from "../../types/collections/author.type.ts";
@@ -48,7 +48,7 @@ export default function NewQuote({ data }: PageProps<NewQuoteProps>) {
         <title>Publish quote</title>
       </Head>
 
-      <Header size={4}>Publish a new quote</Header>
+      <Typography variant="h4">Publish a new quote</Typography>
 
       <form method="post">
         <div class="flex flex-col">

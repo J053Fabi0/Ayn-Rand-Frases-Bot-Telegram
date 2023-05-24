@@ -2,7 +2,7 @@ import { State } from "../../types/state.type.ts";
 import { Handlers, PageProps, ObjectId } from "../../deps.ts";
 import Quote from "../../types/collections/quote.type.ts";
 import { getFullQuote } from "../../controllers/mongo/quote.controller.ts";
-import Header from "../../components/Headers.tsx";
+import Typography from "../../components/Typography.tsx";
 
 interface QuoteProps {
   quote: string | null;
@@ -22,7 +22,7 @@ export const handler: Handlers<QuoteProps, State> = {
 export default function Quote(props: PageProps<QuoteProps>) {
   const { quote } = props.data;
 
-  if (!quote) return <Header size={4}>Quote not found</Header>;
+  if (!quote) return <Typography variant="h4">Quote not found</Typography>;
 
   const splitQuote = quote.split("\n");
 
