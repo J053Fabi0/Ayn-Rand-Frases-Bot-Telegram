@@ -1,10 +1,10 @@
+import isMongoId from "../../utils/isMongoId.ts";
 import { State } from "../../types/state.type.ts";
 import { Metas } from "../../components/Metas.tsx";
 import Typography from "../../components/Typography.tsx";
 import Quote from "../../types/collections/quote.type.ts";
 import { Handlers, Head, PageProps, ObjectId } from "../../deps.ts";
 import { PossibleQuote, getFullQuote } from "../../controllers/mongo/quote.controller.ts";
-import isMongoId from "../../utils/isMongoId.ts";
 
 interface QuoteProps {
   quoteObj: PossibleQuote | null;
