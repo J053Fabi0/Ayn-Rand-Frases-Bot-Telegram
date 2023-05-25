@@ -1,6 +1,7 @@
+import Button from "../components/Button.tsx";
 import { State } from "../types/state.type.ts";
-import { Head, Handlers, PageProps } from "../deps.ts";
 import Typography from "../components/Typography.tsx";
+import { Head, Handlers, PageProps } from "../deps.ts";
 
 interface IndexProps {
   isAdmin: boolean;
@@ -38,8 +39,16 @@ export default function Home({ data }: PageProps<IndexProps>) {
           <Typography variant="h3">Work in progress</Typography>
           <Typography class="mt-3">
             In the meantime checkout the Telegram bot{" "}
-            <a href="https://t.me/FrasesDeAynRandBot" class="mt-3 underline">
+            <a href="https://t.me/FrasesDeAynRandBot" class="mt-3 underline" target="_blank">
               @FrasesDeAynRandBot
+            </a>
+            .
+          </Typography>
+
+          <Typography class="mt-5">
+            If you are an administrator,{" "}
+            <a href="/signin" class="mt-3 underline">
+              sign in here
             </a>
             .
           </Typography>
