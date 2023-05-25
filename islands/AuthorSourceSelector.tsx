@@ -21,8 +21,7 @@ export default function AuthorSourceSelector({ authors, sources }: NewQuoteProps
   // Set the first source as the default source when the filtedered sources change.
   useSignalEffect(() => {
     const [firstSource] = filteredSources.value;
-    if (firstSource) sourceId.value = firstSource._id.toString();
-    else sourceId.value = "null";
+    sourceId.value = firstSource ? firstSource._id.toString() : "null";
   });
 
   return (
@@ -38,14 +37,8 @@ export default function AuthorSourceSelector({ authors, sources }: NewQuoteProps
         ))}
       </select>
 
-      <select
-        value={sourceId.value}
-        onChange={(e) => void (sourceId.value = e.currentTarget.value)}
-        required
-        name="source"
-        class="mt-2 p-2 border border-gray-300 rounded w-full"
-      >
-        {sourcesOptions.value}
+      <select value={sourceId.value} required name="source" class="mt-2 p-2 border border-gray-300 rounded w-full">
+        {sourcesOptions}
         <option value={"null"}>No source</option>
       </select>
     </>
