@@ -48,19 +48,22 @@ export default function Quote(props: PageProps<QuoteProps>) {
       <Head>
         <Metas description={description} title={`Quote from ${author}`} />
       </Head>
-      <p>
-        {splitQuote.map((t, i) => (
-          <p class={i > 0 ? "mt-2" : ""}>{t}</p>
-        ))}
-        <p class="mt-4 ml-2 font-semibold">
-          - {author}.
-          {source && (
-            <>
-              <i>{source}</i>.
-            </>
-          )}
-        </p>
-      </p>
+
+      {/* Quote */}
+      {splitQuote.map((t, i) => (
+        <Typography class={i > 0 ? "mt-2" : ""}>{t}</Typography>
+      ))}
+
+      {/* Author and source */}
+      <Typography variant="lead" class="mt-4 ml-2">
+        - {author}.
+        {source && (
+          <>
+            {" "}
+            <i>{source}</i>.
+          </>
+        )}
+      </Typography>
     </>
   );
 }
