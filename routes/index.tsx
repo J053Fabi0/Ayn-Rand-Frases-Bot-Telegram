@@ -14,6 +14,10 @@ export default function Home() {
       <a href="/source/new">
         <p class="mt-3 underline">Publish a source</p>
       </a>
+
+      <a href="/source/new">
+        <p class="mt-3 underline">Publish an author</p>
+      </a>
     </>
   );
 }
