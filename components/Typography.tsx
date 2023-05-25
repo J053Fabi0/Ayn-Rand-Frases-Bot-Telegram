@@ -1,22 +1,27 @@
 import { JSX } from "../deps.ts";
 
-const commonStyles = "font-sans font-semibold tracking-normal text-inherit antialiased";
+const commonStyles = "block font-sans text-inherit antialiased";
+const headersCommonStyles = "font-semibold tracking-normal leading-tight";
 
 const textStyles = {
-  h1: "text-5xl leading-tight",
-  h2: "text-4xl leading-[1.3]",
-  h3: "text-3xl leading-snug",
-  h4: "text-2xl leading-snug",
-  h5: "text-xl leading-snug",
-  h6: "text-base leading-relaxed capitalize",
+  h1: `${headersCommonStyles} text-5xl leading-tight`,
+  h2: `${headersCommonStyles} text-4xl leading-[1.3]`,
+  h3: `${headersCommonStyles} text-3xl leading-snug`,
+  h4: `${headersCommonStyles} text-2xl leading-snug`,
+  h5: `${headersCommonStyles} text-xl leading-snug`,
+  h6: `${headersCommonStyles} text-base leading-relaxed capitalize`,
+
+  p: "text-base font-light leading-relaxed",
+  lead: "text-xl font-normal leading-relaxed",
+  smallP: "text-sm font-light leading-normal",
 };
 
 interface TypographyProps {
-  variant: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  variant?: keyof typeof textStyles;
 }
 
-const Typography = ({ variant, ...props }: JSX.HTMLAttributes<HTMLHeadingElement> & TypographyProps) => {
-  props.class = `block ${commonStyles} ${textStyles[variant]} ${props.class ?? ""}`;
+const Typography = ({ variant = "p", ...props }: JSX.HTMLAttributes<HTMLHeadingElement> & TypographyProps) => {
+  props.class = `${commonStyles} ${textStyles[variant]} ${props.class ?? ""}`;
 
   switch (variant) {
     case "h1":
@@ -31,8 +36,12 @@ const Typography = ({ variant, ...props }: JSX.HTMLAttributes<HTMLHeadingElement
       return <h5 {...props} />;
     case "h6":
       return <h6 {...props} />;
+
+    case "p":
+    case "lead":
+    case "smallP":
     default:
-      return <h1 {...props} />;
+      return <p {...props} />;
   }
 };
 
