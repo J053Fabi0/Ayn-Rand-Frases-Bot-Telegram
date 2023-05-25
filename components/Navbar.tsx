@@ -15,6 +15,10 @@ const pages: Page[] = [
     href: "/source/new",
     name: "New source",
   },
+  {
+    href: "/author/new",
+    name: "New author",
+  },
 ];
 
 export default function Navbar() {
