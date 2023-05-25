@@ -26,6 +26,7 @@ export default function AuthorSourceSelector({ authors, sources }: NewQuoteProps
           .map((source) => (
             <option value={source._id.toString()}>{source.name}</option>
           ))}
+        <option value={"null"}>No source</option>
       </select>
     </>
   );

@@ -32,7 +32,9 @@ export const handler: Handlers<NewQuoteProps, State> = {
 
     if (!quote || !authorId || !sourceId) return new Response("Missing quote, author, or source", { status: 400 });
 
-    const newQuote = await postQuote({ body: { quote, authorId, sourceId } } as PostQuote);
+    const newQuote = await postQuote({
+      body: { quote, authorId, sourceId: sourceId === "null" ? null : sourceId },
+    } as PostQuote);
 
     // Redirect user to the quote page.
     const headers = new Headers();
