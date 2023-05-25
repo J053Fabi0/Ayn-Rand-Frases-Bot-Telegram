@@ -11,7 +11,7 @@ const textStyles = {
   h5: `${headersCommonStyles} text-xl leading-snug`,
   h6: `${headersCommonStyles} text-base leading-relaxed capitalize`,
 
-  p: "text-base font-light leading-relaxed",
+  p: "text-base font-normal leading-relaxed",
   lead: "text-xl font-normal leading-relaxed",
   smallP: "text-sm font-light leading-normal",
 };
