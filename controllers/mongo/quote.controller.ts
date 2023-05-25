@@ -1,9 +1,10 @@
 import * as a from "./dbUtils.ts";
+import { WEBSITE_URL } from "../../env.ts";
 import Model from "../../models/quote.model.ts";
 import Quote from "../../types/collections/quote.type.ts";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
-import { AggregateOptions, Filter } from "../../deps.ts";
+import { AggregateOptions, Filter, escapeHtml } from "../../deps.ts";
 
 export const getQuotes = a.find(Model);
 export const getQuote = a.findOne(Model);
@@ -40,12 +41,14 @@ export async function getFullQuote(filter: Filter<Collection<Quote>>, options?: 
   if (!possibleQuote || possibleQuote.length === 0)
     return { possibleQuote: null, fullQuote: null } as { possibleQuote: null; fullQuote: null };
 
-  const { quote } = possibleQuote[0];
+  const quote = escapeHtml(possibleQuote[0].quote);
   const author = possibleQuote[0].author[0]?.name;
-  const quoteWithAutor = author ? `${quote}\n\n - ${author}.` : quote;
+  const quoteWithAutor = author
+    ? `${quote}\n\n - <a href="${WEBSITE_URL}/quote/${possibleQuote[0].number}">${escapeHtml(author)}</a>.`
+    : quote;
 
   const source = possibleQuote[0].source[0]?.name;
-  const fullQuote = source ? `${source}\n\n${quoteWithAutor}` : quoteWithAutor;
+  const fullQuote = source ? `${quoteWithAutor} ${escapeHtml(source)}.` : quoteWithAutor;
 
   return { possibleQuote: possibleQuote[0], fullQuote };
 }
