@@ -19,7 +19,7 @@ import CommonResponse from "./types/commonResponse.type.ts";
 import { opine, opineCors, json, NextFunction, start, twindPlugin } from "./deps.ts";
 
 // Check that all required .env variables are set
-const envVariables = ["ADMINS_IDS", "BOT_TOKEN", "API_PORT", "WEB_PORT", "MONGO_URI", "AUTH_TOKEN"];
+const envVariables = ["ADMINS_IDS", "BOT_TOKEN", "API_PORT", "WEB_PORT", "MONGO_URI", "AUTH_TOKEN", "WEBSITE_URL"];
 for (const envVariable of envVariables)
   if (Deno.env.get(envVariable) === undefined) console.log(envVariable + " not set in .env."), Deno.exit(0);
 
