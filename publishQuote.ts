@@ -40,7 +40,10 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
       .sendMessage(chatID, fullQuote, {
         parse_mode: "HTML",
         disable_notification: true,
-        reply_to_message_id: possibleQuote.number && chatType === "private" ? possibleQuote.number : undefined,
+        reply_markup:
+          possibleQuote.number && chatType === "private"
+            ? await getQuotesButtons(possibleQuote.number, chatID)
+            : undefined,
       })
       .catch(() => {});
   else await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML", disable_web_page_preview: true });
