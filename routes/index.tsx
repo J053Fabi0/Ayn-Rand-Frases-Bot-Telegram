@@ -1,4 +1,3 @@
-import Button from "../components/Button.tsx";
 import { State } from "../types/state.type.ts";
 import Typography from "../components/Typography.tsx";
 import { Head, Handlers, PageProps } from "../deps.ts";
