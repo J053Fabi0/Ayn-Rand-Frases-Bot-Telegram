@@ -17,9 +17,10 @@ export const getAuthors = async (_: GetAuthors, res: CommonResponse) => {
   res.send({ message: authors });
 };
 
-export const postAuthor = async ({ body }: PostAuthor, res: CommonResponse) => {
+export const postAuthor = async ({ body }: PostAuthor, res?: CommonResponse) => {
   const author = await createAuthor(body);
-  res.send({ message: author._id });
+  res?.send({ message: author._id });
+  return author;
 };
 
 export const patchAuthor = async ({ body }: PatchAuthor, res: CommonResponse) => {
