@@ -7,18 +7,18 @@ interface Page {
 }
 
 const pages: Page[] = [
-  {
-    href: "/quote/new",
-    name: "New quote",
-  },
-  {
-    href: "/source/new",
-    name: "New source",
-  },
-  {
-    href: "/author/new",
-    name: "New author",
-  },
+  // {
+  //   href: "/quote/new",
+  //   name: "New quote",
+  // },
+  // {
+  //   href: "/source/new",
+  //   name: "New source",
+  // },
+  // {
+  //   href: "/author/new",
+  //   name: "New author",
+  // },
 ];
 
 export default function Navbar() {
