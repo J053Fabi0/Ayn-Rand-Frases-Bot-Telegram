@@ -43,7 +43,7 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
         reply_to_message_id: possibleQuote.number && chatType === "private" ? possibleQuote.number : undefined,
       })
       .catch(() => {});
-  else await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML" });
+  else await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML", disable_web_page_preview: true });
 
   await changeQuote({ _id: possibleQuote._id }, { $set: { lastSentTime: new Date() }, $inc: { timesSent: 1 } });
 }
