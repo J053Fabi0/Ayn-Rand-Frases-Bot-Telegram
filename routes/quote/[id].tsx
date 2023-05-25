@@ -4,6 +4,7 @@ import Typography from "../../components/Typography.tsx";
 import Quote from "../../types/collections/quote.type.ts";
 import { Handlers, Head, PageProps, ObjectId } from "../../deps.ts";
 import { PossibleQuote, getFullQuote } from "../../controllers/mongo/quote.controller.ts";
+import isMongoId from "../../utils/isMongoId.ts";
 
 interface QuoteProps {
   quoteObj: PossibleQuote | null;
@@ -15,7 +16,7 @@ export const handler: Handlers<QuoteProps, State> = {
 
     // The id can be either the quote number or the quote id
     const { possibleQuote } = await getFullQuote(
-      !isNaN(parseInt(id)) ? { number: parseInt(id) } : { _id: new ObjectId(id) }
+      isMongoId(id) ? { _id: new ObjectId(id) } : { number: parseInt(id) }
     );
 
     return await ctx.render({ quoteObj: possibleQuote });
