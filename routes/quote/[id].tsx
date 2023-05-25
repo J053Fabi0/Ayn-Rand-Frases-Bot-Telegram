@@ -53,7 +53,12 @@ export default function Quote(props: PageProps<QuoteProps>) {
           <p class={i > 0 ? "mt-2" : ""}>{t}</p>
         ))}
         <p class="mt-4 ml-2 font-semibold">
-          - {author}. <i>{source}</i>.
+          - {author}.
+          {source && (
+            <>
+              <i>{source}</i>.
+            </>
+          )}
         </p>
       </p>
     </>
