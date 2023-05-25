@@ -39,7 +39,7 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
     return bot.api
       .sendMessage(chatID, fullQuote, {
         parse_mode: "HTML",
-        disable_notification: true,
+        disable_web_page_preview: true,
         reply_markup:
           possibleQuote.number && chatType === "private"
             ? await getQuotesButtons(possibleQuote.number, chatID)
