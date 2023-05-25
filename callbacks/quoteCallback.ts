@@ -14,7 +14,11 @@ export default function quoteCallback(bot: Bot) {
 
     if (ctx.chat)
       ctx
-        .editMessageText(fullQuote, { reply_markup: await getQuotesButtons(number, ctx.chat.id) })
+        .editMessageText(fullQuote, {
+          reply_markup: await getQuotesButtons(number, ctx.chat.id),
+          parse_mode: "HTML",
+          disable_web_page_preview: true,
+        })
         .catch(console.error);
   });
 }

@@ -37,15 +37,13 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
 
   if (chatID)
     return bot.api
-      .sendMessage(
-        chatID,
-        fullQuote,
-        possibleQuote.number && chatType === "private"
-          ? { reply_markup: await getQuotesButtons(possibleQuote.number, chatID) }
-          : undefined
-      )
+      .sendMessage(chatID, fullQuote, {
+        parse_mode: "HTML",
+        disable_notification: true,
+        reply_to_message_id: possibleQuote.number && chatType === "private" ? possibleQuote.number : undefined,
+      })
       .catch(() => {});
-  else await sendMassiveMessage(fullQuote);
+  else await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML" });
 
   await changeQuote({ _id: possibleQuote._id }, { $set: { lastSentTime: new Date() }, $inc: { timesSent: 1 } });
 }
