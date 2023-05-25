@@ -54,7 +54,7 @@ export default function NewQuote({ data }: PageProps<NewQuoteProps>) {
         <div class="flex flex-col">
           <textarea
             required
-            rows={6}
+            rows={10}
             name="quote"
             placeholder="Quote"
             class="mt-2 p-2 border border-gray-300 rounded w-full"
