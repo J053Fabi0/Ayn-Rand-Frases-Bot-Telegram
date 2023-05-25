@@ -24,6 +24,8 @@ export default function frase(bot: Bot) {
     if (fullQuote === null) return tellIDIsNotValid(ctx);
 
     ctx.reply(fullQuote, {
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
       reply_markup: ctx.chat.type == "private" ? await getQuotesButtons(number, chatID) : undefined,
     });
   });

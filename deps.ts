@@ -4,6 +4,7 @@ export type { JSX } from "preact";
 export { compare, hash } from "bcrypt";
 export { default as Cron } from "croner";
 export { default as loki } from "lokijs";
+export { escapeHtml } from "escape_html";
 export { lodash as _, lodash } from "lodash";
 export { signal, computed } from "@preact/signals";
 export { repeatUntilNoError } from "duplicatedFilesCleaner";

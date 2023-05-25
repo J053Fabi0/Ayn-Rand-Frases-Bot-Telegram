@@ -14,9 +14,11 @@ export const handler: Handlers<QuoteProps, State> = {
     const { id } = ctx.params;
 
     // The id can be either the quote number or the quote id
-    const quote = await getFullQuote(!isNaN(parseInt(id)) ? { number: parseInt(id) } : { _id: new ObjectId(id) });
+    const { possibleQuote } = await getFullQuote(
+      !isNaN(parseInt(id)) ? { number: parseInt(id) } : { _id: new ObjectId(id) }
+    );
 
-    return await ctx.render({ quoteObj: quote.possibleQuote });
+    return await ctx.render({ quoteObj: possibleQuote });
   },
 };
 
