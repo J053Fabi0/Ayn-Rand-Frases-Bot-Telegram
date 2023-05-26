@@ -11,6 +11,7 @@ import {
   AggregatePipeline,
 } from "../../deps.ts";
 import InsertDoc from "../../types/collections/insertDoc.type.ts";
+import { Document } from "https://deno.land/x/web_bson@v0.3.0/mod.js";
 import CommonCollection from "../../types/collections/commonCollection.type.ts";
 
 type UnPromisify<T> = T extends Promise<infer U> ? U : T;
@@ -111,9 +112,22 @@ export function deleteMany<T extends Collection<CommonCollection>>(collection: T
     collection.deleteMany(filter, options);
 }
 
+export interface AggregateOptionsWithProjection extends AggregateOptions {
+  projection?: Document;
+}
 export function aggregate<T extends Collection<CommonCollection>>(collection: T) {
   return (
     pipeline: AggregatePipeline<DocumentOfCollection<T>> | AggregatePipeline<DocumentOfCollection<T>>[],
-    options?: AggregateOptions
-  ) => collection.aggregate(pipeline instanceof Array ? pipeline : [pipeline], options).toArray();
+    options?: AggregateOptionsWithProjection
+  ) => {
+    const finalPipeline = pipeline instanceof Array ? pipeline : [pipeline];
+
+    const projection = options?.projection;
+    if (projection) {
+      delete options?.projection;
+      finalPipeline.push({ $project: projection });
+    }
+
+    return collection.aggregate(finalPipeline, options).toArray();
+  };
 }
