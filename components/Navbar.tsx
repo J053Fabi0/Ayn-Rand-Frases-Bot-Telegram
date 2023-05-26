@@ -6,6 +6,10 @@ interface Page {
 }
 
 const pages: Page[] = [
+  {
+    href: "/signin",
+    name: "Sign in",
+  },
   // {
   //   href: "/quote/new",
   //   name: "New quote",
