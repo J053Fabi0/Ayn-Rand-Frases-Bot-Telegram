@@ -2,7 +2,6 @@
   "imports": {
     "joi": "https://esm.sh/joi@17.9.2/",
     "std/": "https://deno.land/std@0.188.0/",
-    "lokijs": "https://esm.sh/lokijs@1.5.12",
     "cors": "https://deno.land/x/cors@v1.2.2/mod.ts",
     "grammy/": "https://deno.land/x/grammy@v1.16.0/",
     "opine": "https://deno.land/x/opine@2.3.4/mod.ts",
