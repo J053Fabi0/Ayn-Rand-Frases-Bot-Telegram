@@ -4,6 +4,7 @@ export type { JSX } from "preact";
 export { compare, hash } from "bcrypt";
 export { default as Cron } from "croner";
 export { escapeHtml } from "escape_html";
+export { default as shuffle } from "shuffle";
 export { lodash as _, lodash } from "lodash";
 export { repeatUntilNoError } from "duplicatedFilesCleaner";
 export { getCookies, setCookie, deleteCookie } from "std/http/cookie.ts";
