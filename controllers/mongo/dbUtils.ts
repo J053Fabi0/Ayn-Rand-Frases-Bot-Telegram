@@ -112,13 +112,15 @@ export function deleteMany<T extends Collection<CommonCollection>>(collection: T
     collection.deleteMany(filter, options);
 }
 
-export interface AggregateOptionsWithProjection extends AggregateOptions {
+export interface AggregateOptionsExtended extends AggregateOptions {
   projection?: Document;
+  limit?: number;
+  skip?: number;
 }
 export function aggregate<T extends Collection<CommonCollection>>(collection: T) {
   return (
     pipeline: AggregatePipeline<DocumentOfCollection<T>> | AggregatePipeline<DocumentOfCollection<T>>[],
-    options?: AggregateOptionsWithProjection
+    options?: AggregateOptionsExtended
   ) => {
     const finalPipeline = pipeline instanceof Array ? pipeline : [pipeline];
 
@@ -126,6 +128,18 @@ export function aggregate<T extends Collection<CommonCollection>>(collection: T)
     if (projection) {
       delete options?.projection;
       finalPipeline.push({ $project: projection });
+    }
+
+    const skip = options?.skip;
+    if (typeof skip === "number") {
+      delete options?.skip;
+      finalPipeline.push({ $skip: skip });
+    }
+
+    const limit = options?.limit;
+    if (typeof limit === "number") {
+      delete options?.limit;
+      finalPipeline.push({ $limit: limit });
     }
 
     return collection.aggregate(finalPipeline, options).toArray();
