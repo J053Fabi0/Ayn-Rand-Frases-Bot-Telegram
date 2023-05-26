@@ -4,10 +4,10 @@ import { Metas } from "../../components/Metas.tsx";
 import Typography from "../../components/Typography.tsx";
 import Quote from "../../types/collections/quote.type.ts";
 import { Handlers, Head, PageProps, ObjectId } from "../../deps.ts";
-import { PossibleQuote, getFullQuote } from "../../controllers/mongo/quote.controller.ts";
+import { FullQuote, getFullQuote } from "../../controllers/mongo/quote.controller.ts";
 
 interface QuoteProps {
-  quoteObj: PossibleQuote | null;
+  quoteObj: FullQuote | null;
 }
 
 export const handler: Handlers<QuoteProps, State> = {
@@ -15,9 +15,7 @@ export const handler: Handlers<QuoteProps, State> = {
     const { id } = ctx.params;
 
     // The id can be either the quote number or the quote id
-    const { possibleQuote } = await getFullQuote(
-      isMongoId(id) ? { _id: new ObjectId(id) } : { number: parseInt(id) }
-    );
+    const possibleQuote = await getFullQuote(isMongoId(id) ? { _id: new ObjectId(id) } : { number: parseInt(id) });
 
     return await ctx.render({ quoteObj: possibleQuote });
   },
@@ -37,8 +35,8 @@ export default function Quote(props: PageProps<QuoteProps>) {
     );
 
   const splitQuote = quoteObj.quote.split("\n");
-  const author = quoteObj.author[0]?.name || "Unknown";
-  const source = quoteObj.source[0]?.name || "";
+  const author = quoteObj.author?.name || "Unknown";
+  const source = quoteObj.source?.name || "";
   const quote = quoteObj.quote.replace(/\n/g, " ");
 
   const description = quote.slice(0, 50) + (quote.length > 50 ? "…" : "");
