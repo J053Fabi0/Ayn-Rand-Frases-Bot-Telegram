@@ -1,6 +1,6 @@
 import Button from "../components/Button.tsx";
-import Typography from "../components/Typography.tsx";
 import { AUTH_TOKEN, BOT_TOKEN } from "../env.ts";
+import Typography from "../components/Typography.tsx";
 import { Head, Handlers, compare, createSignedCookie } from "../deps.ts";
 
 export const handler: Handlers = {
@@ -26,7 +26,7 @@ export default function SignIn() {
       </Head>
 
       <Typography variant="h4" class="text-2xl">
-        Sign in as an admin
+        Sign in as an administrator
       </Typography>
 
       <form method="post">
