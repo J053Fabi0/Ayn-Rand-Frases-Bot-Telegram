@@ -4,7 +4,7 @@ import Model from "../../models/quote.model.ts";
 import Quote from "../../types/collections/quote.type.ts";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
-import { AggregateOptions, Collection, Filter, escapeHtml } from "../../deps.ts";
+import { Collection, Filter, escapeHtml } from "../../deps.ts";
 
 export const getQuotes = a.find(Model);
 export const getQuote = a.findOne(Model);
@@ -26,29 +26,57 @@ export const aggregateQuote = a.aggregate(Model);
 export const getAllQuotesNumbers = async () =>
   (await getQuotes({}, { projection: { number: 1 } })).map(({ number }) => number);
 
-export type PossibleQuote = Omit<Quote, "author" | "source"> & { author: [Author] | []; source: [Source] | [] };
+export interface FullQuote extends Omit<Quote, "author" | "source"> {
+  author: Author | null;
+  source?: Source;
+}
 
-export async function getFullQuote(filter: Filter<Collection<Quote>>, options?: AggregateOptions) {
-  const possibleQuote = (await aggregateQuote(
+export async function getFullQuotes(filter?: Filter<Collection<Quote>>, options?: a.AggregateOptionsExtended) {
+  const limit = options?.limit;
+  if (typeof limit === "number") delete options?.limit;
+
+  const skip = options?.skip;
+  if (typeof skip === "number") delete options?.skip;
+
+  return (await aggregateQuote(
     [
-      { $match: filter },
+      ...(filter ? [{ $match: filter }] : []),
+      // skip and limit before lookup.
+      ...(skip ? [{ $skip: skip }] : []),
+      ...(limit ? [{ $limit: limit }] : []),
       { $lookup: { from: "authors", localField: "author", foreignField: "_id", as: "author" } },
+      { $unwind: { path: "$author", preserveNullAndEmptyArrays: true } },
       { $lookup: { from: "sources", localField: "source", foreignField: "_id", as: "source" } },
+      { $unwind: { path: "$source", preserveNullAndEmptyArrays: true } },
     ],
     options
-  )) as [PossibleQuote] | [] | null;
+  )) as FullQuote[] | [];
+}
 
-  if (!possibleQuote || possibleQuote.length === 0)
-    return { possibleQuote: null, fullQuote: null } as { possibleQuote: null; fullQuote: null };
+export async function getFullQuote(
+  filter: Filter<Collection<Quote>>,
+  options: Omit<a.AggregateOptionsExtended, "skip" | "limit"> = {}
+) {
+  const fullQuotes = await getFullQuotes(filter, { limit: 1, ...options });
+  if (fullQuotes.length === 0) return null;
+  return fullQuotes[0];
+}
 
-  const quote = escapeHtml(possibleQuote[0].quote);
-  const author = possibleQuote[0].author[0]?.name;
+export function parseFullQuote(quote: FullQuote) {
+  const parsedQuote = escapeHtml(quote.quote);
+  const author = quote.author?.name;
   const quoteWithAutor = author
-    ? `${quote}\n\n - <a href="${WEBSITE_URL}/quote/${possibleQuote[0].number}">${escapeHtml(author)}</a>.`
-    : quote;
+    ? `${parsedQuote}\n\n - <a href="${WEBSITE_URL}/quote/${quote.number}">${escapeHtml(author)}</a>.`
+    : parsedQuote;
 
-  const source = possibleQuote[0].source[0]?.name;
-  const fullQuote = source ? `${quoteWithAutor} ${escapeHtml(source)}.` : quoteWithAutor;
+  const source = quote.source?.name;
+  return source ? `${quoteWithAutor} ${escapeHtml(source)}.` : quoteWithAutor;
+}
 
-  return { possibleQuote: possibleQuote[0], fullQuote };
+export async function getParsedFullQuote(
+  filter: Parameters<typeof getFullQuote>[0],
+  options?: Parameters<typeof getFullQuote>[1]
+) {
+  const fullQuote = await getFullQuote(filter, options);
+  return fullQuote ? parseFullQuote(fullQuote) : null;
 }
