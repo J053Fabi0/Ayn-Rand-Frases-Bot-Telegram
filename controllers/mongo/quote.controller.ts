@@ -4,7 +4,7 @@ import Model from "../../models/quote.model.ts";
 import Quote from "../../types/collections/quote.type.ts";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
-import { AggregateOptions, Filter, escapeHtml } from "../../deps.ts";
+import { AggregateOptions, Collection, Filter, escapeHtml } from "../../deps.ts";
 
 export const getQuotes = a.find(Model);
 export const getQuote = a.findOne(Model);
