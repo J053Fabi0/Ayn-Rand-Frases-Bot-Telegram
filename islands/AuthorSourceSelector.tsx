@@ -7,7 +7,7 @@ const findAuthor = (authors: Author[], id: string) => authors.find((a) => a._id.
 
 export default function AuthorSourceSelector({ authors, sources }: NewQuoteProps) {
   const author = useSignal(authors[0]);
-  const sourceId = useSignal(sources[0]._id.toString());
+  const sourceId = useSignal(sources[0]?._id.toString());
 
   const filteredSources = useComputed(() =>
     sources.filter((source) =>
