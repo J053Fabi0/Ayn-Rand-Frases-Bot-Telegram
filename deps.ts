@@ -29,3 +29,5 @@ export { Head, asset } from "$fresh/runtime.ts";
 export { default as twindPlugin } from "$fresh/plugins/twind.ts";
 export type { Options as TwindOptions } from "$fresh/plugins/twind.ts";
 export type { Handlers, PageProps, AppProps, MiddlewareHandlerContext, HandlerContext } from "$fresh/server.ts";
+
+export { BsCaretLeftFill, BsCaretRightFill } from "react-icons/bs";
