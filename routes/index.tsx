@@ -4,12 +4,14 @@ import getQueryParams from "../utils/getQueryParams.ts";
 import Typography, { getTypographyClass } from "../components/Typography.tsx";
 import { Head, Handlers, PageProps, BsCaretLeftFill, BsCaretRightFill } from "../deps.ts";
 import { FullQuote, getFullQuotes, countQuotes } from "../controllers/mongo/quote.controller.ts";
+import Pagination from "../components/Pagination.tsx";
 
 interface IndexProps {
   page: number;
   limit: number;
   hasMore: boolean;
   isAdmin: boolean;
+  pages: number[];
   fullQuotes: FullQuote[];
 }
 
@@ -30,7 +32,9 @@ export const handler: Handlers<IndexProps, State> = {
     const quoteCount = await countQuotes();
     const hasMore = quoteCount > page * limit;
 
-    return ctx.render({ isAdmin: Boolean(ctx.state.authToken), fullQuotes, page, limit, hasMore });
+    const pages = Array.from({ length: Math.ceil(quoteCount / limit) }, (_, i) => i + 1);
+
+    return ctx.render({ isAdmin: Boolean(ctx.state.authToken), fullQuotes, page, limit, hasMore, pages });
   },
 };
 
@@ -65,21 +69,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
       </ul>
 
       <div class="flex justify-center mt-5">
-        {data.page > 1 && (
-          <a href={`/?page=${data.page - 1}`}>
-            <Button class="mr-3" color="green">
-              <BsCaretLeftFill size={17} />
-            </Button>
-          </a>
-        )}
-
-        {data.hasMore && (
-          <a href={`/?page=${data.page + 1}`}>
-            <Button color="green">
-              <BsCaretRightFill size={17} />
-            </Button>
-          </a>
-        )}
+        <Pagination pages={data.pages} baseUrl="/?page=" currentPage={data.page} maxPages={7} />
       </div>
     </>
   );
