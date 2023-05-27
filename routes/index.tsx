@@ -25,7 +25,7 @@ export const handler: Handlers<IndexProps, State> = {
     const pages = Array.from({ length: Math.ceil(quoteCount / limit) }, (_, i) => i + 1);
 
     let page = Math.floor(!isNaN(+queryParams.page) ? Math.max(+queryParams.page, 1) : 1);
-    if (!pages.includes(page)) page = 1;
+    if (!pages.includes(page)) page = page <= 0 ? 1 : pages[pages.length - 1];
 
     const fullQuotes = await getFullQuotes(undefined, {
       limit,
