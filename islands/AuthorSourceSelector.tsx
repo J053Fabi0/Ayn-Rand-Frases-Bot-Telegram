@@ -1,27 +1,45 @@
-import { NewQuoteProps } from "../routes/quote/new.tsx";
 import Author from "../types/collections/author.type.ts";
+import Source from "../types/collections/source.type.ts";
 // These imports can't go in deps.ts because a strange error happens.
 import { useSignal, useComputed, useSignalEffect } from "@preact/signals";
 
 const findAuthor = (authors: Author[], id: string) => authors.find((a) => a._id.toString() === id)!;
 
-export default function AuthorSourceSelector({ authors, sources }: NewQuoteProps) {
-  const author = useSignal(authors[0]);
-  const sourceId = useSignal(sources[0]?._id.toString());
+interface AuthorSourceSelectorProps {
+  authors: Author[];
+  sources: Source[];
+  authorId?: string;
+  sourceId?: string;
+}
+
+export default function AuthorSourceSelector({ authors, sources, ...defaults }: AuthorSourceSelectorProps) {
+  const author = useSignal(defaults.authorId ? findAuthor(authors, defaults.authorId) : authors[0]);
+  const authorId = useComputed(() => `${author.value?._id || ""}`);
+  const sourceId = useSignal(defaults.sourceId ?? `${sources[0]?._id}`);
 
   const filteredSources = useComputed(() =>
-    sources.filter((source) =>
-      source.authors.some((authorId) => authorId.toString() === author.value._id.toString())
-    )
+    sources.filter((source) => source.authors.some((thisAuthorId) => `${thisAuthorId}` === authorId.value))
   );
+
   const sourcesOptions = useComputed(() =>
-    filteredSources.value.map((source) => <option value={source._id.toString()}>{source.name}</option>)
+    filteredSources.value.map((source) => <option value={`${source._id}`}>{source.name}</option>)
   );
 
   // Set the first source as the default source when the filtedered sources change.
   useSignalEffect(() => {
+    // if there's a default source, check if it can be used as the default source
+    if (
+      defaults.sourceId &&
+      (defaults.authorId
+        ? // if there's an authorId by default, just check if the current author is the default author
+          `${author.value._id}` === defaults.authorId
+        : // if there's no authorId by default, check if the filtered sources contain the default source
+          filteredSources.value.some((source) => `${source._id}` === defaults.sourceId))
+    )
+      return void (sourceId.value = defaults.sourceId);
+
     const [firstSource] = filteredSources.value;
-    sourceId.value = firstSource ? firstSource._id.toString() : "null";
+    sourceId.value = firstSource ? `${firstSource?._id}` : "null";
   });
 
   return (
@@ -29,11 +47,12 @@ export default function AuthorSourceSelector({ authors, sources }: NewQuoteProps
       <select
         required
         name="author"
+        value={authorId.value}
         class="mt-2 p-2 border border-gray-300 rounded w-full"
         onChange={(e) => void (author.value = findAuthor(authors, e.currentTarget.value))}
       >
         {authors.map((author) => (
-          <option value={author._id.toString()}>{author.name}</option>
+          <option value={`${author._id}`}>{author.name}</option>
         ))}
       </select>
 

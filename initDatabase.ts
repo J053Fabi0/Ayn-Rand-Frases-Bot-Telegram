@@ -6,6 +6,8 @@ export const client = new MongoClient();
 
 await client.connect(MONGO_URI);
 
+console.log("Connected to MongoDB", MONGO_URI);
+
 const db = client.database();
 
 export default db;
