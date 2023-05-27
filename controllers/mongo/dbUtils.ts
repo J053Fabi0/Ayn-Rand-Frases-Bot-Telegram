@@ -113,9 +113,13 @@ export function deleteMany<T extends Collection<CommonCollection>>(collection: T
 }
 
 export interface AggregateOptionsExtended extends AggregateOptions {
-  projection?: Document;
-  limit?: number;
   skip?: number;
+  limit?: number;
+  /**
+   * The sort is done before the projection.
+   */
+  sort?: Document;
+  projection?: Document;
 }
 export function aggregate<T extends Collection<CommonCollection>>(collection: T) {
   return (
@@ -123,6 +127,12 @@ export function aggregate<T extends Collection<CommonCollection>>(collection: T)
     options?: AggregateOptionsExtended
   ) => {
     const finalPipeline = pipeline instanceof Array ? pipeline : [pipeline];
+
+    const sort = options?.sort;
+    if (sort) {
+      delete options?.sort;
+      finalPipeline.push({ $sort: sort });
+    }
 
     const projection = options?.projection;
     if (projection) {
