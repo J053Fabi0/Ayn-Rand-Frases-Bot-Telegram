@@ -58,8 +58,10 @@ export default function Home({ data }: PageProps<IndexProps>) {
 
       <ul class="list-disc list-inside">
         {data.fullQuotes.map((quote) => (
-          <li class={`mt-2 underline ${getTypographyClass()}`}>
-            <a href={`/quote/${quote.number}`}>Quote #{quote.number}</a>
+          <li class={`mt-2 ${getTypographyClass()}`}>
+            <a href={`/quote/${quote.number}`} class="underline">
+              Quote #{quote.number}
+            </a>
           </li>
         ))}
       </ul>
