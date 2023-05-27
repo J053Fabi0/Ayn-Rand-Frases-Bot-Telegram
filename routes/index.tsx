@@ -22,6 +22,7 @@ export const handler: Handlers<IndexProps, State> = {
 
     const fullQuotes = await getFullQuotes(undefined, {
       limit,
+      sort: { number: -1 },
       skip: (page - 1) * limit,
       projection: { number: 1 },
     });
