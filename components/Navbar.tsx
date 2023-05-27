@@ -29,12 +29,14 @@ export default function Navbar() {
     <nav class="bg-gray-300">
       <div class="mx-auto block w-full max-w-screen-lg py-2 px-4 lg:py-3">
         <div class="container mx-auto flex items-center justify-between text-gray-900">
-          <Typography
-            variant="h5"
-            class="mr-4 block cursor-pointer py-1.5 font-sans text-sm font-normal leading-normal text-inherit antialiased"
-          >
-            <a href="/">Objectivism quotes</a>
-          </Typography>
+          <a href="/">
+            <Typography
+              variant="h5"
+              class="mr-4 block cursor-pointer py-1.5 font-sans text-sm font-normal leading-normal text-inherit antialiased"
+            >
+              Objectivism quotes
+            </Typography>
+          </a>
           <ul class="hidden items-center gap-6 lg:flex">
             {pages.map((page) => (
               <li class="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
