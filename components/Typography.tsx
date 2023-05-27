@@ -1,6 +1,6 @@
 import { JSX } from "../deps.ts";
 
-const commonStyles = "block font-sans text-inherit antialiased";
+const commonStyles = "font-sans text-inherit antialiased";
 const headersCommonStyles = "font-semibold tracking-normal leading-tight";
 
 const textStyles = {
@@ -21,7 +21,7 @@ interface TypographyProps {
 }
 
 const Typography = ({ variant = "p", ...props }: JSX.HTMLAttributes<HTMLHeadingElement> & TypographyProps) => {
-  props.class = `${commonStyles} ${textStyles[variant]} ${props.class ?? ""}`;
+  props.class = `${getTypographyClass(variant)} ${props.class ?? ""}`;
 
   switch (variant) {
     case "h1":
@@ -44,5 +44,8 @@ const Typography = ({ variant = "p", ...props }: JSX.HTMLAttributes<HTMLHeadingE
       return <p {...props} />;
   }
 };
+
+export const getTypographyClass = (variant: keyof typeof textStyles = "p") =>
+  `${commonStyles} ${textStyles[variant]}`;
 
 export default Typography;

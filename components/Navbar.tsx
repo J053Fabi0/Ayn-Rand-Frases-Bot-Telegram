@@ -10,18 +10,6 @@ const pages: Page[] = [
     href: "/signin",
     name: "Sign in",
   },
-  // {
-  //   href: "/quote/new",
-  //   name: "New quote",
-  // },
-  // {
-  //   href: "/source/new",
-  //   name: "New source",
-  // },
-  // {
-  //   href: "/author/new",
-  //   name: "New author",
-  // },
 ];
 
 export default function Navbar() {
