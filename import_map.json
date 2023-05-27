@@ -14,6 +14,7 @@
     "lodash": "https://deno.land/x/deno_ts_lodash@0.0.1/mod.ts",
     "escape_html": "https://deno.land/x/escape_html@1.0.0/mod.ts",
     "react-icons/bs": "https://deno.land/x/react_icons@0.2.3/bs/mod.ts",
+    "react-icons/ai": "https://deno.land/x/react_icons@0.2.3/ai/mod.ts",
     "squishy_cookies": "https://deno.land/x/squishy_cookies@1.2.0/mod.ts",
     "duplicatedFilesCleaner": "https://deno.land/x/duplicated_files_cleaner_incognito@1.2/mod.ts",
 
