@@ -1,17 +1,17 @@
 import Button from "../components/Button.tsx";
 import { State } from "../types/state.type.ts";
+import Pagination from "../components/Pagination.tsx";
+import { Head, Handlers, PageProps } from "../deps.ts";
 import getQueryParams from "../utils/getQueryParams.ts";
 import Typography, { getTypographyClass } from "../components/Typography.tsx";
-import { Head, Handlers, PageProps, BsCaretLeftFill, BsCaretRightFill } from "../deps.ts";
 import { FullQuote, getFullQuotes, countQuotes } from "../controllers/mongo/quote.controller.ts";
-import Pagination from "../components/Pagination.tsx";
 
 interface IndexProps {
   page: number;
   limit: number;
+  pages: number[];
   hasMore: boolean;
   isAdmin: boolean;
-  pages: number[];
   fullQuotes: FullQuote[];
 }
 
