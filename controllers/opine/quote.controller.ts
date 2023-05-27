@@ -7,6 +7,7 @@ import {
 } from "../mongo/quote.controller.ts";
 import { ObjectId } from "../../deps.ts";
 import { pretifyIds } from "../../utils/pretifyId.ts";
+import Quote from "../../types/collections/quote.type.ts";
 import { getSourceById } from "../mongo/source.controller.ts";
 import { getAuthorById } from "../mongo/author.controller.ts";
 import CommonResponse from "../../types/commonResponse.type.ts";
@@ -54,24 +55,30 @@ export const postQuote = async ({ body }: PostQuote, res?: CommonResponse) => {
   return quote;
 };
 
-export const patchQuote = async ({ body }: PatchQuote, res: CommonResponse) => {
-  const { quoteId, ...patchData } = body;
+export const patchQuote = async ({ body }: PatchQuote, res?: CommonResponse) => {
+  const { quoteId, authorId, sourceId } = body;
 
-  if (patchData.sourceId) {
-    const source = await getSourceById(patchData.sourceId, { projection: { _id: 1 } });
-    if (!source) res.setStatus(404).send({ message: null, error: "Source not found" });
+  const patchData = {} as Partial<Quote>;
+
+  if (sourceId) {
+    const source = await getSourceById(sourceId, { projection: { _id: 1 } });
+    if (!source) return void res?.setStatus(404).send({ message: null, error: "Source not found" });
+    patchData.source = new ObjectId(sourceId);
+  } else if (sourceId === null) patchData.source = null;
+
+  if (authorId) {
+    const author = await getAuthorById(authorId, { projection: { _id: 1 } });
+    if (!author) return void res?.setStatus(404).send({ message: null, error: "Author not found" });
+    patchData.author = new ObjectId(authorId);
   }
 
-  if (patchData.authorId) {
-    const author = await getAuthorById(patchData.authorId, { projection: { _id: 1 } });
-    if (!author) res.setStatus(404).send({ message: null, error: "Author not found" });
-  }
+  const results = await changeQuote({ _id: new ObjectId(quoteId) }, { $set: patchData });
 
-  const { modifiedCount } = await changeQuote({ _id: new ObjectId(quoteId) }, { $set: patchData });
+  if (results.modifiedCount === 0) res?.setStatus(404).send({ message: null, error: "Quote not found" });
 
-  if (modifiedCount === 0) res.setStatus(404).send({ message: null, error: "Quote not found" });
+  res?.sendStatus(200);
 
-  res.sendStatus(200);
+  return results;
 };
 
 export const deleteQuote = async ({ params }: DeleteQuote, res: CommonResponse) => {
