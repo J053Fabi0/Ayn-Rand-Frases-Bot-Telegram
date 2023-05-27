@@ -4,10 +4,8 @@ import { State } from "../../types/state.type.ts";
 import { Metas } from "../../components/Metas.tsx";
 import Typography from "../../components/Typography.tsx";
 import Quote from "../../types/collections/quote.type.ts";
-import { Handlers, Head, PageProps, ObjectId } from "../../deps.ts";
-import CaretLeftFill from "../../components/Icons/CaretLeftFill.tsx";
-import CaretRightFill from "../../components/Icons/CaretRightFill.tsx";
 import { FullQuote, getFullQuote, getFullQuotes } from "../../controllers/mongo/quote.controller.ts";
+import { Handlers, Head, PageProps, ObjectId, BsCaretLeftFill, BsCaretRightFill } from "../../deps.ts";
 
 interface QuoteProps {
   quoteObj: FullQuote | null;
@@ -83,15 +81,14 @@ export default function Quote({ data }: PageProps<QuoteProps>) {
 
       <div class="flex justify-center mt-9">
         <a href={`/quote/${data.previous}`} alt={`Quote #${data.previous}`}>
-          <Button class="mr-3 flex" color="green">
-            <CaretLeftFill />#{data.previous}
+          <Button class="mr-3 flex items-center" color="green">
+            <BsCaretLeftFill size={16} /> #{data.previous}
           </Button>
         </a>
 
         <a href={`/quote/${data.next}`} alt={`Quote #${data.next}`}>
-          <Button color="green" class="flex">
-            #{data.next}
-            <CaretRightFill />
+          <Button color="green" class="flex items-center">
+            #{data.next} <BsCaretRightFill size={16} />
           </Button>
         </a>
       </div>

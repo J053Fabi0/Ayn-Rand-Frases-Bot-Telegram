@@ -1,10 +1,8 @@
 import Button from "../components/Button.tsx";
 import { State } from "../types/state.type.ts";
-import { Head, Handlers, PageProps } from "../deps.ts";
 import getQueryParams from "../utils/getQueryParams.ts";
-import CaretLeftFill from "../components/Icons/CaretLeftFill.tsx";
-import CaretRightFill from "../components/Icons/CaretRightFill.tsx";
 import Typography, { getTypographyClass } from "../components/Typography.tsx";
+import { Head, Handlers, PageProps, BsCaretLeftFill, BsCaretRightFill } from "../deps.ts";
 import { FullQuote, getFullQuotes, countQuotes } from "../controllers/mongo/quote.controller.ts";
 
 interface IndexProps {
@@ -70,7 +68,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
         {data.page > 1 && (
           <a href={`/?page=${data.page - 1}`}>
             <Button class="mr-3" color="green">
-              <CaretLeftFill />
+              <BsCaretLeftFill size={17} />
             </Button>
           </a>
         )}
@@ -78,7 +76,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
         {data.hasMore && (
           <a href={`/?page=${data.page + 1}`}>
             <Button color="green">
-              <CaretRightFill />
+              <BsCaretRightFill size={17} />
             </Button>
           </a>
         )}
