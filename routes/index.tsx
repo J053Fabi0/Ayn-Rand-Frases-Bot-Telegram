@@ -19,8 +19,13 @@ export const handler: Handlers<IndexProps, State> = {
   async GET(req, ctx) {
     const queryParams = getQueryParams(req.url);
 
-    const page = !isNaN(+queryParams.page) ? +queryParams.page : 1;
-    const limit = !isNaN(+queryParams.limit) ? +queryParams.limit : 10;
+    const limit = Math.floor(!isNaN(+queryParams.limit) ? Math.max(+queryParams.limit, 1) : 10);
+
+    const quoteCount = await countQuotes();
+    const pages = Array.from({ length: Math.ceil(quoteCount / limit) }, (_, i) => i + 1);
+
+    let page = Math.floor(!isNaN(+queryParams.page) ? Math.max(+queryParams.page, 1) : 1);
+    if (!pages.includes(page)) page = 1;
 
     const fullQuotes = await getFullQuotes(undefined, {
       limit,
@@ -29,10 +34,7 @@ export const handler: Handlers<IndexProps, State> = {
       projection: { number: 1 },
     });
 
-    const quoteCount = await countQuotes();
     const hasMore = quoteCount > page * limit;
-
-    const pages = Array.from({ length: Math.ceil(quoteCount / limit) }, (_, i) => i + 1);
 
     return ctx.render({ isAdmin: Boolean(ctx.state.authToken), fullQuotes, page, limit, hasMore, pages });
   },
