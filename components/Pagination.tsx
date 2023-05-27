@@ -47,7 +47,7 @@ export default function Pagination({ baseUrl, pages, currentPage, maxPages = 5 }
     <nav>
       <ul class="flex">
         {/* Previous button */}
-        {pagesToTheLeft.length > 0 && (
+        {pagesToTheLeft.length > 0 ? (
           <li>
             <a
               aria-label="Previous"
@@ -56,6 +56,10 @@ export default function Pagination({ baseUrl, pages, currentPage, maxPages = 5 }
             >
               <BsCaretLeftFill size={16} />
             </a>
+          </li>
+        ) : (
+          <li class="invisible">
+            <span class={classes.inactive} />
           </li>
         )}
 
@@ -83,11 +87,15 @@ export default function Pagination({ baseUrl, pages, currentPage, maxPages = 5 }
         ))}
 
         {/* Next button */}
-        {pagesToTheRight.length > 0 && (
+        {pagesToTheRight.length > 0 ? (
           <li>
             <a aria-label="Next" class={classes.inactive} href={`${baseUrl}${pagesToTheRight[0]}`}>
               <BsCaretRightFill size={16} />
             </a>
+          </li>
+        ) : (
+          <li class="invisible">
+            <span class={classes.inactive} />
           </li>
         )}
       </ul>
