@@ -32,6 +32,9 @@ export interface FullQuote extends Omit<Quote, "author" | "source"> {
 }
 
 export async function getFullQuotes(filter?: Filter<Collection<Quote>>, options?: a.AggregateOptionsExtended) {
+  const sort = options?.sort;
+  if (sort) delete options?.sort;
+
   const limit = options?.limit;
   if (typeof limit === "number") delete options?.limit;
 
@@ -40,6 +43,7 @@ export async function getFullQuotes(filter?: Filter<Collection<Quote>>, options?
 
   return (await aggregateQuote(
     [
+      ...(sort ? [{ $sort: sort }] : []),
       ...(filter ? [{ $match: filter }] : []),
       // skip and limit before lookup.
       ...(skip ? [{ $skip: skip }] : []),
