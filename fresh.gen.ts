@@ -10,7 +10,8 @@ import * as $3 from "./routes/index.tsx";
 import * as $4 from "./routes/quote/[id].tsx";
 import * as $5 from "./routes/quote/new.tsx";
 import * as $6 from "./routes/signin.tsx";
-import * as $7 from "./routes/source/new.tsx";
+import * as $7 from "./routes/signout.tsx";
+import * as $8 from "./routes/source/new.tsx";
 import * as $$0 from "./islands/AuthorSourceSelector.tsx";
 
 const manifest = {
@@ -22,7 +23,8 @@ const manifest = {
     "./routes/quote/[id].tsx": $4,
     "./routes/quote/new.tsx": $5,
     "./routes/signin.tsx": $6,
-    "./routes/source/new.tsx": $7,
+    "./routes/signout.tsx": $7,
+    "./routes/source/new.tsx": $8,
   },
   islands: {
     "./islands/AuthorSourceSelector.tsx": $$0,
