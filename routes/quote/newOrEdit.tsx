@@ -56,7 +56,6 @@ export const handler: Handlers<NewQuoteProps, State> = {
 
     let quoteId = groups.id ?? "";
     const body = { quote, authorId, sourceId: sourceId === "null" ? null : sourceId };
-    console.log(body);
 
     // Edit quote
     if (groups.action === "edit" && groups.id) {
