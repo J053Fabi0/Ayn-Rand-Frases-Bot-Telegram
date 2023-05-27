@@ -27,25 +27,21 @@ export default function Pagination({ baseUrl, pages, currentPage, maxPages = 5 }
   const pagesToTheLeft = pages.slice(Math.max(indexOfCurrentPage - pagesForEachSide, 0), indexOfCurrentPage);
   const pagesToTheRight = pages.slice(indexOfCurrentPage + 1, indexOfCurrentPage + pagesForEachSide + 1);
 
-  if (pagesToTheLeft.length < pagesForEachSide)
+  // If the pages to the left are less than the pagesForEachSide, add pages to the right to compensate
+  if (pagesToTheLeft.length < pagesForEachSide) {
+    const end = indexOfCurrentPage + pagesForEachSide + 1 + pagesForEachSide - pagesToTheLeft.length;
     pagesToTheRight.push(
-      ...pages
-        .slice(
-          indexOfCurrentPage + pagesForEachSide + 1,
-          indexOfCurrentPage + pagesForEachSide + 1 + pagesForEachSide - pagesToTheLeft.length
-        )
-        .filter((p) => p !== undefined)
+      ...pages.slice(indexOfCurrentPage + pagesForEachSide + 1, end).filter((p) => p !== undefined)
     );
+  }
 
-  if (pagesToTheRight.length < pagesForEachSide)
+  // If the pages to the right are less than the pagesForEachSide, add pages to the left to compensate
+  if (pagesToTheRight.length < pagesForEachSide) {
+    const start = Math.max(indexOfCurrentPage - pagesForEachSide * 2 + pagesToTheRight.length, 0);
     pagesToTheLeft.unshift(
-      ...pages
-        .slice(
-          Math.max(indexOfCurrentPage - pagesForEachSide - pagesForEachSide + pagesToTheRight.length, 0),
-          indexOfCurrentPage - pagesForEachSide
-        )
-        .filter((p) => p !== undefined)
+      ...pages.slice(start, Math.max(indexOfCurrentPage - pagesForEachSide, 0)).filter((p) => p !== undefined)
     );
+  }
 
   return (
     <nav>
