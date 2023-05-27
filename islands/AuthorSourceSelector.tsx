@@ -38,7 +38,7 @@ export default function AuthorSourceSelector({ authors, sources }: NewQuoteProps
       </select>
 
       <select value={sourceId.value} required name="source" class="mt-2 p-2 border border-gray-300 rounded w-full">
-        {sourcesOptions}
+        {sourcesOptions.value}
         <option value={"null"}>No source</option>
       </select>
     </>
