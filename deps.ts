@@ -31,4 +31,5 @@ export type { Options as TwindOptions } from "$fresh/plugins/twind.ts";
 export type { RouteConfig, UnknownPageProps, ErrorPageProps } from "$fresh/server.ts";
 export type { Handlers, PageProps, AppProps, MiddlewareHandlerContext, HandlerContext } from "$fresh/server.ts";
 
+export { AiFillEdit } from "react-icons/ai";
 export { BsCaretLeftFill, BsCaretRightFill } from "react-icons/bs";
