@@ -83,20 +83,18 @@ export default function Home({ data }: PageProps<IndexProps>) {
 
 const AdminTools = () => (
   <>
-    <Typography variant="h3">Admin tools</Typography>
-
     <Typography variant="h4" class="mt-2">
       New
     </Typography>
 
     <a href="/quote/new">
-      <Button class="mt-3 mr-3" color="blue">
+      <Button class="mt-3 mr-3" color="green">
         Quote
       </Button>
     </a>
 
     <a href="/source/new">
-      <Button class="mt-3 mx-3" color="green">
+      <Button class="mt-3 mx-3" color="blue">
         Source
       </Button>
     </a>
