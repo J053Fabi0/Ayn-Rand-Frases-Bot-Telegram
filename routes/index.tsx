@@ -2,6 +2,8 @@ import Button from "../components/Button.tsx";
 import { State } from "../types/state.type.ts";
 import { Head, Handlers, PageProps } from "../deps.ts";
 import getQueryParams from "../utils/getQueryParams.ts";
+import CaretLeftFill from "../components/Icons/CaretLeftFill.tsx";
+import CaretRightFill from "../components/Icons/CaretRightFill.tsx";
 import Typography, { getTypographyClass } from "../components/Typography.tsx";
 import { FullQuote, getFullQuotes, countQuotes } from "../controllers/mongo/quote.controller.ts";
 
@@ -65,15 +67,17 @@ export default function Home({ data }: PageProps<IndexProps>) {
       <div class="flex justify-center mt-5">
         {data.page > 1 && (
           <a href={`/?page=${data.page - 1}`}>
-            <Button class="mr-3" color="blue">
-              Previous
+            <Button class="mr-3" color="green">
+              <CaretLeftFill />
             </Button>
           </a>
         )}
 
         {data.hasMore && (
           <a href={`/?page=${data.page + 1}`}>
-            <Button color="blue">Next</Button>
+            <Button color="green">
+              <CaretRightFill />
+            </Button>
           </a>
         )}
       </div>
