@@ -27,16 +27,14 @@ const pages: Page[] = [
 export default function Navbar() {
   return (
     <nav class="bg-gray-300">
-      <div class="mx-auto block w-full max-w-screen-xl py-2 px-4 lg:px-8 lg:py-4">
+      <div class="mx-auto block w-full max-w-screen-lg py-2 px-4 lg:py-3">
         <div class="container mx-auto flex items-center justify-between text-gray-900">
-          <a
-            href="/"
+          <Typography
+            variant="h5"
             class="mr-4 block cursor-pointer py-1.5 font-sans text-sm font-normal leading-normal text-inherit antialiased"
           >
-            <Typography variant="h5">
-              <span>Objectivism quotes</span>
-            </Typography>
-          </a>
+            <a href="/">Objectivism quotes</a>
+          </Typography>
           <ul class="hidden items-center gap-6 lg:flex">
             {pages.map((page) => (
               <li class="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
