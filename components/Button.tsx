@@ -4,7 +4,7 @@ const colors = {
   red: "bg-pink-500 shadow-pink-500/20 hover:shadow-pink-500/40",
   blue: "bg-blue-500 shadow-blue-500/20 hover:shadow-blue-500/40",
   green: "bg-green-500 shadow-green-500/20 hover:shadow-green-500/40",
-  orange: "bg-orange-500 shadow-orange-500/20 hover:shadow-orange-500/40",
+  // orange: "bg-orange-500 shadow-orange-500/20 hover:shadow-orange-500/40",
 };
 
 interface ButtonProps {
