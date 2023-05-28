@@ -5,6 +5,7 @@ import { State } from "../../types/state.type.ts";
 import { Metas } from "../../components/Metas.tsx";
 import Typography from "../../components/Typography.tsx";
 import Quote from "../../types/collections/quote.type.ts";
+import LastSentTime from "../../islands/LastSentTime.tsx";
 import { FullQuote, getFullQuote, getFullQuotes } from "../../controllers/mongo/quote.controller.ts";
 import { Handlers, Head, PageProps, ObjectId, BsCaretLeftFill, BsCaretRightFill, AiFillEdit } from "../../deps.ts";
 
@@ -67,6 +68,7 @@ export default function Quote({ data }: PageProps<QuoteProps>) {
         <Metas description={description} title={`Quote from ${author}`} />
       </Head>
 
+      {/* Quote */}
       <div class="flex justify-center">
         <div class="max-w-screen-sm">
           {/* Quote */}
@@ -87,13 +89,16 @@ export default function Quote({ data }: PageProps<QuoteProps>) {
         </div>
       </div>
 
+      {/* Buttons */}
       <div class="flex justify-center mt-9">
+        {/* Previous */}
         <a href={`/quote/${previous}`} alt={`Quote #${previous}`}>
           <Button class="mr-3 flex items-center" color="green">
             <BsCaretLeftFill size={16} /> #{previous}
           </Button>
         </a>
 
+        {/* Edit */}
         {isAdmin && (
           <a href={`/quote/edit/${quoteObj.number}`} alt={`Quote #${next}`}>
             <Button color="blue" class="flex items-center mr-3">
@@ -102,11 +107,28 @@ export default function Quote({ data }: PageProps<QuoteProps>) {
           </a>
         )}
 
+        {/* Next */}
         <a href={`/quote/${next}`} alt={`Quote #${next}`}>
           <Button color="green" class="flex items-center">
             #{next} <BsCaretRightFill size={16} />
           </Button>
         </a>
+      </div>
+
+      {/* Sent time */}
+      <div class="flex justify-center">
+        <div class="max-w-screen-sm w-full">
+          <hr class="my-5" />
+
+          <Typography variant="h6">
+            Sent {quoteObj.timesSent} time{quoteObj.timesSent === 1 ? "" : "s"}
+          </Typography>
+          {quoteObj.timesSent > 0 && (
+            <Typography class="mt-1">
+              <LastSentTime dateToParse={+quoteObj.lastSentTime} />
+            </Typography>
+          )}
+        </div>
       </div>
     </>
   );
