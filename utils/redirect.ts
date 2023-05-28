@@ -1,6 +1,6 @@
 interface Options {
-  headers?: Headers;
   body?: BodyInit;
+  headers?: Headers;
   statusText?: string;
 }
 
