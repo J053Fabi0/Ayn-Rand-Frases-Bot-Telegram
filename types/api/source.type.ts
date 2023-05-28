@@ -1,9 +1,9 @@
-import CommonRequest from "../commonRequest.type.ts";
+import CommonRequestPartial from "../commonRequest.type.ts";
 
-export type GetSources = CommonRequest<undefined, undefined, { authorId: string }>;
+export type GetSources = CommonRequestPartial<undefined, undefined, { authorId: string }>;
 
-export type PostSource = CommonRequest<{ name: string; authors: string[] }>;
+export type PostSource = CommonRequestPartial<{ name: string; authors: string[] }>;
 
-export type PatchSource = CommonRequest<{ name?: string; authors?: string[]; sourceId: string }>;
+export type PatchSource = CommonRequestPartial<{ name?: string; authors?: string[]; sourceId: string }>;
 
-export type DeleteSource = CommonRequest<undefined, undefined, { _id: string }>;
+export type DeleteSource = CommonRequestPartial<undefined, undefined, { _id: string }>;

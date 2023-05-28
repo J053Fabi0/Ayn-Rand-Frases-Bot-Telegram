@@ -1,4 +1,4 @@
-import CommonRequest from "../types/commonRequest.type.ts";
+import CommonRequestPartial from "../types/commonRequest.type.ts";
 import { Joi, NextFunction, ObjectSchema } from "../deps.ts";
 import CommonResponse from "../types/commonResponse.type.ts";
 import validateRequest, { Element } from "../utils/validateRequest.ts";
@@ -21,7 +21,8 @@ export const joi = Joi.defaults((schema) => {
 });
 
 export const a =
-  (schema: Joi.Schema, element?: Element) => (req: CommonRequest, res: CommonResponse, next: NextFunction) =>
+  (schema: Joi.Schema, element?: Element) =>
+  (req: CommonRequestPartial, res: CommonResponse, next: NextFunction) =>
     validateRequest(req, res, next, schema, element);
 
 export const id = joi.string().length(24).hex();

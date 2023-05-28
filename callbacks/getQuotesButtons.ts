@@ -1,4 +1,4 @@
-import { ADMINS_IDS } from "../env.ts";
+import { ADMINS_IDS, WEBSITE_URL } from "../env.ts";
 import { InlineKeyboard } from "../deps.ts";
 import { getQuotes } from "../controllers/mongo/quote.controller.ts";
 
@@ -24,17 +24,16 @@ export default async function getQuotesButtons(
   if (!next) next = quotes[actualIndex < quotes.length - 1 ? actualIndex + 1 : 0].number;
 
   const adminButtons = [];
-  if (ADMINS_IDS.includes(+userID) && actualIndex !== -1)
-    adminButtons.push(
-      { text: "🗑", callback_data: `delete_${actualNumber}_${previous}_${next}` },
-      { text: `${actualNumber}`, callback_data: "void" }
-    );
+  const isAdmin = ADMINS_IDS.includes(+userID);
+  if (isAdmin && actualIndex !== -1)
+    adminButtons.push({ text: "🗑", callback_data: `delete_${actualNumber}_${previous}_${next}` });
 
   return new InlineKeyboard(
     (actualIndex !== -1 || customDirections) && quotes.length >= 2
       ? [
           [
             { text: "◀️", callback_data: `p_quote_${previous}` },
+            { text: isAdmin ? `${actualNumber}` : "🌐", url: `${WEBSITE_URL}/quote/${actualNumber}` },
             ...adminButtons,
             { text: "▶️", callback_data: `n_quote_${next}` },
           ],

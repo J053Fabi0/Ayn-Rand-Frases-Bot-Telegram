@@ -6,6 +6,7 @@ export default interface Quote extends CommonCollection {
   number: number;
   author: ObjectId;
   timesSent: number;
+  archived: boolean;
   lastSentTime: Date;
   source: ObjectId | null;
 }

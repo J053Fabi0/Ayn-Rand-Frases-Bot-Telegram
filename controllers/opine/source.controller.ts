@@ -21,10 +21,10 @@ export const getSources = async ({ params }: GetSources, res: CommonResponse) =>
   res.send({ message: sources });
 };
 
-export const postSource = async ({ body }: PostSource, res: CommonResponse) => {
+export const postSource = async ({ body }: PostSource, res?: CommonResponse) => {
   for (const authorId of body.authors) {
     const author = await getAuthorById(authorId, { projection: { _id: 1 } });
-    if (!author) res.setStatus(404).send({ message: null, error: `Author not found (${authorId})` });
+    if (!author) res?.setStatus(404).send({ message: null, error: `Author not found (${authorId})` });
   }
 
   const source = await createSource({
@@ -32,7 +32,9 @@ export const postSource = async ({ body }: PostSource, res: CommonResponse) => {
     authors: body.authors.map((author) => new ObjectId(author)),
   });
 
-  res.send({ message: source._id });
+  res?.send({ message: source._id });
+
+  return source;
 };
 
 export const patchSource = async ({ body }: PatchSource, res: CommonResponse) => {
