@@ -14,7 +14,7 @@ import diffuse from "./utils/diffuse.ts";
 import twindConfig from "./twind.config.ts";
 import { API_PORT, WEB_PORT } from "./env.ts";
 import handleError from "./utils/handleError.ts";
-import CommonRequest from "./types/commonRequest.type.ts";
+import CommonRequestPartial from "./types/commonRequest.type.ts";
 import CommonResponse from "./types/commonResponse.type.ts";
 import { opine, opineCors, json, NextFunction, start, twindPlugin } from "./deps.ts";
 
@@ -35,7 +35,7 @@ app.use(opineCors());
 app.use("/", router);
 
 // Error handling
-app.use((err: Error, _: CommonRequest, res: CommonResponse, __: NextFunction) => handleError(res, err));
+app.use((err: Error, _: CommonRequestPartial, res: CommonResponse, __: NextFunction) => handleError(res, err));
 
 app.listen(API_PORT, () => console.log(`Listening on http://localhost:${API_PORT}/`));
 

@@ -5,7 +5,6 @@ import Typography from "../../components/Typography.tsx";
 import { Checkbox } from "../../components/Checkbox.tsx";
 import { Head, Handlers, PageProps } from "../../deps.ts";
 import Author from "../../types/collections/author.type.ts";
-import { PostSource } from "../../types/api/source.type.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { postSource } from "../../controllers/opine/source.controller.ts";
 
@@ -28,7 +27,7 @@ export const handler: Handlers<NewSourceProps> = {
     if (!source) return new Response("Missing source", { status: 400 });
     if (authors.length === 0) return new Response("Missing authors", { status: 400 });
 
-    await postSource({ body: { authors, name: source } } as PostSource);
+    await postSource({ body: { authors, name: source } });
 
     // Redirect user to the quote page.
     return redirect("/quote/new");

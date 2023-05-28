@@ -1,3 +1,3 @@
-import CommonRequest from "../commonRequest.type.ts";
+import CommonRequestPartial from "../commonRequest.type.ts";
 
-export type AuthRequest = CommonRequest<undefined, { token: string }>;
+export type AuthRequest = CommonRequestPartial<undefined, { token: string }>;
