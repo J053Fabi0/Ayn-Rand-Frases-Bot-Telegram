@@ -26,11 +26,11 @@ export default function frases(bot: Bot) {
     const message =
       `<b>Siguientes frases</b>\n<code>` +
       `${quotes
-        .slice(0, 5)
+        .slice(0, 10)
         .map((q) => q.number)
-        .join(", ")} ... ` +
-      `${quotes
-        .slice(-5)
+        .join(", ")}</code>\n...\n` +
+      `<code>${quotes
+        .slice(-10)
         .map((q) => q.number)
         .join(", ")}</code>\n\n` +
       keys

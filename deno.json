@@ -2,11 +2,16 @@
   "importMap": "./import_map.json",
   "tasks": {
     "stop": "pm2 stop aynrandbot",
-    "start": "pm2 start --interpreter='deno' --interpreter-args='run --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write' --name aynrandbot index.ts && pm2 logs aynrandbot",
+    "start": "pm2 start --interpreter='deno' --interpreter-args='run --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write' --name aynrandbot dev.ts && pm2 logs aynrandbot",
     "logs": "pm2 logs aynrandbot",
     "reload": "pm2 reload aynrandbot && pm2 logs aynrandbot",
+    "delete": "pm2 delete aynrandbot",
 
-    "run": "deno run --allow-net --allow-sys --allow-read --allow-env --allow-run --allow-write index.ts",
-    "watch": "deno run --watch --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write index.ts"
+    "run": "deno run --allow-net --allow-sys --allow-read --allow-env --allow-run --allow-write dev.ts",
+    "watch": "deno run --watch --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write dev.ts"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
   }
 }

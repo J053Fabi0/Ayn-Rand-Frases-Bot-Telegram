@@ -11,6 +11,7 @@ import {
   AggregatePipeline,
 } from "../../deps.ts";
 import InsertDoc from "../../types/collections/insertDoc.type.ts";
+import { Document } from "https://deno.land/x/web_bson@v0.3.0/mod.js";
 import CommonCollection from "../../types/collections/commonCollection.type.ts";
 
 type UnPromisify<T> = T extends Promise<infer U> ? U : T;
@@ -111,9 +112,46 @@ export function deleteMany<T extends Collection<CommonCollection>>(collection: T
     collection.deleteMany(filter, options);
 }
 
+export interface AggregateOptionsExtended extends AggregateOptions {
+  skip?: number;
+  limit?: number;
+  /**
+   * The sort is done before the projection.
+   */
+  sort?: Document;
+  projection?: Document;
+}
 export function aggregate<T extends Collection<CommonCollection>>(collection: T) {
   return (
     pipeline: AggregatePipeline<DocumentOfCollection<T>> | AggregatePipeline<DocumentOfCollection<T>>[],
-    options?: AggregateOptions
-  ) => collection.aggregate(pipeline instanceof Array ? pipeline : [pipeline], options).toArray();
+    options?: AggregateOptionsExtended
+  ) => {
+    const finalPipeline = pipeline instanceof Array ? pipeline : [pipeline];
+
+    const sort = options?.sort;
+    if (sort) {
+      delete options?.sort;
+      finalPipeline.push({ $sort: sort });
+    }
+
+    const projection = options?.projection;
+    if (projection) {
+      delete options?.projection;
+      finalPipeline.push({ $project: projection });
+    }
+
+    const skip = options?.skip;
+    if (typeof skip === "number") {
+      delete options?.skip;
+      finalPipeline.push({ $skip: skip });
+    }
+
+    const limit = options?.limit;
+    if (typeof limit === "number") {
+      delete options?.limit;
+      finalPipeline.push({ $limit: limit });
+    }
+
+    return collection.aggregate(finalPipeline, options).toArray();
+  };
 }

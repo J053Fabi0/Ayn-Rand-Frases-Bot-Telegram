@@ -1,4 +1,4 @@
-import { deleteUser } from "../controllers/user.controller.ts";
+import { deleteUser } from "../controllers/mongo/user.controller.ts";
 
 export default function handleSendMessageError(userID: number) {
   return async function (e: Error) {
