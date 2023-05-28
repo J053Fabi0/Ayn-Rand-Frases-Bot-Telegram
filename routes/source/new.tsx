@@ -1,3 +1,4 @@
+import redirect from "../../utils/redirect.ts";
 import isMongoId from "../../utils/isMongoId.ts";
 import Button from "../../components/Button.tsx";
 import Typography from "../../components/Typography.tsx";
@@ -30,9 +31,7 @@ export const handler: Handlers<NewSourceProps> = {
     await postSource({ body: { authors, name: source } } as PostSource);
 
     // Redirect user to the quote page.
-    const headers = new Headers();
-    headers.set("location", `/quote/new`);
-    return new Response(null, { status: 303, headers });
+    return redirect("/quote/new");
   },
 };
 
