@@ -13,7 +13,7 @@ export default function editar(bot: Bot) {
     const number = parseInt(idString);
     if (isNaN(number)) return ctx.reply(`${number} no es un número.`);
 
-    const quote = await getQuote({ number }, { projection: { author: 1 } });
+    const quote = await getQuote({ number, archived: { $ne: true } }, { projection: { author: 1 } });
     if (!quote) return tellIDIsNotValid(ctx);
 
     const newQuote = words.join(" ");

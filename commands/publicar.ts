@@ -11,7 +11,7 @@ export default function publicar(bot: Bot) {
     const number = parseInt(idString);
     if (isNaN(number)) return publishQuote();
 
-    const quote = await getQuote({ number }, { projection: { _id: 1 } });
+    const quote = await getQuote({ number, archived: { $ne: true } }, { projection: { _id: 1 } });
     if (!quote) return tellIDIsNotValid(ctx);
 
     publishQuote({ id: quote._id });

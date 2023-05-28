@@ -23,10 +23,17 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
     query._id = new ObjectId(id);
   } else if (chatID === undefined) {
     // Si se está publicando a todos se envía siguiente la que tenga menos tiempo de haber sido enviada
-    query._id = (await getQuote({}, { sort: { lastSentTime: 1 }, projection: { _id: 1 } }))!._id;
+    query._id = (await getQuote(
+      { archived: { $ne: true } },
+      { sort: { lastSentTime: 1 }, projection: { _id: 1 } }
+    ))!._id;
   }
   // Si es usando el comando /frase, se intenciona compartir la última que se envió
-  else query._id = (await getQuote({}, { sort: { lastSentTime: -1 }, projection: { _id: -1 } }))!._id;
+  else
+    query._id = (await getQuote(
+      { archived: { $ne: true } },
+      { sort: { lastSentTime: -1 }, projection: { _id: -1 } }
+    ))!._id;
 
   const possibleQuote = await getFullQuote(query);
 
