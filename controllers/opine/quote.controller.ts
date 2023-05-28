@@ -56,9 +56,11 @@ export const postQuote = async ({ body }: PostQuote, res?: CommonResponse) => {
 };
 
 export const patchQuote = async ({ body }: PatchQuote, res?: CommonResponse) => {
-  const { quoteId, authorId, sourceId } = body;
+  const { quoteId, authorId, sourceId, quote } = body;
 
   const patchData = {} as Partial<Quote>;
+
+  if (quote) patchData.quote = quote;
 
   if (sourceId) {
     const source = await getSourceById(sourceId, { projection: { _id: 1 } });
