@@ -1,3 +1,4 @@
+import redirect from "../../utils/redirect.ts";
 import Button from "../../components/Button.tsx";
 import isMongoId from "../../utils/isMongoId.ts";
 import { State } from "../../types/state.type.ts";
@@ -19,8 +20,13 @@ export const handler: Handlers<QuoteProps, State> = {
     const { id } = ctx.params;
     const isAdmin = Boolean(ctx.state.authToken);
 
+    const usingMongoId = isMongoId(id);
+
     // The id can be either the quote number or the quote id
-    const possibleQuote = await getFullQuote(isMongoId(id) ? { _id: new ObjectId(id) } : { number: parseInt(id) });
+    const possibleQuote = await getFullQuote(usingMongoId ? { _id: new ObjectId(id) } : { number: parseInt(id) });
+
+    // If using the quote id, redirect to the quote number
+    if (possibleQuote && usingMongoId) return redirect(`/quote/${possibleQuote.number}`);
 
     if (possibleQuote) {
       const fullQuotes = (await getFullQuotes(undefined, { projection: { number: 1 } })).map((q) => q.number);
