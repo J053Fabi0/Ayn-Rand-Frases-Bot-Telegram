@@ -23,6 +23,7 @@ export type { Filter, Collection, FindOptions, UpdateFilter, UpdateOptions, Inse
 export { default as opine, json, Router } from "opine";
 export type { NextFunction, OpineResponse, OpineRequest, Params, ParamsDictionary } from "opine";
 
+// Fresh
 export { start } from "$fresh/server.ts";
 export { default as dev } from "$fresh/dev.ts";
 export { Head, asset } from "$fresh/runtime.ts";
@@ -31,5 +32,7 @@ export type { Options as TwindOptions } from "$fresh/plugins/twind.ts";
 export type { RouteConfig, UnknownPageProps, ErrorPageProps } from "$fresh/server.ts";
 export type { Handlers, PageProps, AppProps, MiddlewareHandlerContext, HandlerContext } from "$fresh/server.ts";
 
+// Icons
+export { FiTrash2 } from "react-icons/fi";
 export { AiFillEdit } from "react-icons/ai";
 export { BsCaretLeftFill, BsCaretRightFill } from "react-icons/bs";
