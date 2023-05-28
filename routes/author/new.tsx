@@ -1,6 +1,7 @@
+import { Head, Handlers } from "../../deps.ts";
+import redirect from "../../utils/redirect.ts";
 import Button from "../../components/Button.tsx";
 import Typography from "../../components/Typography.tsx";
-import { Head, Handlers } from "../../deps.ts";
 import { PostAuthor } from "../../types/api/author.type.ts";
 import { postAuthor } from "../../controllers/opine/author.controller.ts";
 
@@ -15,9 +16,7 @@ export const handler: Handlers = {
     await postAuthor({ body: { name: author } } as PostAuthor);
 
     // Redirect user to the quote page.
-    const headers = new Headers();
-    headers.set("location", `/quote/new`);
-    return new Response(null, { status: 303, headers });
+    return redirect("/quote/new");
   },
 };
 
