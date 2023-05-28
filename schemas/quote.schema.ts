@@ -16,12 +16,15 @@ export const postQuote = a(
 export const patchQuote = a(
   joi
     .object({
+      quoteId: id.required(),
+
       quote: quote,
       authorId: id,
-      quoteId: id.required(),
       sourceId: id.allow(null),
+      // You can't archive a quote, for that you have to delete it
+      archived: joi.allow(false),
     })
-    .or("quote", "sourceId", "authorId")
+    .or("quote", "sourceId", "authorId", "archive")
 );
 
 export const deleteQuote = a(joi.object({ id: id.required() }), "params");
