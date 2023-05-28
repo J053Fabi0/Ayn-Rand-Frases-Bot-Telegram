@@ -3,7 +3,10 @@ import { changeQuote, getQuotes } from "../controllers/mongo/quote.controller.ts
 
 export default function mezclar(bot: Bot) {
   bot.command("mezclar", async (ctx) => {
-    let quotes = await getQuotes({}, { projection: { number: 1, timesSent: 1, lastSentTime: 1 } });
+    let quotes = await getQuotes(
+      { archived: { $ne: true } },
+      { projection: { number: 1, timesSent: 1, lastSentTime: 1 } }
+    );
 
     const minTimesSent = Math.min(...quotes.map((q) => q.timesSent));
     quotes = quotes.filter((q) => q.timesSent === minTimesSent).sort((a, b) => +a.lastSentTime - +b.lastSentTime);
