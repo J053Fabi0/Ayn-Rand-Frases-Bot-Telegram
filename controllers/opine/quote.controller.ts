@@ -77,16 +77,16 @@ export const patchQuote = async ({ body }: PatchQuote, res?: CommonResponse) => 
   const results = await changeQuote({ _id: new ObjectId(quoteId) }, { $set: patchData });
 
   if (results.modifiedCount === 0) res?.setStatus(404).send({ message: null, error: "Quote not found" });
-
-  res?.sendStatus(200);
+  else res?.sendStatus(200);
 
   return results;
 };
 
-export const deleteQuote = async ({ params }: DeleteQuote, res: CommonResponse) => {
+export const deleteQuote = async ({ params }: DeleteQuote, res?: CommonResponse) => {
   const deletedCount = await deleteQuoteCtrl({ _id: new ObjectId(params._id) });
 
-  if (deletedCount === 0) res.setStatus(404).send({ message: null, error: "Quote not found" });
+  if (deletedCount === 0) res?.setStatus(404).send({ message: null, error: "Quote not found" });
+  else res?.sendStatus(200);
 
-  res.sendStatus(200);
+  return deletedCount;
 };

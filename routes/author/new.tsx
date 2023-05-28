@@ -2,7 +2,6 @@ import { Head, Handlers } from "../../deps.ts";
 import redirect from "../../utils/redirect.ts";
 import Button from "../../components/Button.tsx";
 import Typography from "../../components/Typography.tsx";
-import { PostAuthor } from "../../types/api/author.type.ts";
 import { postAuthor } from "../../controllers/opine/author.controller.ts";
 
 export const handler: Handlers = {
@@ -13,7 +12,7 @@ export const handler: Handlers = {
 
     if (!author) return new Response("Missing author", { status: 400 });
 
-    await postAuthor({ body: { name: author } } as PostAuthor);
+    await postAuthor({ body: { name: author } });
 
     // Redirect user to the quote page.
     return redirect("/quote/new");

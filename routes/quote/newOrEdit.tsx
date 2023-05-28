@@ -1,3 +1,4 @@
+import redirect from "../../utils/redirect.ts";
 import Button from "../../components/Button.tsx";
 import isMongoId from "../../utils/isMongoId.ts";
 import { State } from "../../types/state.type.ts";
@@ -11,7 +12,6 @@ import AuthorSourceSelector from "../../islands/AuthorSourceSelector.tsx";
 import { Head, Handlers, PageProps, RouteConfig, ObjectId } from "../../deps.ts";
 import { postQuote, patchQuote } from "../../controllers/opine/quote.controller.ts";
 import { FullQuote, getFullQuote, getQuote } from "../../controllers/mongo/quote.controller.ts";
-import redirect from "../../utils/redirect.ts";
 
 export const config: RouteConfig = {
   routeOverride: "/quote/(new|edit)/:id?",
@@ -56,7 +56,10 @@ export const handler: Handlers<NewQuoteProps, State> = {
     if (!quote || !authorId || !sourceId) return new Response("Missing quote, author, or source", { status: 400 });
 
     let quoteId = groups.id ?? "";
-    const body = { quote, authorId, sourceId: sourceId === "null" ? null : sourceId };
+    const body = { quote, authorId, sourceId: sourceId === "null" ? null : sourceId } satisfies (
+      | PostQuote
+      | PatchQuote
+    )["body"];
 
     // Edit quote
     if (groups.action === "edit" && groups.id) {
@@ -66,11 +69,11 @@ export const handler: Handlers<NewQuoteProps, State> = {
         quoteId = `${quote._id}`;
       }
 
-      const results = await patchQuote({ body: { ...body, quoteId } } as PatchQuote);
+      const results = await patchQuote({ body: { ...body, quoteId } });
       if (results?.modifiedCount === 0) return ctx.renderNotFound();
     }
     // Publish new quote
-    else if (groups.action === "new" && !groups.id) quoteId = `${(await postQuote({ body } as PostQuote))._id}`;
+    else if (groups.action === "new" && !groups.id) quoteId = `${(await postQuote({ body }))._id}`;
     // Invalid action
     else return ctx.renderNotFound();
 

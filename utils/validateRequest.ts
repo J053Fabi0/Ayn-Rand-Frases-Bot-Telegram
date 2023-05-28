@@ -1,7 +1,7 @@
 import handleError from "./handleError.ts";
 import { Joi, NextFunction } from "../deps.ts";
-import CommonRequest from "../types/commonRequest.type.ts";
 import CommonResponse from "../types/commonResponse.type.ts";
+import CommonRequestPartial, { CommonRequest } from "../types/commonRequest.type.ts";
 
 // params is for /:[param] requests
 // query is for GET requests with ?key=value
@@ -10,7 +10,7 @@ export type Element = "body" | "query" | "params";
 
 // https://jasonwatmore.com/post/2020/07/22/nodejs-express-api-request-schema-validation-with-joi
 export default function validateRequest(
-  req: CommonRequest,
+  req: CommonRequestPartial,
   res: CommonResponse,
   next: NextFunction | undefined,
   schema: Joi.Schema,
@@ -21,7 +21,7 @@ export default function validateRequest(
     abortEarly: true, // incluír solo el primer error
     stripUnknown: true, // eliminar los unknown
   };
-  const { error, value } = schema.validate(req[element], options);
+  const { error, value } = schema.validate((req as CommonRequest)[element], options);
 
   // Si solo se está probando el esquema retornar el resultado de la validación
   // y se sabe que se estla probando el esquema si next no está definido
@@ -39,6 +39,6 @@ export default function validateRequest(
       details: error.details,
     });
 
-  req[element] = value;
+  (req as CommonRequest)[element] = value;
   next();
 }
