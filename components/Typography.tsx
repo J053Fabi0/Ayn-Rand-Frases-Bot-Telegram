@@ -9,7 +9,7 @@ const textStyles = {
   h3: `${headersCommonStyles} text-3xl leading-snug`,
   h4: `${headersCommonStyles} text-2xl leading-snug`,
   h5: `${headersCommonStyles} text-xl leading-snug`,
-  h6: `${headersCommonStyles} text-base leading-relaxed capitalize`,
+  h6: `${headersCommonStyles} text-base leading-relaxed`,
 
   p: "text-base font-normal leading-relaxed",
   lead: "text-xl font-normal leading-relaxed",

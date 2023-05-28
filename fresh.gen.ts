@@ -15,6 +15,7 @@ import * as $8 from "./routes/signin.tsx";
 import * as $9 from "./routes/signout.tsx";
 import * as $10 from "./routes/source/new.tsx";
 import * as $$0 from "./islands/AuthorSourceSelector.tsx";
+import * as $$1 from "./islands/LastSentTime.tsx";
 
 const manifest = {
   routes: {
@@ -32,6 +33,7 @@ const manifest = {
   },
   islands: {
     "./islands/AuthorSourceSelector.tsx": $$0,
+    "./islands/LastSentTime.tsx": $$1,
   },
   baseUrl: import.meta.url,
   config,
