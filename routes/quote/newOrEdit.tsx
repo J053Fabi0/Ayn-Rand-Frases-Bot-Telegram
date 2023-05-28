@@ -11,6 +11,7 @@ import AuthorSourceSelector from "../../islands/AuthorSourceSelector.tsx";
 import { Head, Handlers, PageProps, RouteConfig, ObjectId } from "../../deps.ts";
 import { postQuote, patchQuote } from "../../controllers/opine/quote.controller.ts";
 import { FullQuote, getFullQuote, getQuote } from "../../controllers/mongo/quote.controller.ts";
+import redirect from "../../utils/redirect.ts";
 
 export const config: RouteConfig = {
   routeOverride: "/quote/(new|edit)/:id?",
@@ -74,9 +75,7 @@ export const handler: Handlers<NewQuoteProps, State> = {
     else return ctx.renderNotFound();
 
     // Redirect user to the quote page.
-    const headers = new Headers();
-    headers.set("location", `/quote/${quoteId}`);
-    return new Response(null, { status: 303, headers });
+    return redirect(`/quote/${quoteId}`);
   },
 };
 

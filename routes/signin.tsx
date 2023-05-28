@@ -1,3 +1,4 @@
+import redirect from "../utils/redirect.ts";
 import Button from "../components/Button.tsx";
 import { AUTH_TOKEN, BOT_TOKEN } from "../env.ts";
 import Typography from "../components/Typography.tsx";
@@ -12,9 +13,7 @@ export const handler: Handlers = {
     if (!(await compare(authToken, AUTH_TOKEN))) return new Response("Unauthorized", { status: 401 });
 
     const { headers } = await createSignedCookie("authToken", authToken, BOT_TOKEN, { httpOnly: true, path: "/" });
-    headers.set("location", "/");
-
-    return new Response(null, { status: 303, headers });
+    return redirect("/", { headers });
   },
 };
 
