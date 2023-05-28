@@ -108,10 +108,10 @@ export default function NewQuote({ data }: PageProps<NewQuoteProps>) {
         <div class="flex flex-col">
           <textarea
             required
-            value={quote?.quote || ""}
             rows={10}
             name="quote"
             placeholder="Quote"
+            value={quote?.quote || ""}
             class="mt-2 p-2 border border-gray-300 rounded w-full"
           />
 

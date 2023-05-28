@@ -54,9 +54,9 @@ export const handler: Handlers<QuoteProps, State> = {
 
     if (!_id) return ctx.renderNotFound();
 
-    const deleteCount = await deleteQuote({ params: { _id: `${_id}` } });
+    const { modifiedCount: deletedCount } = await deleteQuote({ params: { _id: `${_id}` } });
 
-    if (deleteCount === 0) return ctx.renderNotFound();
+    if (deletedCount === 0) return ctx.renderNotFound();
 
     return redirect("/");
   },

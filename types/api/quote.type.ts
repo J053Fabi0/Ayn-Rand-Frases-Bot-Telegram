@@ -7,6 +7,7 @@ export type PostQuote = CommonRequestPartial<{ quote: string; sourceId: string |
 export type PatchQuote = CommonRequestPartial<{
   quote?: string;
   quoteId: string;
+  archived?: false;
   authorId?: string;
   sourceId?: string | null;
 }>;
