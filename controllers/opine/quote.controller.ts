@@ -3,7 +3,6 @@ import {
   changeQuote,
   aggregateQuote,
   getQuotes as getQuotesCtrl,
-  deleteQuote as deleteQuoteCtrl,
 } from "../mongo/quote.controller.ts";
 import { ObjectId } from "../../deps.ts";
 import { pretifyIds } from "../../utils/pretifyId.ts";
@@ -42,6 +41,7 @@ export const postQuote = async ({ body }: PostQuote, res?: CommonResponse) => {
 
   const quote = await createQuote({
     timesSent: 0,
+    archived: false,
     quote: body.quote,
     number: lastNumber + 1,
     // lower than the lowest, to be the next one to be sent
@@ -83,10 +83,10 @@ export const patchQuote = async ({ body }: PatchQuote, res?: CommonResponse) => 
 };
 
 export const deleteQuote = async ({ params }: DeleteQuote, res?: CommonResponse) => {
-  const deletedCount = await deleteQuoteCtrl({ _id: new ObjectId(params._id) });
+  const results = await changeQuote({ _id: new ObjectId(params._id) }, { $set: { archived: true } });
 
-  if (deletedCount === 0) res?.setStatus(404).send({ message: null, error: "Quote not found" });
+  if (results.modifiedCount === 0) res?.setStatus(404).send({ message: null, error: "Quote not found" });
   else res?.sendStatus(200);
 
-  return deletedCount;
+  return results;
 };
