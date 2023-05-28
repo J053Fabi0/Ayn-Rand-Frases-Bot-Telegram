@@ -24,7 +24,7 @@ export const deleteQuotes = a.deleteMany(Model);
 export const aggregateQuote = a.aggregate(Model);
 
 export const getAllQuotesNumbers = async () =>
-  (await getQuotes({}, { projection: { number: 1 } })).map(({ number }) => number);
+  (await getQuotes({ archived: { $ne: true } }, { projection: { number: 1 } })).map(({ number }) => number);
 
 export interface FullQuote extends Omit<Quote, "author" | "source"> {
   author: Author | null;
@@ -43,6 +43,7 @@ export async function getFullQuotes(filter?: Filter<Collection<Quote>>, options?
 
   return (await aggregateQuote(
     [
+      { $match: { archived: { $ne: true } } },
       ...(sort ? [{ $sort: sort }] : []),
       ...(filter ? [{ $match: filter }] : []),
       // skip and limit before lookup.

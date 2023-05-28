@@ -5,7 +5,7 @@ import { getQuotes } from "../controllers/mongo/quote.controller.ts";
 export default function frases(bot: Bot) {
   bot.command(["frases", "ids"], async (ctx) => {
     const quotes = await getQuotes(
-      {},
+      { archived: { $ne: true } },
       {
         projection: { _id: 0, number: 1, timesSent: 1, lastSentTime: 1 },
         sort: { lastSentTime: 1 },

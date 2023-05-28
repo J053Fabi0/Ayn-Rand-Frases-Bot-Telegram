@@ -9,7 +9,7 @@ export default function saltar(bot: Bot) {
     const number = parseInt(ctx.message.text.split(" ")[1]);
     if (isNaN(number)) return ctx.reply(`${number} no es un número.`);
 
-    const quote = await getQuote({ number }, { projection: { timesSent: 1 } });
+    const quote = await getQuote({ number, archived: { $ne: true } }, { projection: { timesSent: 1 } });
     if (!quote) return tellIDIsNotValid(ctx);
 
     await changeQuote({ number }, { $set: { lastSentTime: new Date() } });

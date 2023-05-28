@@ -1,6 +1,6 @@
 import { Bot, ObjectId } from "../deps.ts";
 import tellIDIsNotValid from "../utils/tellIDIsNotValid.ts";
-import { deleteQuote, getQuote } from "../controllers/mongo/quote.controller.ts";
+import { changeQuote, getQuote } from "../controllers/mongo/quote.controller.ts";
 
 export default function (bot: Bot) {
   bot.command(["borrar", "eliminar", "quitar"], async (ctx) => {
@@ -13,7 +13,7 @@ export default function (bot: Bot) {
 
     if (!quote) return tellIDIsNotValid(ctx);
 
-    await deleteQuote({ number });
+    await changeQuote({ number }, { $set: { archived: true } });
     await ctx.reply("Listo, la he borrado.");
   });
 }

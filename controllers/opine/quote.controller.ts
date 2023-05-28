@@ -17,7 +17,10 @@ export const getQuotes = async ({ params }: GetQuotes, res: CommonResponse) => {
   if (!author) res.setStatus(404).send({ message: null, error: "Author not found" });
 
   const quotes = pretifyIds(
-    await getQuotesCtrl({ author: new ObjectId(params.authorId) }, { projection: { author: 0 } })
+    await getQuotesCtrl(
+      { archived: { $ne: true }, author: new ObjectId(params.authorId) },
+      { projection: { author: 0 } }
+    )
   );
 
   res.send({ message: quotes });
