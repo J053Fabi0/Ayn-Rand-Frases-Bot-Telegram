@@ -17,6 +17,10 @@ export type CommonRequest<
   "body" | "query" | "params"
 > & { body: Body; query: Query; params: P };
 
+export function isCommonRequest(req: unknown): req is CommonRequest {
+  return typeof req === "object" && req !== null && "body" in req && "query" in req && "params" in req;
+}
+
 /**
  * CommonRequestPartial is like CommonRequest but every field is optional except body, query and
  * params, which are only in the type if they are not undefined.
