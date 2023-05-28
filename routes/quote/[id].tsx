@@ -6,8 +6,10 @@ import { Metas } from "../../components/Metas.tsx";
 import Typography from "../../components/Typography.tsx";
 import Quote from "../../types/collections/quote.type.ts";
 import LastSentTime from "../../islands/LastSentTime.tsx";
-import { FullQuote, getFullQuote, getFullQuotes } from "../../controllers/mongo/quote.controller.ts";
-import { Handlers, Head, PageProps, ObjectId, BsCaretLeftFill, BsCaretRightFill, AiFillEdit } from "../../deps.ts";
+import { Handlers, Head, PageProps, ObjectId } from "../../deps.ts";
+import { deleteQuote } from "../../controllers/opine/quote.controller.ts";
+import { FiTrash2, BsCaretLeftFill, BsCaretRightFill, AiFillEdit } from "../../deps.ts";
+import { FullQuote, getFullQuote, getFullQuotes, getQuote } from "../../controllers/mongo/quote.controller.ts";
 
 interface QuoteProps {
   quoteObj: FullQuote | null;
@@ -15,6 +17,8 @@ interface QuoteProps {
   previous: number;
   isAdmin: boolean;
 }
+
+const urlPattern = new URLPattern({ pathname: "/quote/:id" });
 
 export const handler: Handlers<QuoteProps, State> = {
   async GET(_, ctx) {
@@ -26,10 +30,10 @@ export const handler: Handlers<QuoteProps, State> = {
     // The id can be either the quote number or the quote id
     const possibleQuote = await getFullQuote(usingMongoId ? { _id: new ObjectId(id) } : { number: parseInt(id) });
 
-    // If using the quote id, redirect to the quote number
-    if (possibleQuote && usingMongoId) return redirect(`/quote/${possibleQuote.number}`);
-
     if (possibleQuote) {
+      // If using the quote id, redirect to the quote number
+      if (usingMongoId) return redirect(`/quote/${possibleQuote.number}`);
+
       const fullQuotes = (await getFullQuotes(undefined, { projection: { number: 1 } })).map((q) => q.number);
       const index = fullQuotes.indexOf(possibleQuote.number);
       const next = index > 0 ? fullQuotes[index - 1] : fullQuotes[fullQuotes.length - 1];
@@ -39,6 +43,22 @@ export const handler: Handlers<QuoteProps, State> = {
     }
 
     return await ctx.render({ quoteObj: possibleQuote, next: 1, previous: 1, isAdmin });
+  },
+
+  async POST(req, ctx) {
+    const groups = urlPattern.exec(req.url)!.pathname.groups as { id: string };
+
+    const _id = isMongoId(groups.id)
+      ? new ObjectId(groups.id)
+      : (await getQuote({ number: parseInt(groups.id) }, { projection: { _id: 1 } }))?._id;
+
+    if (!_id) return ctx.renderNotFound();
+
+    const deleteCount = await deleteQuote({ params: { _id: `${_id}` } });
+
+    if (deleteCount === 0) return ctx.renderNotFound();
+
+    return redirect("/");
   },
 };
 
@@ -98,13 +118,20 @@ export default function Quote({ data }: PageProps<QuoteProps>) {
           </Button>
         </a>
 
-        {/* Edit */}
+        {/* Edit and delete */}
         {isAdmin && (
-          <a href={`/quote/edit/${quoteObj.number}`} alt={`Quote #${next}`}>
-            <Button color="blue" class="flex items-center mr-3">
-              <AiFillEdit size={16} />
-            </Button>
-          </a>
+          <>
+            <a href={`/quote/edit/${quoteObj.number}`} alt={`Quote #${next}`}>
+              <Button color="blue" class="mr-3">
+                <AiFillEdit size={16} />
+              </Button>
+            </a>
+            <form method="post">
+              <Button class="mr-3" type="submit" color="red">
+                <FiTrash2 size={16} />
+              </Button>
+            </form>
+          </>
         )}
 
         {/* Next */}
