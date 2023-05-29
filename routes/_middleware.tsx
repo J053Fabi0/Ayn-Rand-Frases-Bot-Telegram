@@ -28,6 +28,7 @@ export const handler = [
 
     return ctx.next();
   },
+
   async function (req: Request, ctx: MiddlewareHandlerContext<State>) {
     const url = new URL(req.url);
     if (url.pathname === "") return await ctx.next();
@@ -41,10 +42,8 @@ export const handler = [
       return ctx.next();
     }
 
-    const { authToken } = ctx.state;
-
     // delete the token if it is not valid
-    if (!(await compare(authToken, AUTH_TOKEN))) {
+    if (!(await compare(ctx.state.authToken, AUTH_TOKEN))) {
       const response = redirect("/signin");
       deleteCookie(response.headers, "authToken");
       return response;
