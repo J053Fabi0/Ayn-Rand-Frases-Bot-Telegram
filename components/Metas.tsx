@@ -1,6 +1,14 @@
 import { WEBSITE_URL } from "../env.ts";
 
-export function Metas({ title, image, description }: { title: string; image?: string; description: string }) {
+export default function Metas({
+  title,
+  image,
+  description,
+}: {
+  title: string;
+  image?: string;
+  description: string;
+}) {
   return (
     <>
       {/* <!-- Primary Meta Tags --> */}
