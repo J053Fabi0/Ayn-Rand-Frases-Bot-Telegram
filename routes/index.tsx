@@ -32,7 +32,13 @@ export const handler: Handlers<IndexProps, State> = {
   async GET(req, ctx) {
     const queryParams = getQueryParams(req.url) as { page?: string };
 
-    const quoteCount = await countQuotes();
+    const { authorId = "all", sourceId = "all" } = ctx.state;
+
+    const filter: Parameters<typeof getFullQuotes>[0] = {};
+    if (authorId !== "all") filter.author = new ObjectId(authorId);
+    if (sourceId !== "all") filter.source = sourceId === "null" ? null : new ObjectId(sourceId);
+
+    const quoteCount = await countQuotes(filter);
     const pages = Array.from({ length: Math.ceil(quoteCount / limit) }, (_, i) => i + 1);
 
     if (queryParams.page && isNaN(+queryParams.page)) return redirect("/");
@@ -40,12 +46,6 @@ export const handler: Handlers<IndexProps, State> = {
     const page = queryParams.page ? +queryParams.page : 1;
     if (!pages.includes(page)) return redirect(`/?page=${page <= 0 ? 1 : pages[pages.length - 1]}`);
     if (queryParams.page === "1") return redirect("/");
-
-    const { authorId = "all", sourceId = "all" } = ctx.state;
-
-    const filter: Parameters<typeof getFullQuotes>[0] = {};
-    if (authorId !== "all") filter.author = new ObjectId(authorId);
-    if (sourceId !== "all") filter.source = sourceId === "null" ? null : new ObjectId(sourceId);
 
     const fullQuotes = await getFullQuotes(filter, {
       limit,
