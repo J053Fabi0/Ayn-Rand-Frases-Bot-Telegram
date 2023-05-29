@@ -1,6 +1,5 @@
 export { sleep } from "sleep";
 export { opineCors } from "cors";
-export type { JSX } from "preact";
 export { compare, hash } from "bcrypt";
 export { default as Cron } from "croner";
 export { escapeHtml } from "escape_html";
@@ -23,7 +22,8 @@ export type { Filter, Collection, FindOptions, UpdateFilter, UpdateOptions, Inse
 export { default as opine, json, Router } from "opine";
 export type { NextFunction, OpineResponse, OpineRequest, Params, ParamsDictionary } from "opine";
 
-// Fresh
+// Fresh & Preact
+export type { JSX } from "preact";
 export { start } from "$fresh/server.ts";
 export { default as dev } from "$fresh/dev.ts";
 export { Head, asset } from "$fresh/runtime.ts";
@@ -34,5 +34,5 @@ export type { Handlers, PageProps, AppProps, MiddlewareHandlerContext, HandlerCo
 
 // Icons
 export { FiTrash2 } from "react-icons/fi";
-export { AiFillEdit } from "react-icons/ai";
-export { BsCaretLeftFill, BsCaretRightFill } from "react-icons/bs";
+export { AiFillEdit, AiOutlineSearch } from "react-icons/ai";
+export { BsCaretLeftFill, BsCaretRightFill, BsSearch } from "react-icons/bs";
