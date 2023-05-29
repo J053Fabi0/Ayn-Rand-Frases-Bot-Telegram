@@ -1,8 +1,8 @@
+import Metas from "../../components/Metas.tsx";
 import redirect from "../../utils/redirect.ts";
 import Button from "../../components/Button.tsx";
 import isMongoId from "../../utils/isMongoId.ts";
 import { State } from "../../types/state.type.ts";
-import { Metas } from "../../components/Metas.tsx";
 import Typography from "../../components/Typography.tsx";
 import Quote from "../../types/collections/quote.type.ts";
 import LastSentTime from "../../islands/LastSentTime.tsx";
