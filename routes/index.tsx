@@ -5,11 +5,12 @@ import Pagination from "../components/Pagination.tsx";
 import getQueryParams from "../utils/getQueryParams.ts";
 import Author from "../types/collections/author.type.ts";
 import Source from "../types/collections/source.type.ts";
+import createSignedCookie from "../utils/createSignedCookie.ts";
 import AuthorSourceSelector from "../islands/AuthorSourceSelector.tsx";
 import { getAuthors } from "../controllers/mongo/author.controller.ts";
 import { getSources } from "../controllers/mongo/source.controller.ts";
-import { Head, Handlers, PageProps, AiOutlineSearch } from "../deps.ts";
 import Typography, { getTypographyClass } from "../components/Typography.tsx";
+import { Head, Handlers, PageProps, AiOutlineSearch, ObjectId } from "../deps.ts";
 import { FullQuote, getFullQuotes, countQuotes } from "../controllers/mongo/quote.controller.ts";
 
 interface IndexProps {
@@ -20,10 +21,12 @@ interface IndexProps {
   isAdmin: boolean;
   authors: Author[];
   sources: Source[];
+  sourceId?: string;
+  authorId?: string;
   fullQuotes: FullQuote[];
 }
 
-const limit = 10;
+const limit = 12;
 
 export const handler: Handlers<IndexProps, State> = {
   async GET(req, ctx) {
@@ -38,7 +41,13 @@ export const handler: Handlers<IndexProps, State> = {
     if (!pages.includes(page)) return redirect(`/?page=${page <= 0 ? 1 : pages[pages.length - 1]}`);
     if (queryParams.page === "1") return redirect("/");
 
-    const fullQuotes = await getFullQuotes(undefined, {
+    const { authorId = "all", sourceId = "all" } = ctx.state;
+
+    const filter: Parameters<typeof getFullQuotes>[0] = {};
+    if (authorId !== "all") filter.author = new ObjectId(authorId);
+    if (sourceId !== "all") filter.source = sourceId === "null" ? null : new ObjectId(sourceId);
+
+    const fullQuotes = await getFullQuotes(filter, {
       limit,
       sort: { number: -1 },
       skip: (page - 1) * limit,
@@ -46,19 +55,32 @@ export const handler: Handlers<IndexProps, State> = {
     });
 
     return ctx.render({
-      page,
-      limit,
-      pages,
-      fullQuotes,
-      authors: await getAuthors(),
-      sources: await getSources(),
       hasMore: quoteCount > page * limit,
       isAdmin: Boolean(ctx.state.authToken),
+      ...{ page, limit, pages, fullQuotes, authorId, sourceId },
+      authors: await getAuthors({}, { projection: { _id: 1, name: 1 } }),
+      sources: await getSources({}, { projection: { _id: 1, name: 1, authors: 1 } }),
     });
+  },
+
+  async POST(req) {
+    const form = await req.formData();
+
+    const authorId = form.get("author")?.toString();
+    const sourceId = form.get("source")?.toString();
+
+    if (!authorId || !sourceId) return new Response("Missing author, or source", { status: 400 });
+
+    const { headers } = await createSignedCookie("authorId", authorId, { httpOnly: true, path: "/" });
+    const { cookie } = await createSignedCookie("sourceId", sourceId, { httpOnly: true, path: "/" });
+    headers.append("Set-Cookie", cookie);
+
+    return redirect(`/`, { body: JSON.stringify({ authorId, sourceId }), headers });
   },
 };
 
 export default function Home({ data }: PageProps<IndexProps>) {
+  const { authorId = "all", sourceId = "all" } = data;
   const authors = [{ _id: "all", name: "All authors" }, ...data.authors];
   const sources = [{ _id: "all", name: "All sources", authors: authors.map((a) => a._id) }, ...data.sources];
 
@@ -82,7 +104,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
       <hr class="my-4" />
 
       <form method="post" class="flex gap-3 w-full mb-3">
-        <AuthorSourceSelector authors={authors} sources={sources} authorId="all" sourceId="all" />
+        <AuthorSourceSelector authors={authors} sources={sources} authorId={authorId} sourceId={sourceId} />
 
         <Button color="green">
           <AiOutlineSearch size={20} />
