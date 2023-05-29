@@ -82,7 +82,21 @@ export const handler: Handlers<IndexProps, State> = {
 export default function Home({ data }: PageProps<IndexProps>) {
   const { authorId = "all", sourceId = "all" } = data;
   const authors = [{ _id: "all", name: "All authors" }, ...data.authors];
-  const sources = [{ _id: "all", name: "All sources", authors: authors.map((a) => a._id) }, ...data.sources];
+
+  const authorsWithSourcesCount = data.authors.reduce((acc, author) => {
+    const authorId = `${author._id}`;
+    acc[authorId] = data.sources.filter((s) => s.authors.some((a) => `${a}` === authorId)).length;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const sources = [
+    {
+      _id: "all",
+      name: "All sources",
+      authors: [...data.authors.map((a) => `${a._id}`).filter((a) => authorsWithSourcesCount[a] >= 1), "all"],
+    },
+    ...data.sources,
+  ];
 
   return (
     <>
