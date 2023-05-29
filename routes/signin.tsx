@@ -1,8 +1,9 @@
+import { AUTH_TOKEN } from "../env.ts";
 import redirect from "../utils/redirect.ts";
 import Button from "../components/Button.tsx";
-import { AUTH_TOKEN, BOT_TOKEN } from "../env.ts";
+import { Head, Handlers, compare } from "../deps.ts";
 import Typography from "../components/Typography.tsx";
-import { Head, Handlers, compare, createSignedCookie } from "../deps.ts";
+import createSignedCookie from "../utils/createSignedCookie.ts";
 
 export const handler: Handlers = {
   async POST(req) {
@@ -12,7 +13,7 @@ export const handler: Handlers = {
     if (!authToken) return new Response("Missing auth token", { status: 401 });
     if (!(await compare(authToken, AUTH_TOKEN))) return new Response("Unauthorized", { status: 401 });
 
-    const { headers } = await createSignedCookie("authToken", authToken, BOT_TOKEN, { httpOnly: true, path: "/" });
+    const { headers } = await createSignedCookie("authToken", authToken, { httpOnly: true, path: "/" });
     return redirect("/", { headers });
   },
 };
