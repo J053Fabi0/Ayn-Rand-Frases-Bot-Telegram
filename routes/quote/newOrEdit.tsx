@@ -112,7 +112,7 @@ export default function NewQuote({ data }: PageProps<NewQuoteProps>) {
             name="quote"
             placeholder="Quote"
             value={quote?.quote || ""}
-            class="mt-2 p-2 border border-gray-300 rounded w-full"
+            class="my-2 p-2 border border-gray-300 rounded w-full"
           />
 
           <AuthorSourceSelector

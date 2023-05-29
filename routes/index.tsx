@@ -1,8 +1,14 @@
+import redirect from "../utils/redirect.ts";
 import Button from "../components/Button.tsx";
 import { State } from "../types/state.type.ts";
 import Pagination from "../components/Pagination.tsx";
-import { Head, Handlers, PageProps } from "../deps.ts";
 import getQueryParams from "../utils/getQueryParams.ts";
+import Author from "../types/collections/author.type.ts";
+import Source from "../types/collections/source.type.ts";
+import AuthorSourceSelector from "../islands/AuthorSourceSelector.tsx";
+import { getAuthors } from "../controllers/mongo/author.controller.ts";
+import { getSources } from "../controllers/mongo/source.controller.ts";
+import { Head, Handlers, PageProps, AiOutlineSearch } from "../deps.ts";
 import Typography, { getTypographyClass } from "../components/Typography.tsx";
 import { FullQuote, getFullQuotes, countQuotes } from "../controllers/mongo/quote.controller.ts";
 
@@ -12,20 +18,25 @@ interface IndexProps {
   pages: number[];
   hasMore: boolean;
   isAdmin: boolean;
+  authors: Author[];
+  sources: Source[];
   fullQuotes: FullQuote[];
 }
 
+const limit = 10;
+
 export const handler: Handlers<IndexProps, State> = {
   async GET(req, ctx) {
-    const queryParams = getQueryParams(req.url);
-
-    const limit = Math.floor(!isNaN(+queryParams.limit) ? Math.max(+queryParams.limit, 1) : 10);
+    const queryParams = getQueryParams(req.url) as { page?: string };
 
     const quoteCount = await countQuotes();
     const pages = Array.from({ length: Math.ceil(quoteCount / limit) }, (_, i) => i + 1);
 
-    let page = Math.floor(!isNaN(+queryParams.page) ? Math.max(+queryParams.page, 1) : 1);
-    if (!pages.includes(page)) page = page <= 0 ? 1 : pages[pages.length - 1];
+    if (queryParams.page && isNaN(+queryParams.page)) return redirect("/");
+
+    const page = queryParams.page ? +queryParams.page : 1;
+    if (!pages.includes(page)) return redirect(`/?page=${page <= 0 ? 1 : pages[pages.length - 1]}`);
+    if (queryParams.page === "1") return redirect("/");
 
     const fullQuotes = await getFullQuotes(undefined, {
       limit,
@@ -34,13 +45,23 @@ export const handler: Handlers<IndexProps, State> = {
       projection: { number: 1 },
     });
 
-    const hasMore = quoteCount > page * limit;
-
-    return ctx.render({ isAdmin: Boolean(ctx.state.authToken), fullQuotes, page, limit, hasMore, pages });
+    return ctx.render({
+      page,
+      limit,
+      pages,
+      fullQuotes,
+      authors: await getAuthors(),
+      sources: await getSources(),
+      hasMore: quoteCount > page * limit,
+      isAdmin: Boolean(ctx.state.authToken),
+    });
   },
 };
 
 export default function Home({ data }: PageProps<IndexProps>) {
+  const authors = [{ _id: "all", name: "All authors" }, ...data.authors];
+  const sources = [{ _id: "all", name: "All sources", authors: authors.map((a) => a._id) }, ...data.sources];
+
   return (
     <>
       <Head>
@@ -58,7 +79,15 @@ export default function Home({ data }: PageProps<IndexProps>) {
         </Typography>
       )}
 
-      <hr class="my-5" />
+      <hr class="my-4" />
+
+      <form method="post" class="flex gap-3 w-full mb-3">
+        <AuthorSourceSelector authors={authors} sources={sources} authorId="all" sourceId="all" />
+
+        <Button color="green">
+          <AiOutlineSearch size={20} />
+        </Button>
+      </form>
 
       <ul class="list-disc list-inside">
         {data.fullQuotes.map((quote) => (
@@ -79,26 +108,22 @@ export default function Home({ data }: PageProps<IndexProps>) {
 
 const AdminTools = () => (
   <>
-    <Typography variant="h4" class="mt-2">
+    <Typography variant="h4" class="my-2">
       New
     </Typography>
 
-    <a href="/quote/new">
-      <Button class="mt-3 mr-3" color="green">
-        Quote
-      </Button>
-    </a>
+    <div class="flex flex-row flex-grap gap-2">
+      <a href="/quote/new">
+        <Button color="green">Quote</Button>
+      </a>
 
-    <a href="/source/new">
-      <Button class="mt-3 mx-3" color="blue">
-        Source
-      </Button>
-    </a>
+      <a href="/source/new">
+        <Button color="blue">Source</Button>
+      </a>
 
-    <a href="/author/new">
-      <Button class="mt-3 mx-3" color="red">
-        Author
-      </Button>
-    </a>
+      <a href="/author/new">
+        <Button color="red">Author</Button>
+      </a>
+    </div>
   </>
 );
