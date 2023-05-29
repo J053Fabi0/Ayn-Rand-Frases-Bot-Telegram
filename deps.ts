@@ -20,7 +20,7 @@ export type { FindAndModifyOptions, InsertDocument, AggregateOptions, AggregateP
 export type { Filter, Collection, FindOptions, UpdateFilter, UpdateOptions, InsertOptions } from "mongo";
 
 export { default as opine, json, Router } from "opine";
-export type { NextFunction, OpineResponse, OpineRequest, Params, ParamsDictionary } from "opine";
+export type { NextFunction, OpineResponse, OpineRequest, Params, ParamsDictionary, CookieOptions } from "opine";
 
 // Fresh & Preact
 export type { JSX } from "preact";
