@@ -63,7 +63,7 @@ export default function NewSource({ data }: PageProps<NewSourceProps>) {
         </div>
 
         <div class="mt-3 flex justify-center items-center">
-          <Button class="mt-2 p-2" type="submit" color="blue">
+          <Button class="mt-2 py-2 px-4 text-lg" type="submit" color="green">
             Publish
           </Button>
         </div>
