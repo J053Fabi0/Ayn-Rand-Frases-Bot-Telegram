@@ -12,7 +12,7 @@ export default function App({ Component }: AppProps) {
       <body class="min-h-screen flex flex-col">
         <Navbar />
 
-        <div class="px-4 pt-8 mx-auto w-full max-w-screen-lg flex-1">
+        <div class="px-4 pt-4 mx-auto w-full max-w-screen-lg flex-1">
           <Component />
         </div>
 
