@@ -71,7 +71,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
       {data.isAdmin ? (
         <AdminTools />
       ) : (
-        <Typography variant="h4" class="mt-3">
+        <Typography variant="h4">
           Subscribe for daily quotes with the Telegram bot{" "}
           <a href="https://t.me/FrasesDeAynRandBot" class="mt-3 underline" target="_blank">
             @FrasesDeAynRandBot
@@ -108,7 +108,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
 
 const AdminTools = () => (
   <>
-    <Typography variant="h4" class="my-2">
+    <Typography variant="h4" class="mb-2">
       New
     </Typography>
 
