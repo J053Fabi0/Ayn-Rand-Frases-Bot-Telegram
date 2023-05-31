@@ -14,6 +14,7 @@ import Typography, { getTypographyClass } from "../components/Typography.tsx";
 import { Head, Handlers, PageProps, AiOutlineSearch, ObjectId, asset } from "../deps.ts";
 import { FullQuote, getFullQuotes, countQuotes } from "../controllers/mongo/quote.controller.ts";
 import { WEBSITE_URL } from "../env.ts";
+import { satisfies } from "https://deno.land/std@0.178.0/semver/mod.ts";
 
 interface IndexProps {
   page: number;
@@ -95,9 +96,13 @@ export default function Home({ data }: PageProps<IndexProps>) {
     {
       _id: "all",
       name: "All sources",
+      // Filter out the authors that have no sources
       authors: [...data.authors.map((a) => `${a._id}`).filter((a) => authorsWithSourcesCount[a] >= 1), "all"],
     },
-    ...data.sources,
+    ...data.sources.map((s) => ({
+      ...s,
+      authors: ["all", ...s.authors],
+    })),
   ];
 
   return (
@@ -105,7 +110,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
       <Head>
         <Metas
           title="Objectivism quotes"
-          image={`${WEBSITE_URL}${asset("/aynrand.png")}`}
+          image={`${WEBSITE_URL}/aynrand.png`}
           description="The best quotes from the Objectivist philosopher Ayn Rand and other Objectivist philosophers."
         />
       </Head>
