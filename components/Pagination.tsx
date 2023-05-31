@@ -1,10 +1,11 @@
 import { BsCaretLeftFill, BsCaretRightFill } from "../deps.ts";
 
+const commonClasses =
+  "mx-1 flex h-9 w-9 items-center justify-center rounded-full p-0 text-sm transition duration-150 ease-in-out";
+
 const classes = {
-  active:
-    "mx-1 flex h-9 w-9 items-center justify-center rounded-full bg-pink-500 p-0 text-sm text-white shadow-md transition duration-150 ease-in-out",
-  inactive:
-    "mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300",
+  active: `${commonClasses} bg-pink-500 text-white shadow-md`,
+  inactive: `${commonClasses} border border-blue-gray-100 bg-transparent text-blue-gray-500 hover:bg-light-300`,
 };
 
 interface PaginationProps {
