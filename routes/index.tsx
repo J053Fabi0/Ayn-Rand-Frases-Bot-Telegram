@@ -1,3 +1,4 @@
+import { WEBSITE_URL } from "../env.ts";
 import Metas from "../components/Metas.tsx";
 import redirect from "../utils/redirect.ts";
 import Button from "../components/Button.tsx";
@@ -11,10 +12,8 @@ import AuthorSourceSelector from "../islands/AuthorSourceSelector.tsx";
 import { getAuthors } from "../controllers/mongo/author.controller.ts";
 import { getSources } from "../controllers/mongo/source.controller.ts";
 import Typography, { getTypographyClass } from "../components/Typography.tsx";
-import { Head, Handlers, PageProps, AiOutlineSearch, ObjectId, asset } from "../deps.ts";
+import { Head, Handlers, PageProps, AiOutlineSearch, ObjectId } from "../deps.ts";
 import { FullQuote, getFullQuotes, countQuotes } from "../controllers/mongo/quote.controller.ts";
-import { WEBSITE_URL } from "../env.ts";
-import { satisfies } from "https://deno.land/std@0.178.0/semver/mod.ts";
 
 interface IndexProps {
   page: number;
@@ -110,7 +109,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
       <Head>
         <Metas
           title="Objectivism quotes"
-          image={`${WEBSITE_URL}/aynrand.png`}
+          image={`${WEBSITE_URL}/favicon/ms-icon-310x310.png`}
           description="The best quotes from the Objectivist philosopher Ayn Rand and other Objectivist philosophers."
         />
       </Head>
