@@ -1,6 +1,8 @@
 import redirect from "./redirect.ts";
 
 export default function checkPageParam(baseUrl: string, queryParams: { page?: string }, pages: number[]) {
+  if (pages.length === 0) pages.push(1);
+
   // If the page is not a number, remove it from the query params
   if (queryParams.page && isNaN(+queryParams.page)) return redirect(`/${baseUrl}`);
 
