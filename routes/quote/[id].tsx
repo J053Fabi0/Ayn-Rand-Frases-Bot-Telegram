@@ -1,79 +1,40 @@
 import Metas from "../../components/Metas.tsx";
-import redirect from "../../utils/redirect.ts";
 import Button from "../../components/Button.tsx";
 import { State } from "../../types/state.type.ts";
 import Typography from "../../components/Typography.tsx";
 import Quote from "../../types/collections/quote.type.ts";
 import LastSentTime from "../../islands/LastSentTime.tsx";
-import isMongoId from "../../types/typeGuards/isMongoId.ts";
-import { Handlers, Head, PageProps, ObjectId } from "../../deps.ts";
-import { deleteQuote } from "../../controllers/opine/quote.controller.ts";
+import { Handlers, Head, PageProps } from "../../deps.ts";
 import { FiTrash2, BsCaretLeftFill, BsCaretRightFill, AiFillEdit } from "../../deps.ts";
-import { FullQuote, getFullQuote, getFullQuotes, getQuote } from "../../controllers/mongo/quote.controller.ts";
+import { FullQuote, getFullQuote, getFullQuotes } from "../../controllers/mongo/quote.controller.ts";
 
 interface QuoteProps {
-  quoteObj: FullQuote | null;
   next: number;
   previous: number;
   isAdmin: boolean;
+  quoteObj: FullQuote;
 }
-
-const urlPattern = new URLPattern({ pathname: "/quote/:id" });
 
 export const handler: Handlers<QuoteProps, State> = {
   async GET(_, ctx) {
     const { id } = ctx.params;
     const isAdmin = Boolean(ctx.state.authToken);
 
-    const usingMongoId = isMongoId(id);
+    if (!ctx.state.quoteExists) return ctx.renderNotFound();
 
-    // The id can be either the quote number or the quote id
-    const possibleQuote = await getFullQuote(usingMongoId ? { _id: new ObjectId(id) } : { number: parseInt(id) });
+    const possibleQuote = (await getFullQuote({ number: parseInt(id) })) as FullQuote;
 
-    if (possibleQuote) {
-      // If using the quote id, redirect to the quote number
-      if (usingMongoId) return redirect(`/quote/${possibleQuote.number}`);
+    const fullQuotes = (await getFullQuotes(undefined, { projection: { number: 1 } })).map((q) => q.number);
+    const index = fullQuotes.indexOf(possibleQuote.number);
+    const next = index > 0 ? fullQuotes[index - 1] : fullQuotes[fullQuotes.length - 1];
+    const previous = index < fullQuotes.length - 1 ? fullQuotes[index + 1] : fullQuotes[0];
 
-      const fullQuotes = (await getFullQuotes(undefined, { projection: { number: 1 } })).map((q) => q.number);
-      const index = fullQuotes.indexOf(possibleQuote.number);
-      const next = index > 0 ? fullQuotes[index - 1] : fullQuotes[fullQuotes.length - 1];
-      const previous = index < fullQuotes.length - 1 ? fullQuotes[index + 1] : fullQuotes[0];
-
-      return await ctx.render({ quoteObj: possibleQuote, next, previous, isAdmin });
-    }
-
-    return await ctx.render({ quoteObj: possibleQuote, next: 1, previous: 1, isAdmin });
-  },
-
-  async POST(req, ctx) {
-    const groups = urlPattern.exec(req.url)!.pathname.groups as { id: string };
-
-    const _id = isMongoId(groups.id)
-      ? new ObjectId(groups.id)
-      : (await getQuote({ number: parseInt(groups.id) }, { projection: { _id: 1 } }))?._id;
-
-    if (!_id) return ctx.renderNotFound();
-
-    const { modifiedCount: deletedCount } = await deleteQuote({ params: { _id: `${_id}` } });
-
-    if (deletedCount === 0) return ctx.renderNotFound();
-
-    return redirect("/");
+    return await ctx.render({ quoteObj: possibleQuote, next, previous, isAdmin });
   },
 };
 
 export default function Quote({ data }: PageProps<QuoteProps>) {
   const { quoteObj, next, previous, isAdmin } = data;
-
-  if (!quoteObj)
-    return (
-      <>
-        <Head>
-          <Metas description="" title="Quote not found" />
-        </Head>
-        <Typography variant="h4">Quote not found</Typography>{" "}
-      </>
-    );
 
   const splitQuote = quoteObj.quote.split("\n");
   const author = quoteObj.author?.name || "Unknown";
@@ -121,16 +82,16 @@ export default function Quote({ data }: PageProps<QuoteProps>) {
         {/* Edit and delete */}
         {isAdmin && (
           <>
-            <a href={`/quote/edit/${quoteObj.number}`} alt={`Quote #${next}`}>
+            <a href={`/quote/edit/${quoteObj.number}`}>
               <Button color="blue" class="mr-3">
                 <AiFillEdit size={16} />
               </Button>
             </a>
-            <form method="post">
+            <a href={`/quote/delete/${quoteObj.number}`}>
               <Button class="mr-3" type="submit" color="red">
                 <FiTrash2 size={16} />
               </Button>
-            </form>
+            </a>
           </>
         )}
 
