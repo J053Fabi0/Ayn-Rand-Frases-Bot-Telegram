@@ -11,6 +11,7 @@ const adminURLs = [
   "/quote/edit/:id",
   "/source/edit/:id",
   "/author/edit/:id",
+  "/source/delete/:id",
   "/sources",
   "/authors",
 ].map((pathname) => new URLPattern({ pathname }));
