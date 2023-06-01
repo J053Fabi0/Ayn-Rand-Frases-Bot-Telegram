@@ -7,6 +7,7 @@ import {
 import { ObjectId } from "../../deps.ts";
 import { pretifyIds } from "../../utils/pretifyId.ts";
 import Quote from "../../types/collections/quote.type.ts";
+import isMongoId from "../../types/typeGuards/isMongoId.ts";
 import { getSourceById } from "../mongo/source.controller.ts";
 import { getAuthorById } from "../mongo/author.controller.ts";
 import CommonResponse from "../../types/commonResponse.type.ts";
@@ -59,7 +60,7 @@ export const postQuote = async ({ body }: PostQuote, res?: CommonResponse) => {
 };
 
 export const patchQuote = async ({ body }: PatchQuote, res?: CommonResponse) => {
-  const { quoteId, authorId, sourceId, quote } = body;
+  const { authorId, sourceId, quote } = body;
 
   const patchData = {} as Partial<Quote>;
 
@@ -77,7 +78,9 @@ export const patchQuote = async ({ body }: PatchQuote, res?: CommonResponse) => 
     patchData.author = new ObjectId(authorId);
   }
 
-  const results = await changeQuote({ _id: new ObjectId(quoteId) }, { $set: patchData });
+  const results = await changeQuote(body.quoteId ? { _id: new ObjectId(body.quoteId) } : { number: body.number }, {
+    $set: patchData,
+  });
 
   if (results.modifiedCount === 0) res?.setStatus(404).send({ message: null, error: "Quote not found" });
   else res?.sendStatus(200);
@@ -85,8 +88,11 @@ export const patchQuote = async ({ body }: PatchQuote, res?: CommonResponse) => 
   return results;
 };
 
-export const deleteQuote = async ({ params }: DeleteQuote, res?: CommonResponse) => {
-  const results = await changeQuote({ _id: new ObjectId(params._id) }, { $set: { archived: true } });
+export const deleteQuote = async ({ params: { idOrNumber } }: DeleteQuote, res?: CommonResponse) => {
+  const results = await changeQuote(
+    isMongoId(idOrNumber) ? { _id: new ObjectId(idOrNumber) } : { number: +idOrNumber },
+    { $set: { archived: true } }
+  );
 
   if (results.modifiedCount === 0) res?.setStatus(404).send({ message: null, error: "Quote not found" });
   else res?.sendStatus(200);

@@ -10,6 +10,6 @@ quoteRouter.post("/quote", s.postQuote, c.postQuote);
 
 quoteRouter.patch("/quote", s.patchQuote, c.patchQuote);
 
-quoteRouter.delete("/quote/:id", s.deleteQuote, c.deleteQuote);
+quoteRouter.delete("/quote/:idOrNumber", s.deleteQuote, c.deleteQuote);
 
 export default quoteRouter;
