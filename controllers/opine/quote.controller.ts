@@ -7,6 +7,7 @@ import {
 import { ObjectId } from "../../deps.ts";
 import { pretifyIds } from "../../utils/pretifyId.ts";
 import Quote from "../../types/collections/quote.type.ts";
+import isMongoId from "../../types/typeGuards/isMongoId.ts";
 import { getSourceById } from "../mongo/source.controller.ts";
 import { getAuthorById } from "../mongo/author.controller.ts";
 import CommonResponse from "../../types/commonResponse.type.ts";
@@ -87,8 +88,11 @@ export const patchQuote = async ({ body }: PatchQuote, res?: CommonResponse) => 
   return results;
 };
 
-export const deleteQuote = async ({ params }: DeleteQuote, res?: CommonResponse) => {
-  const results = await changeQuote({ _id: new ObjectId(params._id) }, { $set: { archived: true } });
+export const deleteQuote = async ({ params: { idOrNumber } }: DeleteQuote, res?: CommonResponse) => {
+  const results = await changeQuote(
+    isMongoId(idOrNumber) ? { _id: new ObjectId(idOrNumber) } : { number: +idOrNumber },
+    { $set: { archived: true } }
+  );
 
   if (results.modifiedCount === 0) res?.setStatus(404).send({ message: null, error: "Quote not found" });
   else res?.sendStatus(200);
