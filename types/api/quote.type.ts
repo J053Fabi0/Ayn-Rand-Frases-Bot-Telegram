@@ -17,4 +17,4 @@ export type PatchQuote = CommonRequestPartial<
   )
 >;
 
-export type DeleteQuote = CommonRequestPartial<undefined, undefined, { _id: string }>;
+export type DeleteQuote = CommonRequestPartial<undefined, undefined, { idOrNumber: string }>;
