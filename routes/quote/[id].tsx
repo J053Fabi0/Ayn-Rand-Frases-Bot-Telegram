@@ -1,11 +1,11 @@
 import Metas from "../../components/Metas.tsx";
 import redirect from "../../utils/redirect.ts";
 import Button from "../../components/Button.tsx";
-import isMongoId from "../../utils/isMongoId.ts";
 import { State } from "../../types/state.type.ts";
 import Typography from "../../components/Typography.tsx";
 import Quote from "../../types/collections/quote.type.ts";
 import LastSentTime from "../../islands/LastSentTime.tsx";
+import isMongoId from "../../types/typeGuards/isMongoId.ts";
 import { Handlers, Head, PageProps, ObjectId } from "../../deps.ts";
 import { deleteQuote } from "../../controllers/opine/quote.controller.ts";
 import { FiTrash2, BsCaretLeftFill, BsCaretRightFill, AiFillEdit } from "../../deps.ts";
