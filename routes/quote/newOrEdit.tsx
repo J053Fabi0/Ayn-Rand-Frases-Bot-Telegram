@@ -1,10 +1,10 @@
 import redirect from "../../utils/redirect.ts";
 import Button from "../../components/Button.tsx";
-import isMongoId from "../../utils/isMongoId.ts";
 import { State } from "../../types/state.type.ts";
 import Typography from "../../components/Typography.tsx";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
+import isMongoId from "../../types/typeGuards/isMongoId.ts";
 import { PostQuote, PatchQuote } from "../../types/api/quote.type.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { getSources } from "../../controllers/mongo/source.controller.ts";
