@@ -7,7 +7,7 @@ export default function checkPageParam(baseUrl: string, queryParams: { page?: st
   const page = queryParams.page ? +queryParams.page : 1;
 
   // If the page is 1 or less, remove it from the query params, as 1 it is the default and 0 or less is not valid
-  if (page <= 1) return redirect(`/${baseUrl}`);
+  if (queryParams.page && page <= 1) return redirect(`/${baseUrl}`);
 
   // If the page is not present in the pages array, redirect to the greatest page
   if (!pages.includes(page)) return redirect(`/${baseUrl}?page=${pages[pages.length - 1]}`);
