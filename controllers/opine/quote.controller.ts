@@ -59,7 +59,7 @@ export const postQuote = async ({ body }: PostQuote, res?: CommonResponse) => {
 };
 
 export const patchQuote = async ({ body }: PatchQuote, res?: CommonResponse) => {
-  const { quoteId, authorId, sourceId, quote } = body;
+  const { authorId, sourceId, quote } = body;
 
   const patchData = {} as Partial<Quote>;
 
@@ -77,7 +77,9 @@ export const patchQuote = async ({ body }: PatchQuote, res?: CommonResponse) => 
     patchData.author = new ObjectId(authorId);
   }
 
-  const results = await changeQuote({ _id: new ObjectId(quoteId) }, { $set: patchData });
+  const results = await changeQuote(body.quoteId ? { _id: new ObjectId(body.quoteId) } : { number: body.number }, {
+    $set: patchData,
+  });
 
   if (results.modifiedCount === 0) res?.setStatus(404).send({ message: null, error: "Quote not found" });
   else res?.sendStatus(200);
