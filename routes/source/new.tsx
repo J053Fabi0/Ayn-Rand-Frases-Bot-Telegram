@@ -1,10 +1,10 @@
 import redirect from "../../utils/redirect.ts";
-import isMongoId from "../../utils/isMongoId.ts";
 import Button from "../../components/Button.tsx";
 import Typography from "../../components/Typography.tsx";
 import { Checkbox } from "../../components/Checkbox.tsx";
 import { Head, Handlers, PageProps } from "../../deps.ts";
 import Author from "../../types/collections/author.type.ts";
+import isMongoId from "../../types/typeGuards/isMongoId.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { postSource } from "../../controllers/opine/source.controller.ts";
 
