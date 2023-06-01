@@ -22,6 +22,8 @@ export const handler = [
     const cookies = getCookies(req.headers);
 
     for (const key of Object.keys(cookies) as (keyof State)[]) {
+      if (key === "quoteExists") continue;
+
       const isValid = await verifySignedCookie(req.headers, key);
       if (isValid === false) {
         invalidKeys.push(key);
