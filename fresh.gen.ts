@@ -14,6 +14,7 @@ import * as $7 from "./routes/quote/newOrEdit.tsx";
 import * as $8 from "./routes/signin.tsx";
 import * as $9 from "./routes/signout.tsx";
 import * as $10 from "./routes/source/new.tsx";
+import * as $11 from "./routes/sources.tsx";
 import * as $$0 from "./islands/AuthorSourceSelector.tsx";
 import * as $$1 from "./islands/LastSentTime.tsx";
 
@@ -30,6 +31,7 @@ const manifest = {
     "./routes/signin.tsx": $8,
     "./routes/signout.tsx": $9,
     "./routes/source/new.tsx": $10,
+    "./routes/sources.tsx": $11,
   },
   islands: {
     "./islands/AuthorSourceSelector.tsx": $$0,

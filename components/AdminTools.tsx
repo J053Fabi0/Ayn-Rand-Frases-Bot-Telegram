@@ -20,6 +20,22 @@ const AdminTools = () => (
         <Button color="red">Author</Button>
       </a>
     </div>
+
+    <hr class="my-4" />
+
+    <Typography variant="h4" class="mb-2">
+      View / Edit / Delete
+    </Typography>
+
+    <div class="flex flex-row flex-grap gap-2">
+      <a href="/sources">
+        <Button color="blue">Sources</Button>
+      </a>
+
+      {/* <a href="/authors">
+        <Button color="red">Authors</Button>
+      </a> */}
+    </div>
   </>
 );
 
