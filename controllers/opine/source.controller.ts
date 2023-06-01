@@ -10,6 +10,7 @@ import Source from "../../types/collections/source.type.ts";
 import { getAuthorById } from "../mongo/author.controller.ts";
 import CommonResponse from "../../types/commonResponse.type.ts";
 import { GetSources, PostSource, PatchSource, DeleteSource } from "../../types/api/source.type.ts";
+import { changeQuotes } from "../mongo/quote.controller.ts";
 
 export const getSources = async ({ params }: GetSources, res: CommonResponse) => {
   const author = await getAuthorById(params.authorId, { projection: { _id: 1 } });
@@ -63,9 +64,13 @@ export const patchSource = async ({ body }: PatchSource, res?: CommonResponse) =
   return results;
 };
 
-export const deleteSource = async ({ params }: DeleteSource, res: CommonResponse) => {
+export const deleteSource = async ({ params }: DeleteSource, res?: CommonResponse) => {
   const deletedCount = await deleteSourceCtrl({ _id: new ObjectId(params._id) });
-  if (deletedCount === 0) res.setStatus(404).send({ message: null, error: "Source not found" });
+  if (deletedCount === 0) res?.setStatus(404).send({ message: null, error: "Source not found" });
+  else {
+    res?.sendStatus(200);
+    await changeQuotes({ source: new ObjectId(params._id) }, { $set: { source: null } });
+  }
 
-  res.sendStatus(200);
+  return deletedCount;
 };
