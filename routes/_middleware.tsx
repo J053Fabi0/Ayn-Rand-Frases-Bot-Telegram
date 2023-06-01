@@ -4,7 +4,9 @@ import { State } from "../types/state.type.ts";
 import verifySignedCookie from "../utils/verifySignedCookie.ts";
 import { getCookies, MiddlewareHandlerContext, compare, deleteCookie } from "../deps.ts";
 
-const adminURLs = ["/quote/new", "/source/new", "/quote/edit/:id"].map((pathname) => new URLPattern({ pathname }));
+const adminURLs = ["/quote/new", "/source/new", "/quote/edit/:id", "/sources"].map(
+  (pathname) => new URLPattern({ pathname })
+);
 
 export const handler = [
   async function (req: Request, ctx: MiddlewareHandlerContext<State>) {

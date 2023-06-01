@@ -26,8 +26,8 @@ interface IndexProps {
   isAdmin: boolean;
   authors: Author[];
   sources: Source[];
-  sourceId?: string;
-  authorId?: string;
+  sourceId: string;
+  authorId: string;
   fullQuotes: FullQuote[];
 }
 
@@ -82,7 +82,7 @@ export const handler: Handlers<IndexProps, State> = {
 };
 
 export default function Home({ data }: PageProps<IndexProps>) {
-  const { authorId = "all", sourceId = "all" } = data;
+  const { authorId, sourceId } = data;
   const authors = [{ _id: "all", name: "All authors" }, ...data.authors];
 
   const authorsWithSourcesCount = data.authors.reduce((acc, author) => {
@@ -130,7 +130,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
       <form method="post" class="flex gap-3 w-full mb-3">
         <AuthorSourceSelector authors={authors} sources={sources} authorId={authorId} sourceId={sourceId} />
 
-        <Button color="green">
+        <Button color="green" type="submit">
           <AiOutlineSearch size={20} />
         </Button>
       </form>
