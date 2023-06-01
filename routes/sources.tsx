@@ -96,7 +96,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
         {data.sources.map((source) => (
           <>
             <li class={`mt-2 ${getTypographyClass()}`}>
-              <a href={`/source/${source._id}`} class="hover:underline hover:text-blue-600">
+              <a href={`/source/edit/${source._id}`} class="hover:underline hover:text-blue-600">
                 {source.name}
               </a>
             </li>
