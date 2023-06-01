@@ -23,7 +23,7 @@ export const config: RouteConfig = {
 interface NewQuoteProps {
   authors: Author[];
   sources: Source[];
-  quote?: FullQuote | null;
+  quote: FullQuote | null;
 }
 
 export const handler: Handlers<NewQuoteProps, State> = {
@@ -35,11 +35,12 @@ export const handler: Handlers<NewQuoteProps, State> = {
     const authors = await getAuthors();
     const sources = await getSources();
 
-    if (!groups.id) return await ctx.render({ authors, sources });
+    if (!groups.id) return await ctx.render({ authors, sources, quote: null });
 
     const possibleQuote = await getFullQuote(
       isMongoId(groups.id) ? { _id: new ObjectId(groups.id) } : { number: parseInt(groups.id) }
     );
+    if (!possibleQuote) throw new Error(`Quote not found: ${groups.id}`);
 
     return ctx.render({ authors, sources, quote: possibleQuote });
   },
@@ -84,19 +85,8 @@ export const handler: Handlers<NewQuoteProps, State> = {
   },
 };
 
-export default function NewQuote({ data }: PageProps<NewQuoteProps>) {
-  const { quote } = data;
-  const editing = quote !== undefined;
-
-  if (quote === null)
-    return (
-      <>
-        <Head>
-          <title>Quote not found</title>
-        </Head>
-        <Typography variant="h4">Quote not found</Typography>
-      </>
-    );
+export default function NewQuote({ data: { quote, authors, sources } }: PageProps<NewQuoteProps>) {
+  const editing = quote !== null;
 
   return (
     <>
@@ -118,7 +108,8 @@ export default function NewQuote({ data }: PageProps<NewQuoteProps>) {
           />
 
           <AuthorSourceSelector
-            {...data}
+            authors={authors}
+            sources={sources}
             authorId={`${quote?.author?._id || ""}`}
             sourceId={`${quote?.source?._id || ""}`}
           />
