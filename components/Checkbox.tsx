@@ -5,11 +5,17 @@ interface CheckboxProps {
   inputId: string;
 }
 
-export function Checkbox({ inputId, name, children }: JSX.HTMLAttributes<HTMLButtonElement> & CheckboxProps) {
+export function Checkbox({
+  inputId,
+  name,
+  children,
+  ...other
+}: JSX.HTMLAttributes<HTMLInputElement> & CheckboxProps) {
   return (
     <div class="inline-flex items-center">
       <label for={inputId} class="relative flex cursor-pointer items-center rounded-full p-2">
         <input
+          {...other}
           name={name}
           id={inputId}
           type="checkbox"
