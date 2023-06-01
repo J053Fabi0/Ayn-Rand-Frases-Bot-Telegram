@@ -14,6 +14,8 @@ export async function handler(req: Request, ctx: MiddlewareHandlerContext<State>
     const groups = pattern.exec(req.url)?.pathname.groups as { id?: string } | undefined;
     if (!groups || !groups.id) continue;
 
+    if (groups.id === "new") break;
+
     const filter: Filter<Quote> = { archived: { $ne: true } };
     if (isMongoId(groups.id)) {
       filter._id = new ObjectId(groups.id);
