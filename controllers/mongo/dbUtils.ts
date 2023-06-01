@@ -1,6 +1,7 @@
 import {
   Filter,
   ObjectId,
+  Document,
   Collection,
   FindOptions,
   UpdateFilter,
@@ -11,7 +12,6 @@ import {
   AggregatePipeline,
 } from "../../deps.ts";
 import InsertDoc from "../../types/collections/insertDoc.type.ts";
-import { Document } from "https://deno.land/x/web_bson@v0.3.0/mod.js";
 import CommonCollection from "../../types/collections/commonCollection.type.ts";
 
 type UnPromisify<T> = T extends Promise<infer U> ? U : T;

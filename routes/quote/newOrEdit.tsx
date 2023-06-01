@@ -65,7 +65,7 @@ export const handler: Handlers<NewQuoteProps, State> = {
     )["body"];
 
     // Edit quote
-    if (groups.action === "edit" && groups.id) {
+    if (groups.action === "edit") {
       if (!isMongoId(groups.id)) {
         const quote = await getQuote({ number: parseInt(groups.id) });
         if (!quote) return ctx.renderNotFound();
@@ -76,9 +76,7 @@ export const handler: Handlers<NewQuoteProps, State> = {
       if (results?.modifiedCount === 0) return ctx.renderNotFound();
     }
     // Publish new quote
-    else if (groups.action === "new" && !groups.id) quoteId = `${(await postQuote({ body }))._id}`;
-    // Invalid action
-    else return ctx.renderNotFound();
+    else quoteId = `${(await postQuote({ body }))._id}`;
 
     // Redirect user to the quote page.
     return redirect(`/quote/${quoteId}`);
