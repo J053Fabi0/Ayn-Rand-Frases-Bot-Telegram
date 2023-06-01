@@ -74,16 +74,9 @@ export function count<T extends Collection<CommonCollection>>(collection: T) {
     collection.countDocuments(filter, options);
 }
 
-function updateCommon(
-  type: "many" | "one",
-  collection: Collection<CommonCollection>,
-  filter: Filter<CommonCollection>,
-  update: UpdateFilter<CommonCollection>,
-  options?: UpdateOptions
-) {
+function addTimestamps(update: UpdateFilter<CommonCollection>) {
   if (update.$set && !update.$set.modifiedAt) update.$set.modifiedAt = new Date();
   else if (!update.$set) update.$set = { modifiedAt: new Date() };
-  return collection[type === "many" ? "updateMany" : "updateOne"](filter, update, options);
 }
 
 export function updateOne<T extends Collection<CommonCollection>>(collection: T) {
@@ -91,7 +84,10 @@ export function updateOne<T extends Collection<CommonCollection>>(collection: T)
     filter: Filter<DocumentOfCollection<T>>,
     update: UpdateFilter<DocumentOfCollection<T>>,
     options?: UpdateOptions
-  ) => updateCommon("one", collection, filter, update, options);
+  ) => {
+    addTimestamps(update);
+    return collection.updateOne(filter, update, options);
+  };
 }
 
 export function updateMany<T extends Collection<CommonCollection>>(collection: T) {
@@ -99,7 +95,10 @@ export function updateMany<T extends Collection<CommonCollection>>(collection: T
     filter: Filter<DocumentOfCollection<T>>,
     update: UpdateFilter<DocumentOfCollection<T>>,
     options?: UpdateOptions
-  ) => updateCommon("many", collection, filter, update, options);
+  ) => {
+    addTimestamps(update);
+    return collection.updateMany(filter, update, options);
+  };
 }
 
 export function deleteOne<T extends Collection<CommonCollection>>(collection: T) {
