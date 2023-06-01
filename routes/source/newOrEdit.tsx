@@ -10,8 +10,8 @@ import Source from "../../types/collections/source.type.ts";
 import isResponse from "../../types/typeGuards/isResponse.ts";
 import { getSource } from "../../controllers/mongo/source.controller.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
-import { postSource } from "../../controllers/opine/source.controller.ts";
 import { Head, Handlers, PageProps, RouteConfig, ObjectId } from "../../deps.ts";
+import { postSource, patchSource } from "../../controllers/opine/source.controller.ts";
 
 export const config: RouteConfig = {
   routeOverride: "/source/(new|edit)/:id?",
@@ -40,7 +40,11 @@ export const handler: Handlers<NewSourceProps> = {
     return ctx.render({ authors, source: possibleSource });
   },
 
-  async POST(req) {
+  async POST(req, ctx) {
+    const groups = getActionAndId(req, ctx);
+
+    if (isPromise(groups) || isResponse(groups)) return groups;
+
     const form = await req.formData();
 
     const source = form.get("source")?.toString();
@@ -49,10 +53,13 @@ export const handler: Handlers<NewSourceProps> = {
     if (!source) return new Response("Missing source", { status: 400 });
     if (authors.length === 0) return new Response("Missing authors", { status: 400 });
 
-    await postSource({ body: { authors, name: source } });
+    if (groups.action === "new") {
+      await postSource({ body: { authors, name: source } });
+      return redirect("/quote/new");
+    }
 
-    // Redirect user to the quote page.
-    return redirect("/quote/new");
+    await patchSource({ body: { sourceId: groups.id, authors, name: source } });
+    return redirect(`/sources`);
   },
 };
 
@@ -82,8 +89,8 @@ export default function NewSource({ data: { authors, source } }: PageProps<NewSo
 
           {authors.map((author, i) => (
             <Checkbox
+              name={`${author._id}`}
               inputId={`author-${i}`}
-              name={author._id.toString()}
               checked={source?.authors.map((a) => `${a}`).includes(`${author._id}`) ?? false}
             >
               {author.name}

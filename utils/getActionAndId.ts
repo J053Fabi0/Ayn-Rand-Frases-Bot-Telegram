@@ -13,5 +13,5 @@ export default function getActionAndId<Data, State>(
   if (groups.action === "edit" && !groups.id) return ctx.renderNotFound();
   if (groups.action === "new" && groups.id) return ctx.renderNotFound();
 
-  return groups;
+  return groups as { action: "edit"; id: string } | { action: "new"; id?: undefined };
 }

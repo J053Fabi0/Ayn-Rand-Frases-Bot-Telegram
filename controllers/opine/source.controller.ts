@@ -6,6 +6,7 @@ import {
 } from "../mongo/source.controller.ts";
 import { ObjectId } from "../../deps.ts";
 import { pretifyIds } from "../../utils/pretifyId.ts";
+import Source from "../../types/collections/source.type.ts";
 import { getAuthorById } from "../mongo/author.controller.ts";
 import CommonResponse from "../../types/commonResponse.type.ts";
 import { GetSources, PostSource, PatchSource, DeleteSource } from "../../types/api/source.type.ts";
@@ -37,24 +38,29 @@ export const postSource = async ({ body }: PostSource, res?: CommonResponse) => 
   return source;
 };
 
-export const patchSource = async ({ body }: PatchSource, res: CommonResponse) => {
-  const { sourceId, authors, ...patchData } = body;
+export const patchSource = async ({ body }: PatchSource, res?: CommonResponse) => {
+  const { sourceId, authors, name } = body;
+
+  const patchData = {} as Partial<Source>;
+
+  if (name) patchData.name = name;
 
   if (authors) {
     for (const authorId of authors) {
       const author = await getAuthorById(authorId, { projection: { _id: 1 } });
-      if (!author) res.setStatus(404).send({ message: null, error: `Author not found (${authorId})` });
+      if (!author)
+        return void res?.setStatus(404).send({ message: null, error: `Author not found (${authorId})` });
     }
+
+    patchData.authors = authors.map((author) => new ObjectId(author));
   }
 
-  const { matchedCount } = await changeSource(
-    { _id: new ObjectId(sourceId) },
-    { $set: { ...patchData, ...(authors ? { authors: authors.map((id) => new ObjectId(id)) } : {}) } }
-  );
+  const results = await changeSource({ _id: new ObjectId(sourceId) }, { $set: patchData });
 
-  if (!matchedCount) res.setStatus(404).send({ message: null, error: "Source not found" });
+  if (!results.matchedCount) res?.setStatus(404).send({ message: null, error: "Source not found" });
+  else res?.sendStatus(200);
 
-  res.sendStatus(200);
+  return results;
 };
 
 export const deleteSource = async ({ params }: DeleteSource, res: CommonResponse) => {
