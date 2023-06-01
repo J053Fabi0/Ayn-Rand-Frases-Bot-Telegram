@@ -6,8 +6,10 @@ import { State } from "../types/state.type.ts";
 import Pagination from "../components/Pagination.tsx";
 import AdminTools from "../components/AdminTools.tsx";
 import getQueryParams from "../utils/getQueryParams.ts";
+import checkPageParam from "../utils/checkPageParam.ts";
 import Author from "../types/collections/author.type.ts";
 import Source from "../types/collections/source.type.ts";
+import isResponse from "../types/typeGuards/isResponse.ts";
 import createSignedCookie from "../utils/createSignedCookie.ts";
 import AuthorSourceSelector from "../islands/AuthorSourceSelector.tsx";
 import { getAuthors } from "../controllers/mongo/author.controller.ts";
@@ -44,11 +46,9 @@ export const handler: Handlers<IndexProps, State> = {
     const quoteCount = await countQuotes(filter);
     const pages = Array.from({ length: Math.ceil(quoteCount / limit) }, (_, i) => i + 1);
 
-    if (queryParams.page && isNaN(+queryParams.page)) return redirect("/");
+    const page = checkPageParam("", queryParams, pages);
 
-    const page = queryParams.page ? +queryParams.page : 1;
-    if (!pages.includes(page)) return redirect(`/?page=${page <= 0 ? 1 : pages[pages.length - 1]}`);
-    if (queryParams.page === "1") return redirect("/");
+    if (isResponse(page)) return page;
 
     const fullQuotes = await getFullQuotes(filter, {
       limit,
