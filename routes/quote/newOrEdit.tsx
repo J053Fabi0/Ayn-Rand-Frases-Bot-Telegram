@@ -2,9 +2,12 @@ import redirect from "../../utils/redirect.ts";
 import Button from "../../components/Button.tsx";
 import { State } from "../../types/state.type.ts";
 import Typography from "../../components/Typography.tsx";
+import getActionAndId from "../../utils/getActionAndId.ts";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
 import isMongoId from "../../types/typeGuards/isMongoId.ts";
+import isPromise from "../../types/typeGuards/isPromise.ts";
+import isResponse from "../../types/typeGuards/isResponse.ts";
 import { PostQuote, PatchQuote } from "../../types/api/quote.type.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { getSources } from "../../controllers/mongo/source.controller.ts";
@@ -16,7 +19,6 @@ import { FullQuote, getFullQuote, getQuote } from "../../controllers/mongo/quote
 export const config: RouteConfig = {
   routeOverride: "/quote/(new|edit)/:id?",
 };
-const urlPattern = new URLPattern({ pathname: "/quote/:action/:id?" });
 
 interface NewQuoteProps {
   authors: Author[];
@@ -26,11 +28,9 @@ interface NewQuoteProps {
 
 export const handler: Handlers<NewQuoteProps, State> = {
   async GET(req, ctx) {
-    const groups = urlPattern.exec(req.url)!.pathname.groups as { action: "edit" | "new"; id?: string };
+    const groups = getActionAndId(req, ctx);
 
-    // only allow /quote/new and /quote/edit/:id
-    if (groups.action === "edit" && !groups.id) return ctx.renderNotFound();
-    if (groups.action === "new" && groups.id) return ctx.renderNotFound();
+    if (isPromise(groups) || isResponse(groups)) return groups;
 
     const authors = await getAuthors();
     const sources = await getSources();
@@ -45,7 +45,9 @@ export const handler: Handlers<NewQuoteProps, State> = {
   },
 
   async POST(req, ctx) {
-    const groups = urlPattern.exec(req.url)!.pathname.groups as { action: "edit" | "new"; id?: string };
+    const groups = getActionAndId(req, ctx);
+
+    if (isPromise(groups) || isResponse(groups)) return groups;
 
     const form = await req.formData();
 
