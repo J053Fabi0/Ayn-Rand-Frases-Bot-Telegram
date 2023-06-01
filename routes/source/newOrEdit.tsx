@@ -1,5 +1,4 @@
 import redirect from "../../utils/redirect.ts";
-import Button from "../../components/Button.tsx";
 import Typography from "../../components/Typography.tsx";
 import { Checkbox } from "../../components/Checkbox.tsx";
 import getActionAndId from "../../utils/getActionAndId.ts";
@@ -8,10 +7,11 @@ import isMongoId from "../../types/typeGuards/isMongoId.ts";
 import isPromise from "../../types/typeGuards/isPromise.ts";
 import Source from "../../types/collections/source.type.ts";
 import isResponse from "../../types/typeGuards/isResponse.ts";
+import Button, { getButtonClasses } from "../../components/Button.tsx";
 import { getSource } from "../../controllers/mongo/source.controller.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
-import { Head, Handlers, PageProps, RouteConfig, ObjectId } from "../../deps.ts";
 import { postSource, patchSource } from "../../controllers/opine/source.controller.ts";
+import { Head, Handlers, PageProps, RouteConfig, ObjectId, FiTrash2 } from "../../deps.ts";
 
 export const config: RouteConfig = {
   routeOverride: "/source/(new|edit)/:id?",
@@ -98,10 +98,15 @@ export default function NewSource({ data: { authors, source } }: PageProps<NewSo
           ))}
         </div>
 
-        <div class="mt-3 flex justify-center items-center">
-          <Button class="mt-2 py-2 px-4 text-lg" type="submit" color="green">
+        <div class="mt-3 flex justify-center align-center items-center mt-2 gap-4">
+          <Button class="py-2 px-4 text-lg" type="submit" color="green">
             {editing ? "Edit" : "Publish"}
           </Button>
+          {editing && (
+            <a href={`/source/delete/${source._id}`} class={getButtonClasses("red")}>
+              <FiTrash2 size={16} />
+            </a>
+          )}
         </div>
       </form>
     </>
