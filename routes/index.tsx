@@ -4,6 +4,7 @@ import redirect from "../utils/redirect.ts";
 import Button from "../components/Button.tsx";
 import { State } from "../types/state.type.ts";
 import Pagination from "../components/Pagination.tsx";
+import AdminTools from "../components/AdminTools.tsx";
 import getQueryParams from "../utils/getQueryParams.ts";
 import Author from "../types/collections/author.type.ts";
 import Source from "../types/collections/source.type.ts";
@@ -151,25 +152,3 @@ export default function Home({ data }: PageProps<IndexProps>) {
     </>
   );
 }
-
-const AdminTools = () => (
-  <>
-    <Typography variant="h4" class="mb-2">
-      New
-    </Typography>
-
-    <div class="flex flex-row flex-grap gap-2">
-      <a href="/quote/new">
-        <Button color="green">Quote</Button>
-      </a>
-
-      <a href="/source/new">
-        <Button color="blue">Source</Button>
-      </a>
-
-      <a href="/author/new">
-        <Button color="red">Author</Button>
-      </a>
-    </div>
-  </>
-);
