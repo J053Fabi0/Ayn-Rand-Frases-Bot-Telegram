@@ -28,6 +28,8 @@ interface NewQuoteProps {
 
 export const handler: Handlers<NewQuoteProps, State> = {
   async GET(req, ctx) {
+    if (ctx.state.quoteExists === false) return ctx.renderNotFound();
+
     const groups = getActionAndId(req, ctx);
 
     if (isPromise(groups) || isResponse(groups)) return groups;
@@ -37,49 +39,38 @@ export const handler: Handlers<NewQuoteProps, State> = {
 
     if (!groups.id) return await ctx.render({ authors, sources, quote: null });
 
-    const possibleQuote = await getFullQuote(
-      isMongoId(groups.id) ? { _id: new ObjectId(groups.id) } : { number: parseInt(groups.id) }
-    );
-    if (!possibleQuote) throw new Error(`Quote not found: ${groups.id}`);
+    const possibleQuote = await getFullQuote({ number: +groups.id });
 
     return ctx.render({ authors, sources, quote: possibleQuote });
   },
 
   async POST(req, ctx) {
-    const groups = getActionAndId(req, ctx);
+    if (ctx.state.quoteExists === false) return ctx.renderNotFound();
 
+    const groups = getActionAndId(req, ctx);
     if (isPromise(groups) || isResponse(groups)) return groups;
 
     const form = await req.formData();
-
     const quote = form.get("quote")?.toString();
     const authorId = form.get("author")?.toString();
     const sourceId = form.get("source")?.toString();
 
-    if (!quote || !authorId || !sourceId) return new Response("Missing quote, author, or source", { status: 400 });
+    if (!quote || !authorId || !sourceId)
+      return new Response("Missing quote, author, or/and source", { status: 400 });
 
-    let quoteId = groups.id ?? "";
+    let quoteNumber = +groups.id!;
     const body = { quote, authorId, sourceId: sourceId === "null" ? null : sourceId } satisfies (
       | PostQuote
       | PatchQuote
     )["body"];
 
     // Edit quote
-    if (groups.action === "edit") {
-      if (!isMongoId(groups.id)) {
-        const quote = await getQuote({ number: parseInt(groups.id) });
-        if (!quote) return ctx.renderNotFound();
-        quoteId = `${quote._id}`;
-      }
-
-      const results = await patchQuote({ body: { ...body, quoteId } });
-      if (results?.modifiedCount === 0) return ctx.renderNotFound();
-    }
+    if (groups.action === "edit") await patchQuote({ body: { ...body, number: quoteNumber } });
     // Publish new quote
-    else quoteId = `${(await postQuote({ body }))._id}`;
+    else quoteNumber = (await postQuote({ body })).number;
 
     // Redirect user to the quote page.
-    return redirect(`/quote/${quoteId}`);
+    return redirect(`/quote/${quoteNumber}`);
   },
 };
 
