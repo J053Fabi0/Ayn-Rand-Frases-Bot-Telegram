@@ -8,13 +8,16 @@ import { Filter, MiddlewareHandlerContext, ObjectId } from "../../deps.ts";
 const urlPatterns = ["/quote/edit/:id", "/quote/delete/:id", "/quote/:id"].map(
   (pathname) => new URLPattern({ pathname })
 );
+const patternsToIgnore = ["/quote/new"].map((pathname) => new URLPattern({ pathname }));
 
 export async function handler(req: Request, ctx: MiddlewareHandlerContext<State>) {
+  for (const pattern of patternsToIgnore) {
+    if (pattern.test(req.url)) return ctx.next();
+  }
+
   for (const pattern of urlPatterns) {
     const groups = pattern.exec(req.url)?.pathname.groups as { id?: string } | undefined;
     if (!groups || !groups.id) continue;
-
-    if (groups.id === "new") break;
 
     const filter: Filter<Quote> = { archived: { $ne: true } };
     if (isMongoId(groups.id)) {
