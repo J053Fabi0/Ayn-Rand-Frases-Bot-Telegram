@@ -47,7 +47,6 @@ export const handler: Handlers<IndexProps, State> = {
     const pages = Array.from({ length: Math.ceil(quoteCount / limit) }, (_, i) => i + 1);
 
     const page = checkPageParam("", queryParams, pages);
-
     if (isResponse(page)) return page;
 
     const fullQuotes = await getFullQuotes(filter, {
@@ -78,7 +77,7 @@ export const handler: Handlers<IndexProps, State> = {
     const { cookie } = await createSignedCookie("sourceId", sourceId, { httpOnly: true, path: "/" });
     headers.append("Set-Cookie", cookie);
 
-    return redirect(`/`, { body: JSON.stringify({ authorId, sourceId }), headers });
+    return redirect(`/`, { headers });
   },
 };
 
