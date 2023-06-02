@@ -5,7 +5,7 @@ import { getQuotes } from "../controllers/mongo/quote.controller.ts";
 export default function frases(bot: Bot) {
   bot.command(["frases", "ids"], async (ctx) => {
     const quotes = await getQuotes(
-      {},
+      { archived: { $ne: true } },
       {
         projection: { _id: 0, number: 1, timesSent: 1, lastSentTime: 1 },
         sort: { lastSentTime: 1 },
@@ -26,11 +26,11 @@ export default function frases(bot: Bot) {
     const message =
       `<b>Siguientes frases</b>\n<code>` +
       `${quotes
-        .slice(0, 5)
+        .slice(0, 10)
         .map((q) => q.number)
-        .join(", ")} ... ` +
-      `${quotes
-        .slice(-5)
+        .join(", ")}</code>\n...\n` +
+      `<code>${quotes
+        .slice(-10)
         .map((q) => q.number)
         .join(", ")}</code>\n\n` +
       keys

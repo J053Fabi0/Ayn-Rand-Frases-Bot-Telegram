@@ -1,7 +1,7 @@
 import { Router } from "../deps.ts";
-import quoteRoutes from "./quote.routes.ts";
-import authorRoutes from "./author.routes.ts";
-import sourceRoutes from "./source.routes.ts";
+import quoteRouter from "./quote.router.ts";
+import authorRouter from "./author.router.ts";
+import sourceRouter from "./source.router.ts";
 import authController from "../middlewares/auth.ts";
 import { auth as authSchema } from "../schemas/auth.schema.ts";
 
@@ -13,8 +13,8 @@ router.use(authSchema, authController);
 // Default response.
 router.get("/", (_, res) => res.sendStatus(200));
 
-router.use(quoteRoutes);
-router.use(authorRoutes);
-router.use(sourceRoutes);
+router.use(quoteRouter);
+router.use(authorRouter);
+router.use(sourceRouter);
 
 export default router;

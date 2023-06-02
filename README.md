@@ -1,21 +1,35 @@
-# Requisitos
+# Objectivism quotes bot and website
 
-- `deno`. Encuentra las instrucciones de instalación en [deno.land](https://deno.land/).
+This is a Telegram bot that sends quotes from Objectivist books, articles and videos. It also has a website where
+you can see the quotes and search for them.
 
-# `.env`
+Subscribe to the Telegram bot: [@FrasesDeAynRandBot](https://t.me/FrasesDeAynRandBot).
 
-- `PORT` El puerto en el que correrá el servidor.
-- `AUTH_TOKEN` El token secreto que se usará para autenticar las peticiones.
-- `ADMINS_IDS` Los ids de los administradores que podrán usarlo privadamente. Puedes obtenerlo con
-  [@userinfobot](https://t.me/userinfobot). Separa los ids con comas, sin espacios.
-- `BOT_TOKEN` El token del bot. Puedes crear un bot con [@BotFather](https://t.me/BotFather).
+Checkout the website [aynrand.josefabio.com](https://aynrand.josefabio.com).
 
-# Correr el bot
+# Host your own bot and website
 
-Copia el archivo `constants.example.ts` a `constants.ts` y modifica, si quieres, la hora de envío.
+## Requirements
 
-Copia el archivo `.env.example` a `.env` y modifica las variables de entorno.
+- `deno`. Find the installation instructions at [deno.land](https://deno.land/).
 
-Para correr el bot, ejecuta `deno task run`.
+## `.env`
 
-Para ver los posibles comandos, ejecuta `deno task`.
+- `WEB_PORT` The port on which the front-end will run.
+- `API_PORT` The port on which the API will run.
+- `AUTH_TOKEN` The secret token that will be used to authenticate requests. Use any secure password.
+- `ADMINS_IDS` The ids of the administrators who will be able to use it privately. You can obtain them with
+  [@userinfobot](https://t.me/userinfobot). Separate the ids with commas, without spaces.
+- `BOT_TOKEN` The bot's token. You can create a bot with [@BotFather](https://t.me/BotFather).
+- `MONGO_URI` The URI of the MongoDB database. You can create a free database at
+  [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+
+## Running the bot
+
+Copy the `constants.example.ts` file to `constants.ts` and modify, if you want, the sending time.
+
+Copy the `.env.example` file to `.env` and modify the environment variables.
+
+To run the bot, execute `deno task run`.
+
+To see the possible commands, execute `deno task`.

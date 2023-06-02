@@ -1,6 +1,6 @@
-import { PUBLICATION_HOUR, TIMEZONE } from "../constants.ts";
 import { Bot } from "../deps.ts";
 import { publishQuoteCron } from "../utils/crons.ts";
+import { PUBLICATION_HOUR, TIMEZONE } from "../constants.ts";
 import msToTimeDescription from "../utils/msToTimeDescription.ts";
 
 export default function restante(bot: Bot) {

@@ -1,6 +1,7 @@
 import {
   Filter,
   ObjectId,
+  Document,
   Collection,
   FindOptions,
   UpdateFilter,
@@ -73,16 +74,9 @@ export function count<T extends Collection<CommonCollection>>(collection: T) {
     collection.countDocuments(filter, options);
 }
 
-function updateCommon(
-  type: "many" | "one",
-  collection: Collection<CommonCollection>,
-  filter: Filter<CommonCollection>,
-  update: UpdateFilter<CommonCollection>,
-  options?: UpdateOptions
-) {
+function addTimestamps(update: UpdateFilter<CommonCollection>) {
   if (update.$set && !update.$set.modifiedAt) update.$set.modifiedAt = new Date();
   else if (!update.$set) update.$set = { modifiedAt: new Date() };
-  return collection[type === "many" ? "updateMany" : "updateOne"](filter, update, options);
 }
 
 export function updateOne<T extends Collection<CommonCollection>>(collection: T) {
@@ -90,7 +84,10 @@ export function updateOne<T extends Collection<CommonCollection>>(collection: T)
     filter: Filter<DocumentOfCollection<T>>,
     update: UpdateFilter<DocumentOfCollection<T>>,
     options?: UpdateOptions
-  ) => updateCommon("one", collection, filter, update, options);
+  ) => {
+    addTimestamps(update);
+    return collection.updateOne(filter, update, options);
+  };
 }
 
 export function updateMany<T extends Collection<CommonCollection>>(collection: T) {
@@ -98,7 +95,10 @@ export function updateMany<T extends Collection<CommonCollection>>(collection: T
     filter: Filter<DocumentOfCollection<T>>,
     update: UpdateFilter<DocumentOfCollection<T>>,
     options?: UpdateOptions
-  ) => updateCommon("many", collection, filter, update, options);
+  ) => {
+    addTimestamps(update);
+    return collection.updateMany(filter, update, options);
+  };
 }
 
 export function deleteOne<T extends Collection<CommonCollection>>(collection: T) {
@@ -111,9 +111,46 @@ export function deleteMany<T extends Collection<CommonCollection>>(collection: T
     collection.deleteMany(filter, options);
 }
 
+export interface AggregateOptionsExtended extends AggregateOptions {
+  skip?: number;
+  limit?: number;
+  /**
+   * The sort is done before the projection.
+   */
+  sort?: Document;
+  projection?: Document;
+}
 export function aggregate<T extends Collection<CommonCollection>>(collection: T) {
   return (
     pipeline: AggregatePipeline<DocumentOfCollection<T>> | AggregatePipeline<DocumentOfCollection<T>>[],
-    options?: AggregateOptions
-  ) => collection.aggregate(pipeline instanceof Array ? pipeline : [pipeline], options).toArray();
+    options?: AggregateOptionsExtended
+  ) => {
+    const finalPipeline = pipeline instanceof Array ? pipeline : [pipeline];
+
+    const sort = options?.sort;
+    if (sort) {
+      delete options?.sort;
+      finalPipeline.push({ $sort: sort });
+    }
+
+    const projection = options?.projection;
+    if (projection) {
+      delete options?.projection;
+      finalPipeline.push({ $project: projection });
+    }
+
+    const skip = options?.skip;
+    if (typeof skip === "number") {
+      delete options?.skip;
+      finalPipeline.push({ $skip: skip });
+    }
+
+    const limit = options?.limit;
+    if (typeof limit === "number") {
+      delete options?.limit;
+      finalPipeline.push({ $limit: limit });
+    }
+
+    return collection.aggregate(finalPipeline, options).toArray();
+  };
 }

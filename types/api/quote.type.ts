@@ -1,14 +1,20 @@
-import CommonRequest from "../commonRequest.type.ts";
+import CommonRequestPartial from "../commonRequest.type.ts";
 
-export type GetQuotes = CommonRequest<undefined, undefined, { authorId: string }>;
+export type GetQuotes = CommonRequestPartial<undefined, undefined, { authorId: string }>;
 
-export type PostQuote = CommonRequest<{ quote: string; sourceId: string | null; authorId: string }>;
+export type PostQuote = CommonRequestPartial<{ quote: string; sourceId: string | null; authorId: string }>;
 
-export type PatchQuote = CommonRequest<{
-  quote?: string;
-  quoteId: string;
-  authorId?: string;
-  sourceId?: string | null;
-}>;
+export type PatchQuote = CommonRequestPartial<
+  {
+    quote?: string;
+    archived?: false;
+    authorId?: string;
+    sourceId?: string | null;
+  } & (
+    | { quoteId?: never; number: number }
+    // Either quoteId or number must be provided, but not both
+    | { quoteId: string; number?: never }
+  )
+>;
 
-export type DeleteQuote = CommonRequest<undefined, undefined, { _id: string }>;
+export type DeleteQuote = CommonRequestPartial<undefined, undefined, { idOrNumber: string }>;
