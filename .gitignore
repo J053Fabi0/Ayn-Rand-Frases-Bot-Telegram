@@ -103,7 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-constants.ts
 .vscode/settings.json
-db/database.db
 deno.lock
