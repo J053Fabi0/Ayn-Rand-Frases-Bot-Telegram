@@ -34,6 +34,8 @@ export type { RouteConfig, UnknownPageProps, ErrorPageProps } from "$fresh/serve
 export type { Handlers, PageProps, AppProps, MiddlewareHandlerContext, HandlerContext } from "$fresh/server.ts";
 
 // Icons
-export { FiTrash2 } from "react-icons/fi";
-export { AiFillEdit, AiOutlineSearch } from "react-icons/ai";
-export { BsCaretLeftFill, BsCaretRightFill, BsSearch } from "react-icons/bs";
+export { FiTrash2 } from "react-icons-fi/FiTrash2";
+export { AiFillEdit } from "react-icons-ai/AiFillEdit";
+export { BsSearch } from "react-icons-bs/BsSearch";
+export { BsCaretLeftFill } from "react-icons-bs/BsCaretLeftFill";
+export { BsCaretRightFill } from "react-icons-bs/BsCaretRightFill";
