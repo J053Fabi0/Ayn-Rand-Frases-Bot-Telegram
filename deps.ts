@@ -36,6 +36,7 @@ export type { Handlers, PageProps, AppProps, MiddlewareHandlerContext, HandlerCo
 // Icons
 export { FiTrash2 } from "react-icons-fi/FiTrash2.ts";
 export { AiFillEdit } from "react-icons-ai/AiFillEdit.ts";
+export { AiOutlineSearch } from "react-icons-ai/AiOutlineSearch.ts";
 export { BsSearch } from "react-icons-bs/BsSearch.ts";
 export { BsCaretLeftFill } from "react-icons-bs/BsCaretLeftFill.ts";
 export { BsCaretRightFill } from "react-icons-bs/BsCaretRightFill.ts";
