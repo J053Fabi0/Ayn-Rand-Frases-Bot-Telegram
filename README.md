@@ -23,6 +23,10 @@ Checkout the website [aynrand.josefabio.com](https://aynrand.josefabio.com).
 - `BOT_TOKEN` The bot's token. You can create a bot with [@BotFather](https://t.me/BotFather).
 - `MONGO_URI` The URI of the MongoDB database. You can create a free database at
   [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+- `PUBLICATION_HOUR` The hour at which the bot will send the quotes. It's just the hour, a simple number from 0
+  to 23.
+- `TIMEZONE` The timezone of the bot. You can find the list of timezones at
+  [Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 
 ## Running the bot
 

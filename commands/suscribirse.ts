@@ -1,6 +1,6 @@
 import { Bot, FilterCtx, Context } from "../deps.ts";
 import { publishQuoteCron } from "../utils/crons.ts";
-import { PUBLICATION_HOUR, TIMEZONE } from "../constants.ts";
+import { PUBLICATION_HOUR, TIMEZONE } from "../env.ts";
 import msToTimeDescription from "../utils/msToTimeDescription.ts";
 import { createUser, getUser } from "../controllers/mongo/user.controller.ts";
 
