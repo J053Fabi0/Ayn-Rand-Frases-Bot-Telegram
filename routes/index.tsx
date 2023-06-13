@@ -1,6 +1,5 @@
 import { WEBSITE_URL } from "../env.ts";
 import Metas from "../components/Metas.tsx";
-import redirect from "../utils/redirect.ts";
 import Button from "../components/Button.tsx";
 import { State } from "../types/state.type.ts";
 import Pagination from "../components/Pagination.tsx";
@@ -10,11 +9,12 @@ import checkPageParam from "../utils/checkPageParam.ts";
 import Author from "../types/collections/author.type.ts";
 import Source from "../types/collections/source.type.ts";
 import isResponse from "../types/typeGuards/isResponse.ts";
-import createSignedCookie from "../utils/createSignedCookie.ts";
+import handlePostFilters from "../utils/handlePostFilters.ts";
 import AuthorSourceSelector from "../islands/AuthorSourceSelector.tsx";
 import { getAuthors } from "../controllers/mongo/author.controller.ts";
 import { getSources } from "../controllers/mongo/source.controller.ts";
 import Typography, { getTypographyClass } from "../components/Typography.tsx";
+import normalizeAuthorsAndSources from "../utils/normalizeAuthorsAndSources.ts";
 import { Head, Handlers, PageProps, AiOutlineSearch, ObjectId } from "../deps.ts";
 import { FullQuote, getFullQuotes, countQuotes } from "../controllers/mongo/quote.controller.ts";
 
@@ -24,10 +24,10 @@ interface IndexProps {
   pages: number[];
   hasMore: boolean;
   isAdmin: boolean;
-  authors: Author[];
-  sources: Source[];
   sourceId: string;
   authorId: string;
+  authors: Author[];
+  sources: Source[];
   fullQuotes: FullQuote[];
 }
 
@@ -65,44 +65,14 @@ export const handler: Handlers<IndexProps, State> = {
     });
   },
 
-  async POST(req) {
-    const form = await req.formData();
-
-    const authorId = form.get("author")?.toString();
-    const sourceId = form.get("source")?.toString();
-
-    if (!authorId || !sourceId) return new Response("Missing author, or source", { status: 400 });
-
-    const { headers } = await createSignedCookie("authorId", authorId, { httpOnly: true, path: "/" });
-    const { cookie } = await createSignedCookie("sourceId", sourceId, { httpOnly: true, path: "/" });
-    headers.append("Set-Cookie", cookie);
-
-    return redirect(`/`, { headers });
+  POST(req) {
+    return handlePostFilters("/", req);
   },
 };
 
 export default function Home({ data }: PageProps<IndexProps>) {
   const { authorId, sourceId } = data;
-  const authors = [{ _id: "all", name: "All authors" }, ...data.authors];
-
-  const authorsWithSourcesCount = data.authors.reduce((acc, author) => {
-    const authorId = `${author._id}`;
-    acc[authorId] = data.sources.filter((s) => s.authors.some((a) => `${a}` === authorId)).length;
-    return acc;
-  }, {} as Record<string, number>);
-
-  const sources = [
-    {
-      _id: "all",
-      name: "All sources",
-      // Filter out the authors that have no sources
-      authors: [...data.authors.map((a) => `${a._id}`).filter((a) => authorsWithSourcesCount[a] >= 1), "all"],
-    },
-    ...data.sources.map((s) => ({
-      ...s,
-      authors: ["all", ...s.authors],
-    })),
-  ];
+  const { sources, authors } = normalizeAuthorsAndSources(data.authors, data.sources);
 
   return (
     <>

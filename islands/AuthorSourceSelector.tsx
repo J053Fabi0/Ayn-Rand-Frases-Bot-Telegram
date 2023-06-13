@@ -60,15 +60,17 @@ export default function AuthorSourceSelector({ authors, sources, ...defaults }: 
         ))}
       </select>
 
-      <select
-        value={sourceId.value as string}
-        required
-        name="source"
-        class="p-2 border border-gray-300 rounded w-full"
-      >
-        {sourcesOptions.value}
-        <option value={"null"}>No source</option>
-      </select>
+      {sourcesOptions.value.length > 0 && (
+        <select
+          value={sourceId.value as string}
+          required
+          name="source"
+          class="p-2 border border-gray-300 rounded w-full"
+        >
+          {sourcesOptions.value}
+          <option value={"null"}>Unknown source</option>
+        </select>
+      )}
     </div>
   );
 }

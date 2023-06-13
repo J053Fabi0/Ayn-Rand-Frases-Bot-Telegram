@@ -33,6 +33,7 @@ export default function SignIn() {
         <div class="flex flex-col">
           <input
             required
+            autoFocus
             type="password"
             name="authToken"
             placeholder="Auth token"
