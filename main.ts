@@ -14,8 +14,8 @@ import diffuse from "./utils/diffuse.ts";
 import twindConfig from "./twind.config.ts";
 import { API_PORT, WEB_PORT } from "./env.ts";
 import handleError from "./utils/handleError.ts";
-import CommonRequestPartial from "./types/commonRequest.type.ts";
 import CommonResponse from "./types/commonResponse.type.ts";
+import CommonRequestPartial from "./types/commonRequest.type.ts";
 import { opine, opineCors, json, NextFunction, start, twindPlugin } from "./deps.ts";
 
 // Check that all required .env variables are set

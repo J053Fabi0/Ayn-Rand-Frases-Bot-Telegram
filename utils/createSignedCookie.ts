@@ -15,5 +15,6 @@ export default function createSignedCookie(
   cookie_value: string,
   opts: CookieOptions = { path: "/" }
 ) {
+  if (!("path" in opts)) opts.path = "/";
   return createSignedCookieCtrl(cookie_name, cookie_value, BOT_TOKEN, opts);
 }
