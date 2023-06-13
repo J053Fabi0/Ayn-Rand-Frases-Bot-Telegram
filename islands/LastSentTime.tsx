@@ -1,5 +1,4 @@
-import dayjs from "https://deno.land/x/deno_dayjs@v0.3.0/mod.ts";
-import relativeTime from "https://deno.land/x/deno_dayjs@v0.3.0/plugin/relativeTime.ts";
+import { dayjs, relativeTime } from "../deps.ts";
 dayjs.extend(relativeTime);
 
 interface LastSentTimeProps {

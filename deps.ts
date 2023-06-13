@@ -10,6 +10,9 @@ export { getCookies, setCookie, deleteCookie } from "std/http/cookie.ts";
 export type { Document } from "https://deno.land/x/web_bson@v0.3.0/mod.js";
 export { createSignedCookie, verifySignedCookie, cookieSign, cookieVerify } from "squishy_cookies";
 
+export { default as dayjs } from "dayjs/mod.ts";
+export { default as relativeTime } from "dayjs/plugin/relativeTime.ts";
+
 export type { Filter as FilterCtx } from "grammy/mod.ts";
 export { Bot, InlineKeyboard, Context } from "grammy/mod.ts";
 
