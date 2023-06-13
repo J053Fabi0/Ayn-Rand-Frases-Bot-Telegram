@@ -18,21 +18,6 @@ import CommonResponse from "./types/commonResponse.type.ts";
 import CommonRequestPartial from "./types/commonRequest.type.ts";
 import { opine, opineCors, json, NextFunction, start, twindPlugin } from "./deps.ts";
 
-// Check that all required .env variables are set
-const envVariables = [
-  "API_PORT",
-  "WEB_PORT",
-  "TIMEZONE",
-  "BOT_TOKEN",
-  "MONGO_URI",
-  "ADMINS_IDS",
-  "AUTH_TOKEN",
-  "WEBSITE_URL",
-  "PUBLICATION_HOUR",
-];
-for (const envVariable of envVariables)
-  if (Deno.env.get(envVariable) === undefined) console.log(envVariable + " not set in .env."), Deno.exit(0);
-
 // Then start the bot
 import("./initBot.ts");
 
