@@ -1,5 +1,4 @@
 import redirect from "../../utils/redirect.ts";
-import Button from "../../components/Button.tsx";
 import { State } from "../../types/state.type.ts";
 import Typography from "../../components/Typography.tsx";
 import getActionAndId from "../../utils/getActionAndId.ts";
@@ -7,10 +6,10 @@ import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
 import isPromise from "../../types/typeGuards/isPromise.ts";
 import isResponse from "../../types/typeGuards/isResponse.ts";
+import NewOrEditQuote from "../../islands/NewOrEditQuote.tsx";
 import { Head, Handlers, PageProps, RouteConfig } from "../../deps.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { getSources } from "../../controllers/mongo/source.controller.ts";
-import AuthorSourceSelector from "../../islands/AuthorSourceSelector.tsx";
 import { FullQuote, getFullQuote } from "../../controllers/mongo/quote.controller.ts";
 import { postQuote, patchQuote, PostQuote, PatchQuote } from "../../controllers/opine/quote.controller.ts";
 
@@ -18,7 +17,7 @@ export const config: RouteConfig = {
   routeOverride: "/quote/(new|edit)/:id?",
 };
 
-interface NewQuoteProps {
+export interface NewQuoteProps {
   authors: Author[];
   sources: Source[];
   quote: FullQuote | null;
@@ -52,11 +51,12 @@ export const handler: Handlers<NewQuoteProps, State> = {
     const quote = form.get("quote")?.toString();
     const authorId = form.get("author")?.toString();
     const sourceId = form.get("source")?.toString() || "null";
+    const sourceDetails = form.get("sourceDetails")?.toString() || "";
 
     if (!quote || !authorId) return new Response("Missing quote, author, or/and source", { status: 400 });
 
     let quoteNumber = +groups.id!;
-    const data = { quote, authorId, sourceId: sourceId === "null" ? null : sourceId } satisfies
+    const data = { quote, authorId, sourceId: sourceId === "null" ? null : sourceId, sourceDetails } satisfies
       | PostQuote
       | PatchQuote;
 
@@ -73,8 +73,6 @@ export const handler: Handlers<NewQuoteProps, State> = {
 export default function NewQuote({ data: { quote, authors, sources } }: PageProps<NewQuoteProps>) {
   const editing = quote !== null;
 
-  const sourcesWithNull = [...sources, { _id: "null", name: "No source", authors: authors.map((a) => a._id) }];
-
   return (
     <>
       <Head>
@@ -83,31 +81,7 @@ export default function NewQuote({ data: { quote, authors, sources } }: PageProp
 
       <Typography variant="h4">{editing ? "Edit" : "Publish a new"} quote</Typography>
 
-      <form method="post">
-        <div class="flex flex-col">
-          <textarea
-            required
-            rows={10}
-            name="quote"
-            placeholder="Quote"
-            value={quote?.quote || ""}
-            class="my-2 p-2 border border-gray-300 rounded w-full"
-          />
-
-          <AuthorSourceSelector
-            authors={authors}
-            sources={sourcesWithNull}
-            authorId={`${quote?.author?._id || ""}`}
-            sourceId={`${quote?.source?._id || ""}`}
-          />
-        </div>
-
-        <div class="mt-3 flex justify-center items-center">
-          <Button class="mt-2 py-2 px-4 text-lg" type="submit" color="green">
-            {editing ? "Save" : "Publish"}
-          </Button>
-        </div>
-      </form>
+      <NewOrEditQuote authors={authors} quote={quote} sources={sources} />
     </>
   );
 }

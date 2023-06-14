@@ -16,8 +16,10 @@ export { ObjectId, MongoClient } from "mongo";
 export type { FindAndModifyOptions, InsertDocument, AggregateOptions, AggregatePipeline } from "mongo";
 export type { Filter, Collection, FindOptions, UpdateFilter, UpdateOptions, InsertOptions } from "mongo";
 
-// Fresh & Preact
+// Preact
 export type { JSX } from "preact";
+
+// Fresh
 export { start } from "$fresh/server.ts";
 export { default as dev } from "$fresh/dev.ts";
 export { Head, asset } from "$fresh/runtime.ts";

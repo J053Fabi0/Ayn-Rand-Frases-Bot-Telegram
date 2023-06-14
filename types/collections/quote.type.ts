@@ -9,4 +9,5 @@ export default interface Quote extends CommonCollection {
   archived: boolean;
   lastSentTime: Date;
   source: ObjectId | null;
+  sourceDetails: string | null;
 }

@@ -14,9 +14,17 @@ interface AuthorSourceSelectorProps {
   sourceId?: string;
   authors: AddId<Pick<Author, "name">>[];
   sources: (AddId<Pick<Source, "name">> & { authors: (string | ObjectId)[] })[];
+  onAuthorChange?: (authorId: string) => void;
+  onSourceChange?: (sourceId: string) => void;
 }
 
-export default function AuthorSourceSelector({ authors, sources, ...defaults }: AuthorSourceSelectorProps) {
+export default function AuthorSourceSelector({
+  authors,
+  sources,
+  onAuthorChange,
+  onSourceChange,
+  ...defaults
+}: AuthorSourceSelectorProps) {
   const author = useSignal(defaults.authorId ? findAuthor(authors, defaults.authorId) : authors[0]);
   const authorId = useComputed(() => (author.value?._id as string) || "");
   const sourceId = useSignal(defaults.sourceId ?? (sources[0]?._id as string));
@@ -53,7 +61,10 @@ export default function AuthorSourceSelector({ authors, sources, ...defaults }: 
         name="author"
         value={authorId.value as string}
         class="p-2 border border-gray-300 rounded w-full"
-        onChange={(e) => void (author.value = findAuthor(authors, e.currentTarget.value))}
+        onChange={(e) => {
+          author.value = findAuthor(authors, e.currentTarget.value);
+          if (onAuthorChange) onAuthorChange(e.currentTarget.value);
+        }}
       >
         {authors.map((author) => (
           <option value={`${author._id}`}>{author.name}</option>
@@ -62,9 +73,13 @@ export default function AuthorSourceSelector({ authors, sources, ...defaults }: 
 
       {sourcesOptions.value.length > 0 && (
         <select
-          value={sourceId.value as string}
           required
           name="source"
+          value={sourceId.value as string}
+          onChange={(e) => {
+            sourceId.value = e.currentTarget.value;
+            if (onSourceChange) onSourceChange(e.currentTarget.value);
+          }}
           class="p-2 border border-gray-300 rounded w-full"
         >
           {sourcesOptions.value}
