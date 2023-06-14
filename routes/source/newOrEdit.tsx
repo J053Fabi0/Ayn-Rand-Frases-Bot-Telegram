@@ -8,10 +8,9 @@ import isPromise from "../../types/typeGuards/isPromise.ts";
 import Source from "../../types/collections/source.type.ts";
 import isResponse from "../../types/typeGuards/isResponse.ts";
 import Button, { getButtonClasses } from "../../components/Button.tsx";
-import { getSource } from "../../controllers/mongo/source.controller.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
-import { postSource, patchSource } from "../../controllers/opine/source.controller.ts";
 import { Head, Handlers, PageProps, RouteConfig, ObjectId, FiTrash2 } from "../../deps.ts";
+import { changeSource, createSource, getSource } from "../../controllers/mongo/source.controller.ts";
 
 export const config: RouteConfig = {
   routeOverride: "/source/(new|edit)/:id?",
@@ -48,17 +47,17 @@ export const handler: Handlers<NewSourceProps> = {
     const form = await req.formData();
 
     const source = form.get("source")?.toString();
-    const authors = [...form.keys()].filter((key) => isMongoId(key));
+    const authors = [...form.keys()].filter((key) => isMongoId(key)).map((id) => new ObjectId(id));
 
     if (!source) return new Response("Missing source", { status: 400 });
     if (authors.length === 0) return new Response("Missing authors", { status: 400 });
 
     if (groups.action === "new") {
-      await postSource({ body: { authors, name: source } });
+      await createSource({ authors: authors, name: source });
       return redirect("/quote/new");
     }
 
-    await patchSource({ body: { sourceId: groups.id, authors, name: source } });
+    await changeSource({ _id: new ObjectId(groups.id) }, { $set: { authors, name: source } });
     return redirect(`/sources`);
   },
 };
@@ -100,7 +99,7 @@ export default function NewSource({ data: { authors, source } }: PageProps<NewSo
 
         <div class="mt-3 flex justify-center align-center items-center mt-2 gap-4">
           <Button class="py-2 px-4 text-lg" type="submit" color="green">
-            {editing ? "Edit" : "Publish"}
+            {editing ? "Save" : "Publish"}
           </Button>
           {editing && (
             <a href={`/source/delete/${source._id}`} class={getButtonClasses("red")}>

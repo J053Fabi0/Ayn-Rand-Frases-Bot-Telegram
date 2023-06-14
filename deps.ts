@@ -1,5 +1,4 @@
 export { sleep } from "sleep";
-export { opineCors } from "cors";
 export { compare, hash } from "bcrypt";
 export { default as Cron } from "croner";
 export { escapeHtml } from "escape_html";
@@ -13,15 +12,9 @@ export { createSignedCookie, verifySignedCookie, cookieSign, cookieVerify } from
 export type { Filter as FilterCtx } from "grammy/mod.ts";
 export { Bot, InlineKeyboard, Context } from "grammy/mod.ts";
 
-export { default as Joi } from "joi";
-export type { ObjectSchema } from "joi";
-
 export { ObjectId, MongoClient } from "mongo";
 export type { FindAndModifyOptions, InsertDocument, AggregateOptions, AggregatePipeline } from "mongo";
 export type { Filter, Collection, FindOptions, UpdateFilter, UpdateOptions, InsertOptions } from "mongo";
-
-export { default as opine, json, Router } from "opine";
-export type { NextFunction, OpineResponse, OpineRequest, Params, ParamsDictionary, CookieOptions } from "opine";
 
 // Fresh & Preact
 export type { JSX } from "preact";

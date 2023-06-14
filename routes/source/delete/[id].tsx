@@ -5,8 +5,7 @@ import Source from "../../../types/collections/source.type.ts";
 import isMongoId from "../../../types/typeGuards/isMongoId.ts";
 import { Handlers, PageProps, ObjectId, Head } from "../../../deps.ts";
 import Button, { getButtonClasses } from "../../../components/Button.tsx";
-import { getSource } from "../../../controllers/mongo/source.controller.ts";
-import { deleteSource } from "../../../controllers/opine/source.controller.ts";
+import { deleteSource, getSource } from "../../../controllers/mongo/source.controller.ts";
 
 interface DeleteSourceProps {
   source: Source;
@@ -29,7 +28,7 @@ export const handler: Handlers<DeleteSourceProps, State> = {
 
     if (!isMongoId(id)) throw new Error(`Invalid id format: ${id}`);
 
-    const deleteCount = await deleteSource({ params: { _id: id } });
+    const deleteCount = await deleteSource({ _id: new ObjectId(id) });
     if (deleteCount === 0) throw new Error(`Source not found: ${id}`);
 
     return redirect("/sources");

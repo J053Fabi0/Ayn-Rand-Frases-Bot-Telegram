@@ -2,7 +2,7 @@ import { Head, Handlers } from "../../deps.ts";
 import redirect from "../../utils/redirect.ts";
 import Button from "../../components/Button.tsx";
 import Typography from "../../components/Typography.tsx";
-import { postAuthor } from "../../controllers/opine/author.controller.ts";
+import { createAuthor } from "../../controllers/mongo/author.controller.ts";
 
 export const handler: Handlers = {
   async POST(req) {
@@ -12,7 +12,7 @@ export const handler: Handlers = {
 
     if (!author) return new Response("Missing author", { status: 400 });
 
-    await postAuthor({ body: { name: author } });
+    await createAuthor({ name: author });
 
     // Redirect user to the quote page.
     return redirect("/quote/new");

@@ -5,16 +5,14 @@ import Typography from "../../components/Typography.tsx";
 import getActionAndId from "../../utils/getActionAndId.ts";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
-import isMongoId from "../../types/typeGuards/isMongoId.ts";
 import isPromise from "../../types/typeGuards/isPromise.ts";
 import isResponse from "../../types/typeGuards/isResponse.ts";
-import { PostQuote, PatchQuote } from "../../types/api/quote.type.ts";
+import { Head, Handlers, PageProps, RouteConfig } from "../../deps.ts";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { getSources } from "../../controllers/mongo/source.controller.ts";
 import AuthorSourceSelector from "../../islands/AuthorSourceSelector.tsx";
-import { Head, Handlers, PageProps, RouteConfig, ObjectId } from "../../deps.ts";
-import { postQuote, patchQuote } from "../../controllers/opine/quote.controller.ts";
-import { FullQuote, getFullQuote, getQuote } from "../../controllers/mongo/quote.controller.ts";
+import { FullQuote, getFullQuote } from "../../controllers/mongo/quote.controller.ts";
+import { postQuote, patchQuote, PostQuote, PatchQuote } from "../../controllers/opine/quote.controller.ts";
 
 export const config: RouteConfig = {
   routeOverride: "/quote/(new|edit)/:id?",
@@ -53,21 +51,19 @@ export const handler: Handlers<NewQuoteProps, State> = {
     const form = await req.formData();
     const quote = form.get("quote")?.toString();
     const authorId = form.get("author")?.toString();
-    const sourceId = form.get("source")?.toString();
+    const sourceId = form.get("source")?.toString() || "null";
 
-    if (!quote || !authorId || !sourceId)
-      return new Response("Missing quote, author, or/and source", { status: 400 });
+    if (!quote || !authorId) return new Response("Missing quote, author, or/and source", { status: 400 });
 
     let quoteNumber = +groups.id!;
-    const body = { quote, authorId, sourceId: sourceId === "null" ? null : sourceId } satisfies (
+    const data = { quote, authorId, sourceId: sourceId === "null" ? null : sourceId } satisfies
       | PostQuote
-      | PatchQuote
-    )["body"];
+      | PatchQuote;
 
     // Edit quote
-    if (groups.action === "edit") await patchQuote({ body: { ...body, number: quoteNumber } });
+    if (groups.action === "edit") await patchQuote({ ...data, number: quoteNumber });
     // Publish new quote
-    else quoteNumber = (await postQuote({ body })).number;
+    else quoteNumber = (await postQuote(data)).number;
 
     // Redirect user to the quote page.
     return redirect(`/quote/${quoteNumber}`);
@@ -106,7 +102,7 @@ export default function NewQuote({ data: { quote, authors, sources } }: PageProp
 
         <div class="mt-3 flex justify-center items-center">
           <Button class="mt-2 py-2 px-4 text-lg" type="submit" color="green">
-            {editing ? "Edit" : "Publish"}
+            {editing ? "Save" : "Publish"}
           </Button>
         </div>
       </form>
