@@ -91,6 +91,9 @@ export async function getParsedFullQuote(
  */
 export const getQuotesWithoutSource = async () =>
   (
-    await aggregateQuote([{ $match: { source: null } }, { $group: { _id: "$author", number: { $sum: 1 } } }])
+    await aggregateQuote([
+      { $match: { source: null, archived: { $ne: true } } },
+      { $group: { _id: "$author", number: { $sum: 1 } } },
+    ])
   ).reduce((acc, { _id, number }) => ({ ...acc, [`${_id}`]: number }), {} as QuotesWithoutSource);
 export type QuotesWithoutSource = Record<string, number>;
