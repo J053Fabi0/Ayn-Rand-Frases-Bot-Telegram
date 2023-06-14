@@ -13,7 +13,15 @@ import AuthorSourceSelector from "../../islands/AuthorSourceSelector.tsx";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { getSources } from "../../controllers/mongo/source.controller.ts";
 import normalizeAuthorsAndSources from "../../utils/normalizeAuthorsAndSources.ts";
-import { FullQuote, getFullQuote, getFullQuotes } from "../../controllers/mongo/quote.controller.ts";
+import {
+  FullQuote,
+  QuotesWithoutSource,
+  aggregateQuote,
+  countQuotes,
+  getFullQuote,
+  getFullQuotes,
+  getQuotesWithoutSource,
+} from "../../controllers/mongo/quote.controller.ts";
 import { FiTrash2, BsCaretLeftFill, BsCaretRightFill, AiFillEdit, AiOutlineSearch } from "../../deps.ts";
 
 interface QuoteProps {
@@ -25,6 +33,7 @@ interface QuoteProps {
   authors: Author[];
   sources: Source[];
   quoteObj: FullQuote;
+  quotesWithoutSource: QuotesWithoutSource;
 }
 
 export const handler: Handlers<QuoteProps, State> = {
@@ -41,6 +50,8 @@ export const handler: Handlers<QuoteProps, State> = {
     if (authorId !== "all") filter.author = new ObjectId(authorId);
     if (sourceId !== "all") filter.source = sourceId === "null" ? null : new ObjectId(sourceId);
 
+    // group all authors and count how many quotes they have with source = null
+    const quotesWithoutSource = await getQuotesWithoutSource();
     const fullQuotes = (await getFullQuotes(filter, { projection: { number: 1 } })).map((q) => q.number);
     const index = fullQuotes.indexOf(possibleQuote.number);
 
@@ -54,6 +65,7 @@ export const handler: Handlers<QuoteProps, State> = {
       isAdmin,
       authorId,
       sourceId,
+      quotesWithoutSource,
       quoteObj: possibleQuote,
       previous: fullQuotes.length === 2 ? possibleQuote.number : previous,
       authors: await getAuthors({}, { projection: { _id: 1, name: 1 } }),
@@ -68,7 +80,7 @@ export const handler: Handlers<QuoteProps, State> = {
 };
 
 export default function Quote({ data }: PageProps<QuoteProps>) {
-  const { quoteObj, next, previous, isAdmin, authorId, sourceId } = data;
+  const { quoteObj, next, previous, isAdmin, authorId, sourceId, quotesWithoutSource } = data;
 
   const splitQuote = quoteObj.quote.split("\n");
   const author = quoteObj.author?.name || "Unknown";
@@ -77,7 +89,7 @@ export default function Quote({ data }: PageProps<QuoteProps>) {
 
   const description = quote.slice(0, 50) + (quote.length > 50 ? "…" : "");
 
-  const { sources, authors } = normalizeAuthorsAndSources(data.authors, data.sources);
+  const { sources, authors } = normalizeAuthorsAndSources(data.authors, data.sources, quotesWithoutSource);
 
   return (
     <>

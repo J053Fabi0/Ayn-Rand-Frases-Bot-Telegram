@@ -85,3 +85,12 @@ export async function getParsedFullQuote(
   const fullQuote = await getFullQuote(filter, options);
   return fullQuote ? parseFullQuote(fullQuote) : null;
 }
+
+/**
+ * @returns A record of the authors (keys) and the number of quotes without source they have (value).
+ */
+export const getQuotesWithoutSource = async () =>
+  (
+    await aggregateQuote([{ $match: { source: null } }, { $group: { _id: "$author", number: { $sum: 1 } } }])
+  ).reduce((acc, { _id, number }) => ({ ...acc, [`${_id}`]: number }), {} as QuotesWithoutSource);
+export type QuotesWithoutSource = Record<string, number>;

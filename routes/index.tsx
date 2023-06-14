@@ -1,3 +1,10 @@
+import {
+  FullQuote,
+  getFullQuotes,
+  countQuotes,
+  QuotesWithoutSource,
+  getQuotesWithoutSource,
+} from "../controllers/mongo/quote.controller.ts";
 import { WEBSITE_URL } from "../env.ts";
 import Metas from "../components/Metas.tsx";
 import Button from "../components/Button.tsx";
@@ -16,7 +23,6 @@ import { getSources } from "../controllers/mongo/source.controller.ts";
 import Typography, { getTypographyClass } from "../components/Typography.tsx";
 import normalizeAuthorsAndSources from "../utils/normalizeAuthorsAndSources.ts";
 import { Head, Handlers, PageProps, AiOutlineSearch, ObjectId } from "../deps.ts";
-import { FullQuote, getFullQuotes, countQuotes } from "../controllers/mongo/quote.controller.ts";
 
 interface IndexProps {
   page: number;
@@ -29,6 +35,7 @@ interface IndexProps {
   authors: Author[];
   sources: Source[];
   fullQuotes: FullQuote[];
+  quotesWithoutSource: QuotesWithoutSource;
 }
 
 const limit = 12;
@@ -56,7 +63,10 @@ export const handler: Handlers<IndexProps, State> = {
       projection: { number: 1 },
     });
 
+    const quotesWithoutSource = await getQuotesWithoutSource();
+
     return ctx.render({
+      quotesWithoutSource,
       hasMore: quoteCount > page * limit,
       isAdmin: Boolean(ctx.state.authToken),
       ...{ page, limit, pages, fullQuotes, authorId, sourceId },
@@ -71,8 +81,8 @@ export const handler: Handlers<IndexProps, State> = {
 };
 
 export default function Home({ data }: PageProps<IndexProps>) {
-  const { authorId, sourceId } = data;
-  const { sources, authors } = normalizeAuthorsAndSources(data.authors, data.sources);
+  const { authorId, sourceId, quotesWithoutSource } = data;
+  const { sources, authors } = normalizeAuthorsAndSources(data.authors, data.sources, quotesWithoutSource);
 
   return (
     <>

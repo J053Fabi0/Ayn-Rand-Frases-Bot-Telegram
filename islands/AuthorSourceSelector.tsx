@@ -68,7 +68,6 @@ export default function AuthorSourceSelector({ authors, sources, ...defaults }: 
           class="p-2 border border-gray-300 rounded w-full"
         >
           {sourcesOptions.value}
-          <option value={"null"}>Unknown source</option>
         </select>
       )}
     </div>
