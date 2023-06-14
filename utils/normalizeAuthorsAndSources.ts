@@ -11,7 +11,9 @@ export default function normalizeAuthorsAndSources(
 
   const authorsWithSourcesCount = authors.reduce((acc, author) => {
     const authorId = `${author._id}`;
-    acc[authorId] = sources.filter((s) => s.authors.some((a) => `${a}` === authorId)).length;
+    acc[authorId] =
+      sources.filter((s) => s.authors.some((a) => `${a}` === authorId)).length +
+      (quotesWithoutAuthor[authorId] || 0);
     return acc;
   }, {} as Record<string, number>);
 

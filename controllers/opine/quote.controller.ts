@@ -47,13 +47,13 @@ export const patchQuote = async (body: PatchQuote) => {
 
   if (sourceId) {
     const source = await getSourceById(sourceId, { projection: { _id: 1 } });
-    if (!source) return;
+    if (!source) throw new Error("Source not found");
     patchData.source = new ObjectId(sourceId);
   } else if (sourceId === null) patchData.source = null;
 
   if (authorId) {
     const author = await getAuthorById(authorId, { projection: { _id: 1 } });
-    if (!author) return;
+    if (!author) throw new Error("Author not found");
     patchData.author = new ObjectId(authorId);
   }
 

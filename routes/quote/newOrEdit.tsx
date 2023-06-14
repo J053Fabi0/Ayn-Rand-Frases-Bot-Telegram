@@ -73,6 +73,8 @@ export const handler: Handlers<NewQuoteProps, State> = {
 export default function NewQuote({ data: { quote, authors, sources } }: PageProps<NewQuoteProps>) {
   const editing = quote !== null;
 
+  const sourcesWithNull = [...sources, { _id: "null", name: "No source", authors: authors.map((a) => a._id) }];
+
   return (
     <>
       <Head>
@@ -94,7 +96,7 @@ export default function NewQuote({ data: { quote, authors, sources } }: PageProp
 
           <AuthorSourceSelector
             authors={authors}
-            sources={sources}
+            sources={sourcesWithNull}
             authorId={`${quote?.author?._id || ""}`}
             sourceId={`${quote?.source?._id || ""}`}
           />
