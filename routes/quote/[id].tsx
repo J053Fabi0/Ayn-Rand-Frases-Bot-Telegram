@@ -1,9 +1,9 @@
 import Metas from "../../components/Metas.tsx";
 import redirect from "../../utils/redirect.ts";
+import Quote from "../../components/Quote.tsx";
 import Button from "../../components/Button.tsx";
 import { State } from "../../types/state.type.ts";
 import Typography from "../../components/Typography.tsx";
-import Quote from "../../types/collections/quote.type.ts";
 import LastSentTime from "../../islands/LastSentTime.tsx";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
@@ -13,16 +13,9 @@ import AuthorSourceSelector from "../../islands/AuthorSourceSelector.tsx";
 import { getAuthors } from "../../controllers/mongo/author.controller.ts";
 import { getSources } from "../../controllers/mongo/source.controller.ts";
 import normalizeAuthorsAndSources from "../../utils/normalizeAuthorsAndSources.ts";
-import {
-  FullQuote,
-  QuotesWithoutSource,
-  aggregateQuote,
-  countQuotes,
-  getFullQuote,
-  getFullQuotes,
-  getQuotesWithoutSource,
-} from "../../controllers/mongo/quote.controller.ts";
+import { FullQuote, getFullQuote, getFullQuotes } from "../../controllers/mongo/quote.controller.ts";
 import { FiTrash2, BsCaretLeftFill, BsCaretRightFill, AiFillEdit, AiOutlineSearch } from "../../deps.ts";
+import { QuotesWithoutSource, getQuotesWithoutSource } from "../../controllers/mongo/quote.controller.ts";
 
 interface QuoteProps {
   next: number;
@@ -79,12 +72,10 @@ export const handler: Handlers<QuoteProps, State> = {
   },
 };
 
-export default function Quote({ data }: PageProps<QuoteProps>) {
+export default function QuotePage({ data }: PageProps<QuoteProps>) {
   const { quoteObj, next, previous, isAdmin, authorId, sourceId, quotesWithoutSource } = data;
 
-  const splitQuote = quoteObj.quote.split("\n");
   const author = quoteObj.author?.name || "Unknown";
-  const source = quoteObj.source?.name || "";
   const quote = quoteObj.quote.replace(/\n/g, " ");
 
   const description = quote.slice(0, 50) + (quote.length > 50 ? "…" : "");
@@ -100,21 +91,7 @@ export default function Quote({ data }: PageProps<QuoteProps>) {
       {/* Quote */}
       <div class="flex justify-center">
         <div class="max-w-screen-sm">
-          {/* Quote */}
-          {splitQuote.map((t, i) => (
-            <Typography class={i > 0 ? "mt-2" : ""}>{t}</Typography>
-          ))}
-
-          {/* Author and source */}
-          <Typography variant="lead" class="mt-4 ml-2">
-            - {author}.
-            {source && (
-              <>
-                {" "}
-                <i>{source}</i>.
-              </>
-            )}
-          </Typography>
+          <Quote quote={quoteObj} />
         </div>
       </div>
 

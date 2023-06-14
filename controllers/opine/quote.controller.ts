@@ -5,7 +5,12 @@ import { getSourceById } from "../mongo/source.controller.ts";
 import { getAuthorById } from "../mongo/author.controller.ts";
 import { createQuote, changeQuote, aggregateQuote } from "../mongo/quote.controller.ts";
 
-export type PostQuote = { quote: string; sourceId: string | null; authorId: string };
+export type PostQuote = {
+  quote: string;
+  sourceId: string | null;
+  authorId: string;
+  sourceDetails?: Quote["sourceDetails"];
+};
 export const postQuote = async (data: PostQuote) => {
   const lastNumber =
     (await aggregateQuote([{ $group: { _id: null, number: { $max: "$number" } } }]))[0]?.number ?? 0;
@@ -23,6 +28,7 @@ export const postQuote = async (data: PostQuote) => {
     lastSentTime: new Date(+lowestSentTime - 1),
     author: new ObjectId(data.authorId),
     source: data.sourceId ? new ObjectId(data.sourceId) : null,
+    sourceDetails: data.sourceDetails || null,
   });
 
   return quote;
@@ -33,13 +39,14 @@ export type PatchQuote = {
   archived?: false;
   authorId?: string;
   sourceId?: string | null;
+  sourceDetails?: Quote["sourceDetails"];
 } & (
   | { quoteId?: never; number: number }
   // Either quoteId or number must be provided, but not both
   | { quoteId: string; number?: never }
 );
-export const patchQuote = async (body: PatchQuote) => {
-  const { authorId, sourceId, quote } = body;
+export const patchQuote = async (data: PatchQuote) => {
+  const { authorId, sourceId, quote, sourceDetails, quoteId, number } = data;
 
   const patchData = {} as Partial<Quote>;
 
@@ -57,7 +64,9 @@ export const patchQuote = async (body: PatchQuote) => {
     patchData.author = new ObjectId(authorId);
   }
 
-  const results = await changeQuote(body.quoteId ? { _id: new ObjectId(body.quoteId) } : { number: body.number }, {
+  if (sourceDetails !== undefined) patchData.sourceDetails = sourceDetails || null;
+
+  const results = await changeQuote(quoteId ? { _id: new ObjectId(quoteId) } : { number }, {
     $set: patchData,
   });
 
