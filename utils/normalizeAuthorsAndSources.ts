@@ -21,8 +21,8 @@ export default function normalizeAuthorsAndSources(
     {
       _id: "all",
       name: "All",
-      // Filter out the authors that have less than 1 source.
-      authors: [...authors.map((a) => `${a._id}`).filter((a) => authorsWithSourcesCount[a] >= 1), "all"],
+      // Filter out the authors that have less than 2 source.
+      authors: [...authors.map((a) => `${a._id}`).filter((a) => authorsWithSourcesCount[a] >= 2), "all"],
     },
 
     ...sources.map((s) => ({ ...s, authors: ["all", ...s.authors] })),
