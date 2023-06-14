@@ -52,10 +52,10 @@ export const handler: Handlers<QuoteProps, State> = {
     return await ctx.render({
       next,
       isAdmin,
-      previous,
       authorId,
       sourceId,
       quoteObj: possibleQuote,
+      previous: fullQuotes.length === 2 ? possibleQuote.number : previous,
       authors: await getAuthors({}, { projection: { _id: 1, name: 1 } }),
       sources: await getSources({}, { projection: { _id: 1, name: 1, authors: 1 } }),
     });
