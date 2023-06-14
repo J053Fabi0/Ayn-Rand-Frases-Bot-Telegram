@@ -3,7 +3,7 @@ import { State } from "../../../types/state.type.ts";
 import Typography from "../../../components/Typography.tsx";
 import { Handlers, PageProps, Head } from "../../../deps.ts";
 import Button, { getButtonClasses } from "../../../components/Button.tsx";
-import { deleteQuote } from "../../../controllers/opine/quote.controller.ts";
+import { archiveQuote } from "../../../controllers/opine/quote.controller.ts";
 
 interface DeleteQuoteProps {
   quoteNumber: number;
@@ -21,7 +21,7 @@ export const handler: Handlers<DeleteQuoteProps, State> = {
   async POST(_, ctx) {
     if (!ctx.state.quoteExists) return ctx.renderNotFound();
 
-    await deleteQuote({ params: { idOrNumber: ctx.params.id } });
+    await archiveQuote(ctx.params.id);
 
     return redirect("/");
   },
