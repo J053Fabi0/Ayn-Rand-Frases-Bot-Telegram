@@ -1,8 +1,14 @@
 import Typography from "./Typography.tsx";
+import Source from "../types/collections/source.type.ts";
 import Author from "../types/collections/author.type.ts";
 import { FullQuote } from "../controllers/mongo/quote.controller.ts";
 
-export default function Quote({ quote }: { quote: FullQuote }) {
+export type EssentialQuote = Pick<FullQuote, "quote"> & {
+  source?: { name: Source["name"] } | null;
+  author?: { name: Author["name"] } | null;
+};
+
+export default function Quote({ quote }: { quote: EssentialQuote }) {
   const splitQuote = quote.quote.split("\n");
   const source = quote.source?.name || "";
   const author = quote.author?.name || "Unknown";
