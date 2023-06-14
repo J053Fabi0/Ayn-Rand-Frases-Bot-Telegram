@@ -18,7 +18,7 @@ export default function LastSentTime({ dateToParse }: LastSentTimeProps) {
     <>
       {date.toLocaleString()}
       &nbsp; - &nbsp;
-      {dayjsDate.fromNow()}
+      {dayjsDate.fromNow()}.
     </>
   );
 }
