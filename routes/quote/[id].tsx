@@ -5,6 +5,7 @@ import Button from "../../components/Button.tsx";
 import { State } from "../../types/state.type.ts";
 import Typography from "../../components/Typography.tsx";
 import LastSentTime from "../../islands/LastSentTime.tsx";
+import getQueryParams from "../../utils/getQueryParams.ts";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
 import handlePostFilters from "../../utils/handlePostFilters.ts";
@@ -30,10 +31,11 @@ interface QuoteProps {
 }
 
 export const handler: Handlers<QuoteProps, State> = {
-  async GET(_, ctx) {
+  async GET(req, ctx) {
     const { id } = ctx.params;
     const isAdmin = Boolean(ctx.state.authToken);
     const { authorId = "all", sourceId = "all" } = ctx.state;
+    const latestIfNotFound = Object.keys(getQueryParams(req.url)).includes("latestIfNotFound");
 
     if (!ctx.state.quoteExists) return ctx.renderNotFound();
 
@@ -46,9 +48,14 @@ export const handler: Handlers<QuoteProps, State> = {
     // group all authors and count how many quotes they have with source = null
     const quotesWithoutSource = await getQuotesWithoutSource();
     const fullQuotes = (await getFullQuotes(filter, { projection: { number: 1 } })).map((q) => q.number);
+
     const index = fullQuotes.indexOf(possibleQuote.number);
 
-    if (index === -1) return redirect(`/quote/${fullQuotes[0]}`);
+    // if the current quote is not in the list of quotes with the current filters
+    // and the latestIfNotFound query param is present, redirect to the latest quote
+    if (latestIfNotFound && index === -1) return redirect(`/quote/${fullQuotes[0]}`);
+    // remove latestIfNotFound query param
+    else if (latestIfNotFound) return redirect(`/quote/${id}`);
 
     const next = index > 0 ? fullQuotes[index - 1] : fullQuotes[fullQuotes.length - 1];
     const previous = index < fullQuotes.length - 1 ? fullQuotes[index + 1] : fullQuotes[0];
@@ -68,7 +75,7 @@ export const handler: Handlers<QuoteProps, State> = {
 
   POST(req, ctx) {
     const { id } = ctx.params;
-    return handlePostFilters(`/quote/${id}`, req);
+    return handlePostFilters(`/quote/${id}?latestIfNotFound`, req);
   },
 };
 
