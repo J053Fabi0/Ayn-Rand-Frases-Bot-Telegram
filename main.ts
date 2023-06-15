@@ -8,7 +8,6 @@
 // load the .env file
 import "dotenv";
 import "./utils/crons.ts";
-import { WEB_PORT } from "./env.ts";
 import manifest from "./fresh.gen.ts";
 import twindConfig from "./twind.config.ts";
 import { start, twindPlugin } from "./deps.ts";
@@ -17,4 +16,4 @@ import { start, twindPlugin } from "./deps.ts";
 import("./initBot.ts");
 
 // Start the web server
-await start(manifest, { plugins: [twindPlugin(twindConfig)], port: WEB_PORT });
+await start(manifest, { plugins: [twindPlugin(twindConfig)] });
