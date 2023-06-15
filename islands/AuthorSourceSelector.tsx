@@ -47,11 +47,14 @@ export default function AuthorSourceSelector({
           author.value._id === defaults.authorId
         : // if there's no authorId by default, check if the filtered sources contain the default source
           filteredSources.value.some((source) => source._id === defaults.sourceId))
-    )
-      return void (sourceId.value = defaults.sourceId);
+    ) {
+      sourceId.value = defaults.sourceId;
+    } else {
+      const [firstSource] = filteredSources.value;
+      sourceId.value = firstSource ? (firstSource?._id as string) : "null";
+    }
 
-    const [firstSource] = filteredSources.value;
-    sourceId.value = firstSource ? (firstSource?._id as string) : "null";
+    if (onSourceChange) onSourceChange(sourceId.peek());
   });
 
   return (
