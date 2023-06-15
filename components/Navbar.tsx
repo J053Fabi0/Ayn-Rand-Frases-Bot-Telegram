@@ -1,3 +1,4 @@
+import Button from "./Button.tsx";
 import Typography from "./Typography.tsx";
 
 interface Page {
@@ -5,41 +6,48 @@ interface Page {
   name: string;
 }
 
-const pages: Page[] = [
-  {
-    href: "/signin",
-    name: "Sign in",
-  },
-];
+const pages: Page[] = [];
 
-export default function Navbar() {
+export default function Navbar({ loggedIn = false }) {
+  const signInOrOut = loggedIn ? (
+    <a href="/signout">
+      <Button color="red">
+        <span>Sign out</span>
+      </Button>
+    </a>
+  ) : (
+    <a href="/signin">
+      <Button color="green">
+        <span>Sign in</span>
+      </Button>
+    </a>
+  );
+
+  const pagesElement = pages.length > 0 && (
+    <ul class="hidden items-center gap-6 lg:flex">
+      {pages.map((page) => (
+        <li class="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
+          <a class="flex items-center" href={page.href}>
+            {page.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+
   return (
     <nav class="bg-gray-300">
       <div class="mx-auto block w-full max-w-screen-lg py-2 px-4 lg:py-3">
         <div class="container mx-auto flex items-center justify-between text-gray-900">
           <a href="/">
-            <Typography
-              variant="h5"
-              class="mr-4 block cursor-pointer py-1.5 font-sans text-sm font-normal leading-normal text-inherit antialiased"
-            >
+            <Typography variant="h5" class="mr-4 cursor-pointer">
               Objectivism quotes
             </Typography>
           </a>
-          <ul class="hidden items-center gap-6 lg:flex">
-            {pages.map((page) => (
-              <li class="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-                <a class="flex items-center" href={page.href}>
-                  {page.name}
-                </a>
-              </li>
-            ))}
-          </ul>
 
-          {/* <a href="/signin">
-            <Button color="blue" class="hidden lg:inline-block">
-              <span>Sign in</span>
-            </Button>
-          </a> */}
+          {pagesElement}
+
+          <div class="hidden lg:inline-block">{signInOrOut}</div>
 
           <button
             class="middle none relative ml-auto h-6 max-h-[40px] w-6 max-w-[40px] rounded-lg text-center font-sans text-xs font-medium uppercase text-blue-gray-500 transition-all hover:bg-transparent focus:bg-transparent active:bg-transparent disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:hidden"
@@ -63,22 +71,9 @@ export default function Navbar() {
           class="block h-0 w-full basis-full overflow-hidden text-blue-gray-900 transition-all duration-300 ease-in lg:hidden"
           data-collapse="navbar"
         >
-          <div class="container mx-auto pb-2">
-            <ul class="mt-2 mb-4 flex flex-col gap-2">
-              {pages.map((page) => (
-                <li class="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-                  <a class="flex items-center" href={page.href}>
-                    {page.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            {/* <a href="/signin">
-              <Button color="blue">
-                <span>Sign in</span>
-              </Button>
-            </a> */}
+          <div class="container mx-auto pb-2 pt-5">
+            {pagesElement}
+            {signInOrOut}
           </div>
         </div>
       </div>

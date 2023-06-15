@@ -2,7 +2,9 @@ import Navbar from "../components/Navbar.tsx";
 import { Links } from "../components/Links.tsx";
 import { AppProps, Head, asset } from "../deps.ts";
 
-export default function App({ Component }: AppProps) {
+export default function App({ Component, data }: AppProps) {
+  const { isAdmin } = data || {};
+
   return (
     <>
       <Head>
@@ -10,7 +12,7 @@ export default function App({ Component }: AppProps) {
       </Head>
 
       <body class="min-h-screen flex flex-col">
-        <Navbar />
+        <Navbar loggedIn={isAdmin} />
 
         <div class="px-4 pt-4 mx-auto w-full max-w-screen-lg flex-1">
           <Component />
