@@ -74,8 +74,11 @@ export function parseFullQuote(quote: FullQuote) {
     ? `${parsedQuote}\n\n - <a href="${WEBSITE_URL}/quote/${quote.number}">${escapeHtml(author)}</a>.`
     : parsedQuote;
 
-  const source = quote.source?.name;
-  return source ? `${quoteWithAutor} ${escapeHtml(source)}.` : quoteWithAutor;
+  let source = escapeHtml(quote.source?.name || "");
+  if (source && quote.source?.url) source = `<a href="${quote.source.url}">${source}</a>`;
+  if (source && quote.sourceDetails) source += escapeHtml(quote.sourceDetails);
+
+  return source ? `${quoteWithAutor} ${source}.` : quoteWithAutor;
 }
 
 export async function getParsedFullQuote(

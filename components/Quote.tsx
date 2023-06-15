@@ -1,5 +1,5 @@
-import { createElement, Fragment } from "preact";
 import Typography from "./Typography.tsx";
+import { createElement, Fragment } from "preact";
 import Source from "../types/collections/source.type.ts";
 import Author from "../types/collections/author.type.ts";
 import { FullQuote } from "../controllers/mongo/quote.controller.ts";
