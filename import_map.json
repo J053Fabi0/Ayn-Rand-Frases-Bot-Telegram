@@ -6,6 +6,7 @@
     "mongo": "https://deno.land/x/mongo@v0.31.2/mod.ts",
     "bcrypt": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
     "shuffle": "https://deno.land/x/shuffle@v1.0.1/mod.ts",
+    "web_bson": "https://deno.land/x/web_bson@v0.3.0/mod.js",
     "croner": "https://deno.land/x/croner@6.0.4/dist/croner.js",
     "lodash": "https://deno.land/x/deno_ts_lodash@0.0.1/mod.ts",
     "escape_html": "https://deno.land/x/escape_html@1.0.0/mod.ts",

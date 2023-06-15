@@ -1,12 +1,12 @@
 export { sleep } from "sleep";
 export { compare, hash } from "bcrypt";
 export { default as Cron } from "croner";
+export type { Document } from "web_bson";
 export { escapeHtml } from "escape_html";
 export { default as shuffle } from "shuffle";
 export { lodash as _, lodash } from "lodash";
 export { repeatUntilNoError } from "duplicatedFilesCleaner";
 export { getCookies, setCookie, deleteCookie } from "std/http/cookie.ts";
-export type { Document } from "https://deno.land/x/web_bson@v0.3.0/mod.js";
 export { createSignedCookie, verifySignedCookie, cookieSign, cookieVerify } from "squishy_cookies";
 
 export type { Filter as FilterCtx } from "grammy/mod.ts";
