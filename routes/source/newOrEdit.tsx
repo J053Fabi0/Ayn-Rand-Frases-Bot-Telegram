@@ -46,18 +46,21 @@ export const handler: Handlers<NewSourceProps> = {
 
     const form = await req.formData();
 
+    const url = form.get("url")?.toString();
     const source = form.get("source")?.toString();
     const authors = [...form.keys()].filter((key) => isMongoId(key)).map((id) => new ObjectId(id));
 
     if (!source) return new Response("Missing source", { status: 400 });
     if (authors.length === 0) return new Response("Missing authors", { status: 400 });
 
+    const data = { url: url || null, name: source, authors };
+
     if (groups.action === "new") {
-      await createSource({ authors: authors, name: source });
+      await createSource(data);
       return redirect("/quote/new");
     }
 
-    await changeSource({ _id: new ObjectId(groups.id) }, { $set: { authors, name: source } });
+    await changeSource({ _id: new ObjectId(groups.id) }, { $set: data });
     return redirect(`/sources`);
   },
 };
@@ -83,6 +86,15 @@ export default function NewSource({ data: { authors, source } }: PageProps<NewSo
             name="source"
             placeholder="Source"
             value={source?.name ?? ""}
+            class="my-2 p-2 border border-gray-300 rounded w-full"
+          />
+
+          <input
+            name="url"
+            type="url"
+            placeholder="URL"
+            pattern="https://.*"
+            value={source?.url ?? ""}
             class="my-2 p-2 border border-gray-300 rounded w-full"
           />
 
