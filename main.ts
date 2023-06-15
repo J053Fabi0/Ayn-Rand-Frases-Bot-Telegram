@@ -6,7 +6,6 @@
 /// <reference lib="dom.asynciterable" />
 
 // load the .env file
-import "dotenv";
 import "./utils/crons.ts";
 import manifest from "./fresh.gen.ts";
 import twindConfig from "./twind.config.ts";

@@ -1,6 +1,6 @@
 import { hash } from "./deps.ts";
 
-import "dotenv";
+import "std/dotenv/load.ts";
 export const TIMEZONE = Deno.env.get("TIMEZONE") as string;
 export const BOT_TOKEN = Deno.env.get("BOT_TOKEN") as string;
 export const MONGO_URI = Deno.env.get("MONGO_URI") as string;
