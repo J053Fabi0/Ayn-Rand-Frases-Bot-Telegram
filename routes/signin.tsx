@@ -6,6 +6,11 @@ import Typography from "../components/Typography.tsx";
 import createSignedCookie from "../utils/createSignedCookie.ts";
 
 export const handler: Handlers = {
+  GET(_, ctx) {
+    if (ctx.state.authToken) return redirect("/");
+    return ctx.render();
+  },
+
   async POST(req) {
     const form = await req.formData();
 
