@@ -11,21 +11,26 @@ export default function NewOrEditQuote({ authors, quote, sources }: NewQuoteProp
   const sourceString = useSignal("");
   const authorString = useSignal("");
   const sourceDetailsString = useSignal("");
+  const sourceUrlString = useSignal<string | null>(null);
   const computedQuote = useComputed<EssentialQuote>(() => ({
     quote: quoteString.value,
-    source: { name: sourceString.value },
     author: { name: authorString.value },
     sourceDetails: sourceDetailsString.value,
+    source: { name: sourceString.value, url: sourceUrlString.value },
   }));
 
   if (!quoteString.value && !sourceString.value && !authorString.value && !sourceDetailsString.value && quote) {
     quoteString.value = quote.quote;
     sourceDetailsString.value = quote.sourceDetails ?? "";
     if (quote.source?.name) sourceString.value = quote.source.name;
+    if (quote.source?.url) sourceUrlString.value = quote.source.url;
     if (quote.author?.name) authorString.value = quote.author.name;
   }
   if (!authorString.value && authors.length) authorString.value = authors[0].name;
-  if (!sourceString.value && sources.length) sourceString.value = sources[0].name;
+  if (!sourceString.value && sources.length) {
+    sourceString.value = sources[0].name;
+    sourceUrlString.value = sources[0].url || null;
+  }
 
   const sourcesWithNull = [...sources, { _id: "null", name: "No source", authors: authors.map((a) => a._id) }];
 
@@ -51,9 +56,11 @@ export default function NewOrEditQuote({ authors, quote, sources }: NewQuoteProp
             onAuthorChange={(newAuthorId) =>
               (authorString.value = authors.find((a) => `${a._id}` === newAuthorId)?.name || "")
             }
-            onSourceChange={(newSourceId) =>
-              (sourceString.value = sources.find((s) => `${s._id}` === newSourceId)?.name || "")
-            }
+            onSourceChange={(newSourceId) => {
+              const source = sources.find((s) => `${s._id}` === newSourceId)!;
+              sourceString.value = source.name || "";
+              sourceUrlString.value = source.url || null;
+            }}
           />
 
           <input
