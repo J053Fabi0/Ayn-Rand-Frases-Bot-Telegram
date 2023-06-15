@@ -1,11 +1,11 @@
 import redirect from "./redirect.ts";
 import createSignedCookie from "./createSignedCookie.ts";
 
-export default async function handlePostFilters(redirectPath: string, req: Request) {
-  const form = await req.formData();
+export default async function handlePostFilters(redirectPath: string, reqOrForm: Request | FormData) {
+  const finalForm = reqOrForm instanceof FormData ? reqOrForm : await reqOrForm.formData();
 
-  const authorId = form.get("author")?.toString();
-  const sourceId = form.get("source")?.toString() || "null";
+  const authorId = finalForm.get("author")?.toString();
+  const sourceId = finalForm.get("source")?.toString() || "all";
 
   if (!authorId) return new Response("Missing author", { status: 400 });
 

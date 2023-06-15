@@ -30,52 +30,66 @@ interface QuoteProps {
   quotesWithoutSource: QuotesWithoutSource;
 }
 
+async function getDataOrResponse(authorId: string, sourceId: string, quoteId: string, latestIfNotFound = false) {
+  const possibleQuote = (await getFullQuote({ number: parseInt(quoteId) })) as FullQuote;
+
+  const filter: Parameters<typeof getFullQuotes>[0] = {};
+  if (authorId !== "all") filter.author = new ObjectId(authorId);
+  if (sourceId !== "all") filter.source = sourceId === "null" ? null : new ObjectId(sourceId);
+
+  // group all authors and count how many quotes they have with source = null
+  const quotesWithoutSource = await getQuotesWithoutSource();
+  const fullQuotes = (await getFullQuotes(filter, { projection: { number: 1 } })).map((q) => q.number);
+
+  const index = fullQuotes.indexOf(possibleQuote.number);
+
+  // if the current quote is not in the list of quotes with the current filters
+  // and latestIfNotFound, redirect to the latest quote
+  if (latestIfNotFound && index === -1) return redirect(`/quote/${fullQuotes[0]}`);
+
+  return { possibleQuote, fullQuotes, index, quotesWithoutSource };
+}
+
 export const handler: Handlers<QuoteProps, State> = {
-  async GET(req, ctx) {
+  async GET(_, ctx) {
     const { id } = ctx.params;
-    const isAdmin = Boolean(ctx.state.authToken);
     const { authorId = "all", sourceId = "all" } = ctx.state;
-    const latestIfNotFound = Object.keys(getQueryParams(req.url)).includes("latestIfNotFound");
 
     if (!ctx.state.quoteExists) return ctx.renderNotFound();
 
-    const possibleQuote = (await getFullQuote({ number: parseInt(id) })) as FullQuote;
-
-    const filter: Parameters<typeof getFullQuotes>[0] = {};
-    if (authorId !== "all") filter.author = new ObjectId(authorId);
-    if (sourceId !== "all") filter.source = sourceId === "null" ? null : new ObjectId(sourceId);
-
-    // group all authors and count how many quotes they have with source = null
-    const quotesWithoutSource = await getQuotesWithoutSource();
-    const fullQuotes = (await getFullQuotes(filter, { projection: { number: 1 } })).map((q) => q.number);
-
-    const index = fullQuotes.indexOf(possibleQuote.number);
-
-    // if the current quote is not in the list of quotes with the current filters
-    // and the latestIfNotFound query param is present, redirect to the latest quote
-    if (latestIfNotFound && index === -1) return redirect(`/quote/${fullQuotes[0]}`);
-    // remove latestIfNotFound query param
-    else if (latestIfNotFound) return redirect(`/quote/${id}`);
+    const result = await getDataOrResponse(authorId, sourceId, id);
+    if (result instanceof Response) return result;
+    const { possibleQuote, fullQuotes, index } = result;
 
     const next = index > 0 ? fullQuotes[index - 1] : fullQuotes[fullQuotes.length - 1];
     const previous = index < fullQuotes.length - 1 ? fullQuotes[index + 1] : fullQuotes[0];
 
     return await ctx.render({
       next,
-      isAdmin,
       authorId,
       sourceId,
-      quotesWithoutSource,
       quoteObj: possibleQuote,
+      isAdmin: Boolean(ctx.state.authToken),
+      quotesWithoutSource: result.quotesWithoutSource,
       previous: fullQuotes.length === 2 ? possibleQuote.number : previous,
       authors: await getAuthors({}, { projection: { _id: 1, name: 1 } }),
       sources: await getSources({}, { projection: { _id: 1, name: 1, authors: 1 } }),
     });
   },
 
-  POST(req, ctx) {
+  async POST(req, ctx) {
     const { id } = ctx.params;
-    return handlePostFilters(`/quote/${id}?latestIfNotFound`, req);
+
+    const form = await req.formData();
+    const authorId = form.get("author")?.toString() || "all";
+    const sourceId = form.get("source")?.toString() || "all";
+
+    const response = await handlePostFilters(`/quote/${id}`, form);
+
+    const redirect = await getDataOrResponse(authorId, sourceId, id, true);
+    if (redirect instanceof Response) response.headers.set("location", redirect.headers.get("location")!);
+
+    return response;
   },
 };
 
