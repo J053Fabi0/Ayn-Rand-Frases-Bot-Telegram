@@ -6,6 +6,7 @@ import verifySignedCookie from "../utils/verifySignedCookie.ts";
 import { getCookies, MiddlewareHandlerContext, compare, deleteCookie } from "../deps.ts";
 
 export const handler = [
+  // parse and check cookies
   async function (req: Request, ctx: MiddlewareHandlerContext<State>) {
     const invalidKeys: string[] = [];
     const cookies = getCookies(req.headers);
@@ -30,6 +31,7 @@ export const handler = [
     return ctx.next();
   },
 
+  // check if the user is trying to access an admin page
   async function (req: Request, ctx: MiddlewareHandlerContext<State>) {
     const url = new URL(req.url);
     if (url.pathname === "") return await ctx.next();
@@ -51,5 +53,12 @@ export const handler = [
     }
 
     return ctx.next();
+  },
+
+  // add the Link: rel="modulepreload" header
+  async function (req: Request, ctx: MiddlewareHandlerContext<State>) {
+    const response = await ctx.next();
+    response.headers.append("Link", 'rel="modulepreload"');
+    return response;
   },
 ];
