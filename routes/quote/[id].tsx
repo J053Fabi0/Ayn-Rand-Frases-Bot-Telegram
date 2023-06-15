@@ -5,7 +5,6 @@ import Button from "../../components/Button.tsx";
 import { State } from "../../types/state.type.ts";
 import Typography from "../../components/Typography.tsx";
 import LastSentTime from "../../islands/LastSentTime.tsx";
-import getQueryParams from "../../utils/getQueryParams.ts";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
 import handlePostFilters from "../../utils/handlePostFilters.ts";
