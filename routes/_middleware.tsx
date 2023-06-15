@@ -1,20 +1,9 @@
 import { AUTH_TOKEN } from "../env.ts";
 import redirect from "../utils/redirect.ts";
 import { State } from "../types/state.type.ts";
+import { isAdminPage } from "../utils/isAdminPage.tsx";
 import verifySignedCookie from "../utils/verifySignedCookie.ts";
 import { getCookies, MiddlewareHandlerContext, compare, deleteCookie } from "../deps.ts";
-
-const adminURLs = [
-  "/quote/new",
-  "/source/new",
-  "/author/new",
-  "/quote/edit/:id",
-  "/source/edit/:id",
-  "/author/edit/:id",
-  "/source/delete/:id",
-  "/sources",
-  "/authors",
-].map((pathname) => new URLPattern({ pathname }));
 
 export const handler = [
   async function (req: Request, ctx: MiddlewareHandlerContext<State>) {
@@ -49,7 +38,7 @@ export const handler = [
       if (url.pathname === "/signin") return ctx.next();
 
       // redirect to signin page if the user is trying to access an admin page
-      if (adminURLs.some((pattern) => pattern.test(req.url))) return redirect("/signin");
+      if (isAdminPage(req.url)) return redirect("/signin");
 
       return ctx.next();
     }

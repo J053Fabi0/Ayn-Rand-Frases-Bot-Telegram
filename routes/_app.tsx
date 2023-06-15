@@ -1,9 +1,10 @@
 import Navbar from "../components/Navbar.tsx";
 import { Links } from "../components/Links.tsx";
 import { AppProps, Head, asset } from "../deps.ts";
+import { isAdminPage } from "../utils/isAdminPage.tsx";
 
-export default function App({ Component, data }: AppProps) {
-  const { isAdmin } = data || {};
+export default function App({ Component, data, url }: AppProps) {
+  const isAdmin = (data || {}).isAdmin ?? isAdminPage(url.href);
 
   return (
     <>
