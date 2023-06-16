@@ -1,25 +1,26 @@
 import { AUTH_TOKEN } from "../env.ts";
 import redirect from "../utils/redirect.ts";
 import Button from "../components/Button.tsx";
+import { State } from "../types/state.type.ts";
 import { Head, Handlers, compare } from "../deps.ts";
 import Typography from "../components/Typography.tsx";
-import createSignedCookie from "../utils/createSignedCookie.ts";
 
-export const handler: Handlers = {
+export const handler: Handlers<null, State> = {
   GET(_, ctx) {
     if (ctx.state.authToken) return redirect("/");
     return ctx.render();
   },
 
-  async POST(req) {
+  async POST(req, ctx) {
     const form = await req.formData();
 
     const authToken = form.get("authToken")?.toString();
     if (!authToken) return new Response("Missing auth token", { status: 401 });
     if (!(await compare(authToken, AUTH_TOKEN))) return new Response("Unauthorized", { status: 401 });
 
-    const { headers } = await createSignedCookie("authToken", authToken, { httpOnly: true, path: "/" });
-    return redirect("/", { headers });
+    ctx.state.session.set("authToken", authToken);
+
+    return redirect("/");
   },
 };
 

@@ -2,32 +2,19 @@ import { AUTH_TOKEN } from "../env.ts";
 import redirect from "../utils/redirect.ts";
 import { State } from "../types/state.type.ts";
 import { isAdminPage } from "../utils/isAdminPage.tsx";
-import verifySignedCookie from "../utils/verifySignedCookie.ts";
-import { getCookies, MiddlewareHandlerContext, compare, deleteCookie } from "../deps.ts";
+import { MiddlewareHandlerContext, compare, deleteCookie, cookieSession } from "../deps.ts";
+
+const session = cookieSession({});
 
 export const handler = [
-  // parse and check cookies
-  async function (req: Request, ctx: MiddlewareHandlerContext<State>) {
-    const invalidKeys: string[] = [];
-    const cookies = getCookies(req.headers);
+  // implement fresh-session
+  (req: Request, ctx: MiddlewareHandlerContext<State>) => session(req, ctx),
 
-    for (const key of Object.keys(cookies) as (keyof State)[]) {
-      if (key === "quoteExists") continue;
-
-      const isValid = await verifySignedCookie(req.headers, key);
-      if (isValid === false) {
-        invalidKeys.push(key);
-      } else {
-        ctx.state[key] = isValid.split(".")[0];
-      }
-    }
-
-    if (invalidKeys.length > 0) {
-      const response = redirect("/signin");
-      for (const key of invalidKeys) deleteCookie(response.headers, key);
-      return response;
-    }
-
+  // parse the session data
+  function (_: Request, ctx: MiddlewareHandlerContext<State>) {
+    ctx.state.authToken = ctx.state.session.get("authToken");
+    ctx.state.authorId = ctx.state.session.get("authorId");
+    ctx.state.sourceId = ctx.state.session.get("sourceId");
     return ctx.next();
   },
 

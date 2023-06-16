@@ -1,7 +1,11 @@
+import { State } from "../types/state.type.ts";
 import redirect from "./redirect.ts";
-import createSignedCookie from "./createSignedCookie.ts";
 
-export default async function handlePostFilters(redirectPath: string, reqOrForm: Request | FormData) {
+export default async function handlePostFilters(
+  redirectPath: string,
+  reqOrForm: Request | FormData,
+  state: State
+) {
   const finalForm = reqOrForm instanceof FormData ? reqOrForm : await reqOrForm.formData();
 
   const authorId = finalForm.get("author")?.toString();
@@ -9,9 +13,8 @@ export default async function handlePostFilters(redirectPath: string, reqOrForm:
 
   if (!authorId) return new Response("Missing author", { status: 400 });
 
-  const { headers } = await createSignedCookie("authorId", authorId, { httpOnly: true });
-  const { cookie } = await createSignedCookie("sourceId", sourceId, { httpOnly: true });
-  headers.append("Set-Cookie", cookie);
+  state.session.set("authorId", authorId);
+  state.session.set("sourceId", sourceId);
 
-  return redirect(redirectPath, { headers });
+  return redirect(redirectPath);
 }

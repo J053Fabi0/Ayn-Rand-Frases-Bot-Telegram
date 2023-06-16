@@ -75,8 +75,8 @@ export const handler: Handlers<IndexProps, State> = {
     });
   },
 
-  POST(req) {
-    return handlePostFilters("/", req);
+  POST(req, { state }) {
+    return handlePostFilters("/", req, state);
   },
 };
 

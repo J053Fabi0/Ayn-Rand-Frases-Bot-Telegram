@@ -3,17 +3,16 @@ import redirect from "../utils/redirect.ts";
 import Button from "../components/Button.tsx";
 import { State } from "../types/state.type.ts";
 import Pagination from "../components/Pagination.tsx";
+import AdminTools from "../components/AdminTools.tsx";
 import getQueryParams from "../utils/getQueryParams.ts";
+import checkPageParam from "../utils/checkPageParam.ts";
 import Author from "../types/collections/author.type.ts";
 import Source from "../types/collections/source.type.ts";
-import createSignedCookie from "../utils/createSignedCookie.ts";
-import { getAuthors } from "../controllers/mongo/author.controller.ts";
-import { countSources, getSources } from "../controllers/mongo/source.controller.ts";
-import Typography, { getTypographyClass } from "../components/Typography.tsx";
-import { Head, Handlers, PageProps, AiOutlineSearch, ObjectId, Filter } from "../deps.ts";
-import checkPageParam from "../utils/checkPageParam.ts";
 import isResponse from "../types/typeGuards/isResponse.ts";
-import AdminTools from "../components/AdminTools.tsx";
+import { getAuthors } from "../controllers/mongo/author.controller.ts";
+import Typography, { getTypographyClass } from "../components/Typography.tsx";
+import { countSources, getSources } from "../controllers/mongo/source.controller.ts";
+import { Head, Handlers, PageProps, AiOutlineSearch, ObjectId, Filter } from "../deps.ts";
 
 interface IndexProps {
   page: number;
@@ -60,12 +59,12 @@ export const handler: Handlers<IndexProps, State> = {
     });
   },
 
-  async POST(req) {
+  async POST(req, ctx) {
     const form = await req.formData();
     const authorId = form.get("author")?.toString();
     if (!authorId) return new Response("Missing author", { status: 400 });
-    const { headers } = await createSignedCookie("authorId", authorId, { httpOnly: true, path: "/" });
-    return redirect(`/sources`, { headers });
+    ctx.state.session.set("authorId", authorId);
+    return redirect(`/sources`);
   },
 };
 

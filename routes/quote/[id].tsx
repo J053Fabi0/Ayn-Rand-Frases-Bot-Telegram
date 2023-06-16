@@ -83,7 +83,7 @@ export const handler: Handlers<QuoteProps, State> = {
     const authorId = form.get("author")?.toString() || "all";
     const sourceId = form.get("source")?.toString() || "all";
 
-    const response = await handlePostFilters(`/quote/${id}`, form);
+    const response = await handlePostFilters(`/quote/${id}`, form, ctx.state);
 
     const redirect = await getDataOrResponse(authorId, sourceId, id, true);
     if (redirect instanceof Response) response.headers.set("location", redirect.headers.get("location")!);
