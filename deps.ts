@@ -6,7 +6,6 @@ export { escapeHtml } from "escape_html";
 export { default as shuffle } from "shuffle";
 export { lodash as _, lodash } from "lodash";
 export { repeatUntilNoError } from "duplicatedFilesCleaner";
-export { getCookies, setCookie, deleteCookie } from "std/http/cookie.ts";
 
 // Fresh session
 export { cookieSession } from "fresh-session";
@@ -28,6 +27,7 @@ export type { JSX } from "preact";
 export { start } from "$fresh/server.ts";
 export { default as dev } from "$fresh/dev.ts";
 export { Head, asset } from "$fresh/runtime.ts";
+export type { Middleware } from "$fresh/src/server/types.ts";
 export { default as twindPlugin } from "$fresh/plugins/twind.ts";
 export type { Options as TwindOptions } from "$fresh/plugins/twind.ts";
 export type { RouteConfig, UnknownPageProps, ErrorPageProps } from "$fresh/server.ts";
