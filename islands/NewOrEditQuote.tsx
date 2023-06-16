@@ -80,7 +80,7 @@ export default function NewOrEditQuote({ authors, quote, sources }: NewQuoteProp
         </div>
       </form>
 
-      <hr class="my-5" />
+      {computedQuote.value.quote && <hr class="my-5" />}
       <Quote quote={computedQuote.value} />
     </>
   );
