@@ -4,7 +4,12 @@ import { State } from "../types/state.type.ts";
 import { isAdminPage } from "../utils/isAdminPage.tsx";
 import { MiddlewareHandlerContext, compare, deleteCookie, cookieSession } from "../deps.ts";
 
-const session = cookieSession({});
+const session = cookieSession({
+  secure: true,
+  httpOnly: true,
+  sameSite: "Strict",
+  maxAge: Number.MAX_SAFE_INTEGER,
+});
 
 export const handler = [
   // implement fresh-session
