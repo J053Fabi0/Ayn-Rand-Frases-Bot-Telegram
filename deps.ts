@@ -8,8 +8,8 @@ export { lodash as _, lodash } from "lodash";
 export { repeatUntilNoError } from "duplicatedFilesCleaner";
 
 // Fresh session
-export { cookieSession } from "fresh-session";
-export type { WithSession } from "fresh-session";
+export { cookieSession } from "fresh-session/mod.ts";
+export type { WithSession } from "fresh-session/src/stores/interface.ts";
 
 // Grammy
 export type { Filter as FilterCtx } from "grammy/mod.ts";
