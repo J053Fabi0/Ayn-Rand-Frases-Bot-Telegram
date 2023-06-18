@@ -11,8 +11,11 @@ import {
   AggregateOptions,
   AggregatePipeline,
 } from "../../deps.ts";
-import InsertDoc from "../../types/collections/insertDoc.type.ts";
 import CommonCollection from "../../types/collections/commonCollection.type.ts";
+
+export type InsertDoc<T = CommonCollection> = InsertDocument<
+  Omit<T, keyof CommonCollection> & { createdAt?: Date; modifiedAt?: Date; _id: ObjectId }
+>;
 
 type UnPromisify<T> = T extends Promise<infer U> ? U : T;
 type DocumentOfCollection<T extends Collection<CommonCollection>> = Exclude<
