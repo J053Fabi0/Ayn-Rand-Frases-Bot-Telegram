@@ -7,7 +7,7 @@ export default function Metas({
 }: {
   title: string;
   image?: string;
-  description: string;
+  description?: string;
 }) {
   return (
     <>
@@ -15,8 +15,8 @@ export default function Metas({
       <title>{title}</title>
       <meta name="title" content={title} />
       <meta name="theme-color" content="#797979" />
-      <meta name="description" content={description} />
       <meta name="msapplication-TileColor" content="#797979" />
+      {description && <meta name="description" content={description} />}
       <meta name="viewport" content="width=device-with, initial-scale=1" />
 
       {/* <!-- Open Graph / Facebook --> */}
@@ -24,14 +24,14 @@ export default function Metas({
       <meta property="og:type" content="website" />
       <meta property="og:url" content={WEBSITE_URL} />
       {image && <meta property="og:image" content={image} />}
-      <meta property="og:description" content={description} />
+      {description && <meta property="og:description" content={description} />}
 
       {/* <!-- Twitter --> */}
       <meta property="twitter:title" content={title} />
       <meta property="twitter:url" content={WEBSITE_URL} />
       {image && <meta property="twitter:image" content={image} />}
-      <meta property="twitter:description" content={description} />
       <meta property="twitter:card" content="summary_large_image" />
+      {description && <meta property="twitter:description" content={description} />}
     </>
   );
 }

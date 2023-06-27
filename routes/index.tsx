@@ -1,7 +1,7 @@
 import {
   FullQuote,
-  getFullQuotes,
   countQuotes,
+  getFullQuotes,
   QuotesWithoutSource,
   getQuotesWithoutSource,
 } from "../controllers/mongo/quote.controller.ts";
