@@ -17,7 +17,7 @@ export default function Metas({
       <meta name="theme-color" content="#797979" />
       <meta name="msapplication-TileColor" content="#797979" />
       {description && <meta name="description" content={description} />}
-      <meta name="viewport" content="width=device-with, initial-scale=1" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
 
       {/* <!-- Open Graph / Facebook --> */}
       <meta property="og:title" content={title} />
