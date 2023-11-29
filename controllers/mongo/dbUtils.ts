@@ -20,7 +20,7 @@ export type InsertDoc<T = CommonCollection> = InsertDocument<
 type UnPromisify<T> = T extends Promise<infer U> ? U : T;
 type DocumentOfCollection<T extends Collection<CommonCollection>> = Exclude<
   UnPromisify<ReturnType<T["findAndModify"]>>,
-  undefined
+  undefined | null
 >;
 
 export function find<T extends Collection<CommonCollection>>(collection: T) {

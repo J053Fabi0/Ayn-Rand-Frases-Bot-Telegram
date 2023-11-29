@@ -33,7 +33,7 @@ export const handler: Handlers<IndexProps, State> = {
     const authorId = ctx.state.authorId || "all";
 
     const filter: Filter<Source> = {};
-    if (authorId !== "all") filter.authors = new ObjectId(authorId);
+    if (authorId !== "all") filter.authors = [new ObjectId(authorId)];
 
     const sourceCount = await countSources(filter);
     const pages = Array.from({ length: Math.ceil(sourceCount / limit) }, (_, i) => i + 1);
