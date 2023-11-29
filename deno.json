@@ -13,14 +13,11 @@
     "build": "deno run -A main.ts build",
     "preview": "deno run -A main.ts"
   },
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact"
-  },
+  "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" },
   "imports": {
-    "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.2.3",
-    "@preact/signals": "https://esm.sh/*@preact/signals@1.1.3",
-    "$fresh/": "https://deno.land/x/fresh@1.4.2/",
+    "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.0",
+    "@preact/signals": "https://esm.sh/*@preact/signals@1.2.1",
+    "$fresh/": "https://deno.land/x/fresh@1.5.4/",
     "bcrypt": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
     "croner": "https://deno.land/x/croner@7.0.1/dist/croner.js",
     "dayjs/": "https://deno.land/x/deno_dayjs@v0.5.0/",
@@ -30,9 +27,9 @@
     "grammy/": "https://deno.land/x/grammy@v1.18.1/",
     "lodash": "https://deno.land/x/deno_ts_lodash@0.0.1/mod.ts",
     "mongo": "https://deno.land/x/mongo@v0.32.0/mod.ts",
-    "preact-render-to-string": "https://esm.sh/*preact-render-to-string@6.2.1",
-    "preact": "https://esm.sh/preact@10.15.1",
-    "preact/": "https://esm.sh/preact@10.15.1/",
+    "preact-render-to-string": "https://esm.sh/*preact-render-to-string@6.2.2",
+    "preact": "https://esm.sh/preact@10.18.1",
+    "preact/": "https://esm.sh/preact@10.18.1/",
     "react-icons/ai": "https://cdn.jsdelivr.net/gh/urielch/react-icons-ai@1.0.9/mod.ts",
     "react-icons/bs": "https://cdn.jsdelivr.net/gh/urielch/react-icons-bs@1.0.9/mod.ts",
     "react-icons/fi": "https://cdn.jsdelivr.net/gh/urielch/react-icons-fi@1.0.9/mod.ts",
@@ -43,13 +40,6 @@
     "twind/": "https://esm.sh/twind@0.16.19/",
     "web_bson": "https://deno.land/x/web_bson@v0.3.0/mod.js"
   },
-  "lint": {
-    "rules": {
-      "tags": ["fresh", "recommended"]
-    },
-    "exclude": ["_fresh"]
-  },
-  "fmt": {
-    "exclude": ["_fresh"]
-  }
+  "lint": { "rules": { "tags": ["fresh", "recommended"] } },
+  "exclude": ["**/_fresh/*"]
 }
