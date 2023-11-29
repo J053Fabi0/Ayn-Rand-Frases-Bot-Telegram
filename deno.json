@@ -10,7 +10,7 @@
     "run": "deno run --allow-net --allow-sys --allow-read --allow-env --allow-run --allow-write main.ts",
     "watch": "deno run --watch --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write dev.ts",
     "dev": "deno run --watch --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write dev.ts",
-    "build": "deno run -A main.ts build",
+    "build": "deno run -A dev.ts build",
     "preview": "deno run -A main.ts",
     "run:molt": "deno run --allow-env --allow-read --allow-write=. --allow-run=git,deno --allow-net=deno.land,esm.sh,cdn.jsdelivr.net https://deno.land/x/molt/cli.ts",
     "update_deps": "deno task -q run:molt check ./**/*.ts"
@@ -47,13 +47,8 @@
   },
   "lint": {
     "rules": {
-      "tags": [
-        "fresh",
-        "recommended"
-      ]
+      "tags": ["fresh", "recommended"]
     }
   },
-  "exclude": [
-    "**/_fresh/*"
-  ]
+  "exclude": ["**/_fresh/*"]
 }
