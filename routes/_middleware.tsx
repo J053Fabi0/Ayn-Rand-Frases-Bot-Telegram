@@ -2,7 +2,7 @@ import { AUTH_TOKEN } from "../env.ts";
 import redirect from "../utils/redirect.ts";
 import { State } from "../types/state.type.ts";
 import { isAdminPage } from "../utils/isAdminPage.tsx";
-import { Middleware, compare, cookieSession } from "../deps.ts";
+import { Middleware, MiddlewareHandlerContext, compare, cookieSession } from "../deps.ts";
 
 const session = cookieSession({
   secure: true,
@@ -14,7 +14,7 @@ const session = cookieSession({
 export const { handler }: Middleware<State> = {
   handler: [
     // implement fresh-session
-    (req, ctx) => session(req, ctx),
+    (req, ctx) => session(req, ctx as unknown as MiddlewareHandlerContext<Record<string, unknown>>),
 
     // parse the session data
     (_, ctx) => {
