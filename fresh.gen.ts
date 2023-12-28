@@ -2,49 +2,50 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
-import * as $0 from "./routes/_404.tsx";
-import * as $1 from "./routes/_500.tsx";
-import * as $2 from "./routes/_app.tsx";
-import * as $3 from "./routes/_middleware.tsx";
-import * as $4 from "./routes/author/new.tsx";
-import * as $5 from "./routes/index.tsx";
-import * as $6 from "./routes/quote/[id].tsx";
-import * as $7 from "./routes/quote/_middleware.tsx";
-import * as $8 from "./routes/quote/delete/[id].tsx";
-import * as $9 from "./routes/quote/newOrEdit.tsx";
-import * as $10 from "./routes/signin.tsx";
-import * as $11 from "./routes/signout.tsx";
-import * as $12 from "./routes/source/delete/[id].tsx";
-import * as $13 from "./routes/source/newOrEdit.tsx";
-import * as $14 from "./routes/sources.tsx";
-import * as $$0 from "./islands/AuthorSourceSelector.tsx";
-import * as $$1 from "./islands/LastSentTime.tsx";
-import * as $$2 from "./islands/NewOrEditQuote.tsx";
+import * as $_404 from "./routes/_404.tsx";
+import * as $_500 from "./routes/_500.tsx";
+import * as $_app from "./routes/_app.tsx";
+import * as $_middleware from "./routes/_middleware.tsx";
+import * as $author_new from "./routes/author/new.tsx";
+import * as $index from "./routes/index.tsx";
+import * as $quote_id_ from "./routes/quote/[id].tsx";
+import * as $quote_middleware from "./routes/quote/_middleware.tsx";
+import * as $quote_delete_id_ from "./routes/quote/delete/[id].tsx";
+import * as $quote_newOrEdit from "./routes/quote/newOrEdit.tsx";
+import * as $signin from "./routes/signin.tsx";
+import * as $signout from "./routes/signout.tsx";
+import * as $source_delete_id_ from "./routes/source/delete/[id].tsx";
+import * as $source_newOrEdit from "./routes/source/newOrEdit.tsx";
+import * as $sources from "./routes/sources.tsx";
+import * as $AuthorSourceSelector from "./islands/AuthorSourceSelector.tsx";
+import * as $LastSentTime from "./islands/LastSentTime.tsx";
+import * as $NewOrEditQuote from "./islands/NewOrEditQuote.tsx";
+import { type Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
-    "./routes/_404.tsx": $0,
-    "./routes/_500.tsx": $1,
-    "./routes/_app.tsx": $2,
-    "./routes/_middleware.tsx": $3,
-    "./routes/author/new.tsx": $4,
-    "./routes/index.tsx": $5,
-    "./routes/quote/[id].tsx": $6,
-    "./routes/quote/_middleware.tsx": $7,
-    "./routes/quote/delete/[id].tsx": $8,
-    "./routes/quote/newOrEdit.tsx": $9,
-    "./routes/signin.tsx": $10,
-    "./routes/signout.tsx": $11,
-    "./routes/source/delete/[id].tsx": $12,
-    "./routes/source/newOrEdit.tsx": $13,
-    "./routes/sources.tsx": $14,
+    "./routes/_404.tsx": $_404,
+    "./routes/_500.tsx": $_500,
+    "./routes/_app.tsx": $_app,
+    "./routes/_middleware.tsx": $_middleware,
+    "./routes/author/new.tsx": $author_new,
+    "./routes/index.tsx": $index,
+    "./routes/quote/[id].tsx": $quote_id_,
+    "./routes/quote/_middleware.tsx": $quote_middleware,
+    "./routes/quote/delete/[id].tsx": $quote_delete_id_,
+    "./routes/quote/newOrEdit.tsx": $quote_newOrEdit,
+    "./routes/signin.tsx": $signin,
+    "./routes/signout.tsx": $signout,
+    "./routes/source/delete/[id].tsx": $source_delete_id_,
+    "./routes/source/newOrEdit.tsx": $source_newOrEdit,
+    "./routes/sources.tsx": $sources,
   },
   islands: {
-    "./islands/AuthorSourceSelector.tsx": $$0,
-    "./islands/LastSentTime.tsx": $$1,
-    "./islands/NewOrEditQuote.tsx": $$2,
+    "./islands/AuthorSourceSelector.tsx": $AuthorSourceSelector,
+    "./islands/LastSentTime.tsx": $LastSentTime,
+    "./islands/NewOrEditQuote.tsx": $NewOrEditQuote,
   },
   baseUrl: import.meta.url,
-};
+} satisfies Manifest;
 
 export default manifest;

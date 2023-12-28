@@ -15,14 +15,11 @@
     "run:molt": "deno run --allow-env --allow-read --allow-write=. --allow-run=git,deno --allow-net=deno.land,esm.sh,cdn.jsdelivr.net https://deno.land/x/molt/cli.ts",
     "update_deps": "deno task -q run:molt check ./**/*.ts"
   },
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact"
-  },
+  "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" },
   "imports": {
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.0",
-    "@preact/signals": "https://esm.sh/*@preact/signals@1.2.2",
-    "$fresh/": "https://deno.land/x/fresh@1.5.4/",
+    "@preact/signals": "https://esm.sh/*@preact/signals@1.2.1",
+    "$fresh/": "https://deno.land/x/fresh@1.6.1/",
     "bcrypt": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
     "croner": "https://deno.land/x/croner@7.0.5/dist/croner.js",
     "dayjs/": "https://deno.land/x/deno_dayjs@v0.5.0/",
@@ -45,10 +42,6 @@
     "twind/": "https://esm.sh/twind@0.16.19/",
     "web_bson": "https://deno.land/x/web_bson@v0.3.0/mod.js"
   },
-  "lint": {
-    "rules": {
-      "tags": ["fresh", "recommended"]
-    }
-  },
+  "lint": { "rules": { "tags": ["fresh", "recommended"] } },
   "exclude": ["**/_fresh/*"]
 }
