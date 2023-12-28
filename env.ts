@@ -10,3 +10,6 @@ export const ADMINS_IDS = Deno.env.get("ADMINS_IDS")!.split(",").map(parseInt);
 
 export const AUTH_TOKEN =
   typeof Deno.env.get("AUTH_TOKEN") === "string" ? await hash(Deno.env.get("AUTH_TOKEN")!) : "";
+
+export const MASTODON_URL = Deno.env.get("MASTODON_URL") as string;
+export const MASTODON_ACCESS_TOKEN = Deno.env.get("MASTODON_ACCESS_TOKEN") as string;

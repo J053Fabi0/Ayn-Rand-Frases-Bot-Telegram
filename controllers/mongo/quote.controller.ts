@@ -1,10 +1,10 @@
 import * as a from "./dbUtils.ts";
 import { WEBSITE_URL } from "../../env.ts";
 import Model from "../../models/quote.model.ts";
+import { Filter, escapeHtml } from "../../deps.ts";
 import Quote from "../../types/collections/quote.type.ts";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
-import { Collection, Filter, escapeHtml } from "../../deps.ts";
 
 export const getQuotes = a.find(Model);
 export const getQuote = a.findOne(Model);
@@ -67,26 +67,29 @@ export async function getFullQuote(
   return fullQuotes[0];
 }
 
-export function parseFullQuote(quote: FullQuote) {
-  const parsedQuote = escapeHtml(quote.quote);
+export function parseFullQuote(quote: FullQuote, html: boolean) {
+  const parsedQuote = html ? escapeHtml(quote.quote) : quote.quote;
   const author = quote.author?.name;
   const quoteWithAutor = author
-    ? `${parsedQuote}\n\n - <a href="${WEBSITE_URL}/quote/${quote.number}">${escapeHtml(author)}</a>.`
+    ? html
+      ? `${parsedQuote}\n\n - <a href="${WEBSITE_URL}/quote/${quote.number}">${escapeHtml(author)}</a>.`
+      : `${parsedQuote}\n\n - ${author}.`
     : parsedQuote;
 
   let source = escapeHtml(quote.source?.name || "");
-  if (source && quote.source?.url) source = `<a href="${quote.source.url}">${source}</a>`;
-  if (source && quote.sourceDetails) source += escapeHtml(quote.sourceDetails);
+  if (source && quote.source?.url) source = html ? `<a href="${quote.source.url}">${source}</a>` : source;
+  if (source && quote.sourceDetails) source += html ? escapeHtml(quote.sourceDetails) : quote.sourceDetails;
 
   return source ? `${quoteWithAutor} ${source}.` : quoteWithAutor;
 }
 
 export async function getParsedFullQuote(
   filter: Parameters<typeof getFullQuote>[0],
-  options?: Parameters<typeof getFullQuote>[1]
+  options: Parameters<typeof getFullQuote>[1] | undefined,
+  html: boolean
 ) {
   const fullQuote = await getFullQuote(filter, options);
-  return fullQuote ? parseFullQuote(fullQuote) : null;
+  return fullQuote ? parseFullQuote(fullQuote, html) : null;
 }
 
 /**

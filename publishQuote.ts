@@ -3,6 +3,7 @@ import { ObjectId } from "./deps.ts";
 import getQuotesButtons from "./callbacks/getQuotesButtons.ts";
 import sendMassiveMessage from "./utils/sendMassiveMessage.ts";
 import { changeQuote, getFullQuote, getQuote, parseFullQuote } from "./controllers/mongo/quote.controller.ts";
+import publishToMastodon from "./utils/publishToMastodon.ts";
 
 interface CommonParams {
   id?: string | ObjectId;
@@ -42,7 +43,7 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
     return bot.api.sendMessage(chatID, "No hay frases para compartir.").catch(() => {});
   }
 
-  const fullQuote = parseFullQuote(possibleQuote);
+  const fullQuote = parseFullQuote(possibleQuote, true);
 
   if (chatID)
     return bot.api
@@ -55,7 +56,14 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
             : undefined,
       })
       .catch(() => {});
-  else await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML", disable_web_page_preview: true });
+  else {
+    await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML", disable_web_page_preview: true });
+    await publishToMastodon({
+      language: "en",
+      visibility: "public",
+      status: parseFullQuote(possibleQuote, false),
+    });
+  }
 
   await changeQuote({ _id: possibleQuote._id }, { $set: { lastSentTime: new Date() }, $inc: { timesSent: 1 } });
 }

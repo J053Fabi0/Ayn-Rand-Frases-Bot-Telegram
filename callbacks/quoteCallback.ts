@@ -8,7 +8,7 @@ export default function quoteCallback(bot: Bot) {
     ctx.answerCallbackQuery().catch(console.error);
 
     const number = parseInt(ctx.update.callback_query.data.substring(8));
-    const fullQuote = await getParsedFullQuote({ number });
+    const fullQuote = await getParsedFullQuote({ number }, undefined, true);
 
     if (fullQuote === null) return ctx.editMessageText("Esta frase ha sido eliminada.").catch(console.error);
 
