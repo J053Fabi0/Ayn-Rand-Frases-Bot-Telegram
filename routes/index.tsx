@@ -92,6 +92,7 @@ export default function Home({ data }: PageProps<IndexProps>) {
           image={`${WEBSITE_URL}/favicon/ms-icon-310x310.png`}
           description="The best quotes from the Objectivist philosopher Ayn Rand and other Objectivist philosophers."
         />
+        <a rel="me" href="https://mastodon.josefabio.com/@aynrand" className="hidden"></a>
       </Head>
 
       {data.isAdmin ? (
