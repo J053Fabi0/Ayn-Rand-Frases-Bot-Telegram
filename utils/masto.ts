@@ -6,5 +6,7 @@ const masto = createRestAPIClient({
   accessToken: MASTODON_ACCESS_TOKEN,
 });
 
-const publishToMastodon = masto.v1.statuses.create.bind(masto.v1.statuses);
-export default publishToMastodon;
+export default masto;
+
+// const publishToMastodon = masto.v1.statuses.create.bind(masto.v1.statuses);
+// export default publishToMastodon;

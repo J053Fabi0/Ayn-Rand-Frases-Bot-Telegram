@@ -1,9 +1,9 @@
 import bot from "./initBot.ts";
 import { ObjectId } from "./deps.ts";
+import masto from "./utils/masto.ts";
 import getQuotesButtons from "./callbacks/getQuotesButtons.ts";
 import sendMassiveMessage from "./utils/sendMassiveMessage.ts";
 import { changeQuote, getFullQuote, getQuote, parseFullQuote } from "./controllers/mongo/quote.controller.ts";
-import publishToMastodon from "./utils/publishToMastodon.ts";
 
 interface CommonParams {
   id?: string | ObjectId;
@@ -58,11 +58,15 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
       .catch(() => {});
   else {
     await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML", disable_web_page_preview: true });
-    await publishToMastodon({
-      language: "en",
-      visibility: "public",
-      status: parseFullQuote(possibleQuote, false),
-    });
+    try {
+      await masto.v1.statuses.create({
+        language: "en",
+        visibility: "public",
+        status: parseFullQuote(possibleQuote, false),
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   await changeQuote({ _id: possibleQuote._id }, { $set: { lastSentTime: new Date() }, $inc: { timesSent: 1 } });
