@@ -7,6 +7,3 @@ const masto = createRestAPIClient({
 });
 
 export default masto;
-
-// const publishToMastodon = masto.v1.statuses.create.bind(masto.v1.statuses);
-// export default publishToMastodon;
