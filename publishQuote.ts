@@ -56,14 +56,13 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
             : undefined,
       })
       .catch(() => {});
-  else {
-    await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML", disable_web_page_preview: true });
-    try {
-      const { quote, extras } = parseFullQuote(possibleQuote, false);
-      await publishToMastodon(quote, extras, possibleQuote.language);
-    } catch (e) {
-      console.error(e);
-    }
+
+  await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML", disable_web_page_preview: true });
+  try {
+    const { quote, extras } = parseFullQuote(possibleQuote, false);
+    await publishToMastodon(quote, extras, possibleQuote.language);
+  } catch (e) {
+    console.error(e);
   }
 
   await changeQuote({ _id: possibleQuote._id }, { $set: { lastSentTime: new Date() }, $inc: { timesSent: 1 } });
