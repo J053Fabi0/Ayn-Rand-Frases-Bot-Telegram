@@ -25,7 +25,7 @@ export default function frase(bot: Bot) {
 
     ctx.reply(fullQuote, {
       parse_mode: "HTML",
-      disable_web_page_preview: true,
+      link_preview_options: { is_disabled: true },
       reply_markup: ctx.chat.type == "private" ? await getQuotesButtons(number, chatID) : undefined,
     });
   });

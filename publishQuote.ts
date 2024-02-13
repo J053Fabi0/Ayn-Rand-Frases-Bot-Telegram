@@ -49,7 +49,7 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
     return bot.api
       .sendMessage(chatID, fullQuote, {
         parse_mode: "HTML",
-        disable_web_page_preview: true,
+        link_preview_options: { is_disabled: true },
         reply_markup:
           possibleQuote.number && chatType === "private"
             ? await getQuotesButtons(possibleQuote.number, chatID)
@@ -57,7 +57,10 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
       })
       .catch(() => {});
 
-  await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML", disable_web_page_preview: true });
+  await sendMassiveMessage(fullQuote, undefined, {
+    parse_mode: "HTML",
+    link_preview_options: { is_disabled: true },
+  });
   try {
     const { quote, extras } = parseFullQuote(possibleQuote, false);
     await publishToMastodon(quote, extras, possibleQuote.language);

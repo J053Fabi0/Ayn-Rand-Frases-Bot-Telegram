@@ -16,7 +16,7 @@ export default function quoteCallback(bot: Bot) {
       ctx
         .editMessageText(fullQuote, {
           parse_mode: "HTML",
-          disable_web_page_preview: true,
+          link_preview_options: { is_disabled: true },
           reply_markup: await getQuotesButtons(number, ctx.chat.id),
         })
         .catch(console.error);
