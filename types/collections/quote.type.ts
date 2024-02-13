@@ -1,4 +1,5 @@
 import { ObjectId } from "../../deps.ts";
+import { language } from "../languages.type.ts";
 import CommonCollection from "./commonCollection.type.ts";
 
 export default interface Quote extends CommonCollection {
@@ -8,6 +9,7 @@ export default interface Quote extends CommonCollection {
   timesSent: number;
   archived: boolean;
   lastSentTime: Date;
+  language?: language;
   source: ObjectId | null;
   sourceDetails: string | null;
 }

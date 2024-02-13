@@ -4,7 +4,7 @@ import Source from "../types/collections/source.type.ts";
 import Author from "../types/collections/author.type.ts";
 import { FullQuote } from "../controllers/mongo/quote.controller.ts";
 
-export type EssentialQuote = Pick<FullQuote, "quote" | "sourceDetails"> & {
+export type EssentialQuote = Pick<FullQuote, "quote" | "sourceDetails" | "language"> & {
   author?: { name: Author["name"] } | null;
   source?: { name: Source["name"]; url?: Source["url"] } | null;
 };

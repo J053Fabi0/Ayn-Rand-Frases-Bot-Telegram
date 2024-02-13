@@ -60,7 +60,7 @@ export default async function publishQuote({ id, chatID, chatType }: Params = {}
     await sendMassiveMessage(fullQuote, undefined, { parse_mode: "HTML", disable_web_page_preview: true });
     try {
       const { quote, extras } = parseFullQuote(possibleQuote, false);
-      await publishToMastodon(quote, extras);
+      await publishToMastodon(quote, extras, possibleQuote.language);
     } catch (e) {
       console.error(e);
     }

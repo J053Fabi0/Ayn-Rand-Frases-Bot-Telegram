@@ -9,6 +9,7 @@ export type PostQuote = {
   quote: string;
   sourceId: string | null;
   authorId: string;
+  language?: Quote["language"];
   sourceDetails?: Quote["sourceDetails"];
 };
 export const postQuote = async (data: PostQuote) => {
@@ -24,11 +25,12 @@ export const postQuote = async (data: PostQuote) => {
     archived: false,
     quote: data.quote,
     number: lastNumber + 1,
+    language: data.language,
+    author: new ObjectId(data.authorId),
+    sourceDetails: data.sourceDetails || null,
     // lower than the lowest, to be the next one to be sent
     lastSentTime: new Date(+lowestSentTime - 1),
-    author: new ObjectId(data.authorId),
     source: data.sourceId ? new ObjectId(data.sourceId) : null,
-    sourceDetails: data.sourceDetails || null,
   });
 
   return quote;
@@ -39,6 +41,7 @@ export type PatchQuote = {
   archived?: false;
   authorId?: string;
   sourceId?: string | null;
+  language?: Quote["language"];
   sourceDetails?: Quote["sourceDetails"];
 } & (
   | { quoteId?: never; number: number }
@@ -46,9 +49,9 @@ export type PatchQuote = {
   | { quoteId: string; number?: never }
 );
 export const patchQuote = async (data: PatchQuote) => {
-  const { authorId, sourceId, quote, sourceDetails, quoteId, number } = data;
+  const { authorId, sourceId, quote, sourceDetails, quoteId, number, language } = data;
 
-  const patchData = {} as Partial<Quote>;
+  const patchData = { language } as Partial<Quote>;
 
   if (quote) patchData.quote = quote;
 
@@ -73,8 +76,7 @@ export const patchQuote = async (data: PatchQuote) => {
   return results;
 };
 
-export const archiveQuote = (idOrNumber: string | ObjectId | number) => {
-  return changeQuote(isMongoId(idOrNumber) ? { _id: new ObjectId(idOrNumber) } : { number: +idOrNumber }, {
+export const archiveQuote = (idOrNumber: string | ObjectId | number) =>
+  changeQuote(isMongoId(idOrNumber) ? { _id: new ObjectId(idOrNumber) } : { number: +idOrNumber }, {
     $set: { archived: true },
   });
-};

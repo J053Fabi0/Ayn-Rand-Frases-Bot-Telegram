@@ -2,6 +2,7 @@ import redirect from "../../utils/redirect.ts";
 import { State } from "../../types/state.type.ts";
 import Typography from "../../components/Typography.tsx";
 import getActionAndId from "../../utils/getActionAndId.ts";
+import { isLanguage } from "../../types/languages.type.ts";
 import Author from "../../types/collections/author.type.ts";
 import Source from "../../types/collections/source.type.ts";
 import isPromise from "../../types/typeGuards/isPromise.ts";
@@ -50,15 +51,21 @@ export const handler: Handlers<NewQuoteProps, State> = {
     const form = await req.formData();
     const quote = form.get("quote")?.toString();
     const authorId = form.get("author")?.toString();
+    const language = form.get("language")?.toString();
     const sourceId = form.get("source")?.toString() || "null";
     const sourceDetails = form.get("sourceDetails")?.toString() || "";
 
+    if (!language || !isLanguage(language)) return new Response("Invalid language", { status: 400 });
     if (!quote || !authorId) return new Response("Missing quote, author, or/and source", { status: 400 });
 
     let quoteNumber = +groups.id!;
-    const data = { quote, authorId, sourceId: sourceId === "null" ? null : sourceId, sourceDetails } satisfies
-      | PostQuote
-      | PatchQuote;
+    const data = {
+      quote,
+      authorId,
+      language,
+      sourceDetails,
+      sourceId: sourceId === "null" ? null : sourceId,
+    } satisfies PostQuote | PatchQuote;
 
     // Edit quote
     if (groups.action === "edit") await patchQuote({ ...data, number: quoteNumber });

@@ -1,4 +1,5 @@
 import masto from "./masto.ts";
+import Quote from "../types/collections/quote.type.ts";
 
 interface Part {
   text: string;
@@ -20,7 +21,7 @@ function getFullQuoteFromPart(part: Part) {
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 type CreateStatusParams = Writeable<Parameters<typeof masto.v1.statuses.create>[0]>;
 
-export default async function publishToMastodon(quote: string, extras: string) {
+export default async function publishToMastodon(quote: string, extras: string, language?: Quote["language"]) {
   const words = quote.split(" ");
   const parts: Part[] = [{ extras, text: words.shift()!, truncated: true }];
 
@@ -52,7 +53,7 @@ export default async function publishToMastodon(quote: string, extras: string) {
   }
 
   const { length } = parts;
-  const createStatusParams: CreateStatusParams = { status: "", visibility: "public" };
+  const createStatusParams: CreateStatusParams = { status: "", visibility: "public", language };
   for (let i = 0; i < length; i++) {
     const part = parts[i];
     createStatusParams.status = (i >= 1 ? "…" : "") + getFullQuoteFromPart(part);
