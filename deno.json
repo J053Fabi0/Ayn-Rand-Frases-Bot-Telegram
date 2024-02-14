@@ -22,7 +22,7 @@
   "imports": {
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.0",
     "@preact/signals": "https://esm.sh/*@preact/signals@1.2.2",
-    "$fresh/": "https://deno.land/x/fresh@1.6.3/",
+    "$fresh/": "https://deno.land/x/fresh@1.6.5/",
     "bcrypt": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
     "croner": "https://deno.land/x/croner@8.0.0/dist/croner.js",
     "dayjs/": "https://deno.land/x/deno_dayjs@v0.5.0/",
