@@ -1,18 +1,18 @@
 {
   "tasks": {
     "stop": "pm2 stop aynrandbot",
-    "start": "deno task build && DENO_DEPLOYMENT_ID=\"$(git rev-parse HEAD)\" pm2 start --interpreter='deno' --interpreter-args='run --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write' --name aynrandbot main.ts && pm2 logs aynrandbot",
+    "start": "deno task build && DENO_DEPLOYMENT_ID=\"$(git rev-parse HEAD)\" pm2 start --interpreter='deno' --interpreter-args='run --allow-import --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write' --name aynrandbot main.ts && pm2 logs aynrandbot",
     "logs": "pm2 logs aynrandbot",
     "reload": "deno task build && pm2 reload aynrandbot && pm2 logs aynrandbot",
     "delete": "pm2 delete aynrandbot",
-    "check": "deno check main.ts dev.ts",
+    "check": "deno check --allow-import main.ts dev.ts",
     "update": "deno run -A -r https://fresh.deno.dev/update .",
-    "run": "deno run --allow-net --allow-sys --allow-read --allow-env --allow-run --allow-write main.ts",
-    "watch": "deno run --watch --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write dev.ts",
-    "dev": "deno run --watch --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write dev.ts",
+    "run": "deno run --allow-import --allow-net --allow-sys --allow-read --allow-env --allow-run --allow-write main.ts",
+    "watch": "deno run --watch --allow-import --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write dev.ts",
+    "dev": "deno run --watch --allow-import --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write dev.ts",
     "build": "deno run -A dev.ts build",
     "preview": "deno run -A main.ts",
-    "run:molt": "deno run --allow-env --allow-read --allow-write=. --allow-run=git,deno --allow-net=deno.land,esm.sh,cdn.jsdelivr.net https://deno.land/x/molt/cli.ts",
+    "run:molt": "deno run --allow-import --allow-env --allow-read --allow-write=. --allow-run=git,deno --allow-net=deno.land,esm.sh,cdn.jsdelivr.net https://deno.land/x/molt/cli.ts",
     "update_deps": "deno task -q run:molt check ./**/*.ts"
   },
   "compilerOptions": {
