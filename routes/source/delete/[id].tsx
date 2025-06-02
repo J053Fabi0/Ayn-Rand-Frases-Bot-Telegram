@@ -23,7 +23,7 @@ export const handler: Handlers<DeleteSourceProps, State> = {
     return await ctx.render({ source: possibleSource });
   },
 
-  async POST(req, ctx) {
+  async POST(_, ctx) {
     const { id } = ctx.params;
 
     if (!isMongoId(id)) throw new Error(`Invalid id format: ${id}`);
@@ -50,7 +50,7 @@ export default function DeleteSource({ data: { source } }: PageProps<DeleteSourc
         This action cannot be undone. All quotes associated with this source will be left with no source.
       </Typography>
 
-      <div class="mt-9 flex justify-center align-center items-center mt-2 gap-8">
+      <div class="mt-9 flex justify-center align-center items-center gap-8">
         <a href={`/source/edit/${source._id}`} class={getButtonClasses("blue")}>
           Go back
         </a>

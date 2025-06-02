@@ -50,6 +50,7 @@ export default function Navbar({ loggedIn = false }) {
           <div class="hidden lg:inline-block">{signInOrOut}</div>
 
           <button
+            type="button"
             class="middle none relative ml-auto h-6 max-h-[40px] w-6 max-w-[40px] rounded-lg text-center font-sans text-xs font-medium uppercase text-blue-gray-500 transition-all hover:bg-transparent focus:bg-transparent active:bg-transparent disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:hidden"
             data-collapse-target="navbar"
           >

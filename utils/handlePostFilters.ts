@@ -1,5 +1,5 @@
-import { State } from "../types/state.type.ts";
 import redirect from "./redirect.ts";
+import { State } from "../types/state.type.ts";
 
 export default async function handlePostFilters(
   redirectPath: string,

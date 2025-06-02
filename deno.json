@@ -9,7 +9,7 @@
     "update": "deno run -A -r https://fresh.deno.dev/update .",
     "run": "deno run --allow-import --allow-net --allow-sys --allow-read --allow-env --allow-run --allow-write main.ts",
     "watch": "deno run --watch --allow-import --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write dev.ts",
-    "dev": "deno run --watch --allow-import --allow-sys --allow-net --allow-read --allow-env --allow-run --allow-write dev.ts",
+    "dev": "deno task watch",
     "build": "deno run -A dev.ts build",
     "preview": "deno run -A main.ts",
     "run:molt": "deno run --allow-import --allow-env --allow-read --allow-write=. --allow-run=git,deno --allow-net=deno.land,esm.sh,cdn.jsdelivr.net https://deno.land/x/molt/cli.ts",
